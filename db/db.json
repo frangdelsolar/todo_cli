@@ -1,3 +1,23 @@
 {
-	"tasks": {}
+	"tasks": {
+		"8c41d5e5-e139-4bab-a2fa-a0b8e9f7612b": {
+			"id": "8c41d5e5-e139-4bab-a2fa-a0b8e9f7612b",
+			"title": "Old Task",
+			"createdAt": "2024-06-05T08:53:29-03:00"
+		},
+		"bfdd67a5-73db-4511-96a5-9ada63f9777f": {
+			"id": "bfdd67a5-73db-4511-96a5-9ada63f9777f",
+			"title": "Electricidad",
+			"createdAt": "2024-06-05T00:19:25-03:00"
+		}
+	},
+	"taskPeriods": {
+		"335956f1-c509-49bb-b30e-d8a8f0b9f391": {
+			"id": "335956f1-c509-49bb-b30e-d8a8f0b9f391",
+			"taskId": "8c41d5e5-e139-4bab-a2fa-a0b8e9f7612b",
+			"startDate": "2024-01-02T00:00:00Z",
+			"endDate": "",
+			"createdAt": "2024-06-05T09:08:34-03:00"
+		}
+	}
 }

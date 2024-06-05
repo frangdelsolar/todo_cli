@@ -15,8 +15,10 @@ func main(){
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	log.Info().Msg("Running TODO App v" + APP_VERSION)
 
-	c := cli.NewCLI()
+	c, err := cli.NewCLI()
+	if err != nil {
+		log.Err(err).Msg("Error creating new CLI")
+		return
+	}
 	c.Run()
-
-
 }

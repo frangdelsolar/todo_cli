@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"todo_cli/models"
 
 	"github.com/rs/zerolog/log"
 )
@@ -12,18 +13,28 @@ const dbFileName = "db.json"
 var dbPath = filepath.Join("./db", dbFileName)
 
 
+// DB represents the database content.
 type DB struct {
-    Tasks map[string]Task `json:"tasks"`
+    Tasks map[string]models.Task `json:"tasks"`
+	EffectivePeriods map[string]models.EffectivePeriod `json:"taskPeriods"`
 }
 
-func (db *DB) init() {
+// NewDB initializes a new DB instance.
+//
+// It creates the necessary directories and the "db.json" file if they don't exist.
+// It reads the contents of the "db.json" file and unmarshals it into the DB struct.
+// If the file is empty, it initializes the Tasks and EffectivePeriods maps.
+// It returns a pointer to the DB instance and an error if any.
+func NewDB() (*DB, error){
     log.Debug().Msg("Initializing DB")
+
+	var db DB
 
     // Create the "db" directory if it doesn't exist
     err := os.MkdirAll(filepath.Dir(dbPath), os.ModePerm) // Create all necessary directories
     if err != nil {
         log.Err(err).Msg("Failed to create directory structure")
-        return
+        return nil, err
     }
 
     // Create the "db.json" file if it doesn't exist
@@ -32,7 +43,7 @@ func (db *DB) init() {
         f, err := os.Create(dbPath)
         if err != nil {
             log.Err(err).Msg("Failed to create DB file")
-            return
+            return nil, err
         }
         defer f.Close()
     }
@@ -41,22 +52,31 @@ func (db *DB) init() {
 	data, err := os.ReadFile(dbPath)
 	if err != nil {
 		log.Err(err).Msg("Failed to read DB file")
-		return
+		return nil, err
 	}
 
 	if len(data) > 0 {
 		err = json.Unmarshal(data, &db)
 		if err != nil {
 			log.Err(err).Msg("Failed to unmarshal DB file")
-			return
+			return nil, err
 		}
 	} else {
-		db.Tasks = make(map[string]Task)
+		db.Tasks = map[string]models.Task{}
+		db.EffectivePeriods = map[string]models.EffectivePeriod{}
 	}
 
 	log.Info().Msg("DB initialized")
+
+	return &db, nil
 }
 
+// Save saves the DB instance to a JSON file.
+//
+// It marshals the DB instance into JSON format with indentation and writes it to
+// the file specified by dbPath. If any error occurs during the marshaling or
+// writing process, it logs the error and returns. Otherwise, it logs a message
+// indicating that the DB has been saved.
 func (db *DB) Save() {
 	log.Debug().Msg("Saving DB")
 	data, err := json.MarshalIndent(db, "", "\t")
@@ -70,10 +90,4 @@ func (db *DB) Save() {
 		return
 	}
 	log.Info().Msg("DB saved")
-}
-
-func GetDB() *DB {
-	db := DB{}
-	db.init()
-	return &db
 }
