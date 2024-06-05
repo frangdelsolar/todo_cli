@@ -6,12 +6,17 @@ import (
 	"path/filepath"
 	"todo_cli/models"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 const dbFileName = "db.json"
 var dbPath = filepath.Join("./db", dbFileName)
 
+// init initializes the logger to output to the console.
+func init(){
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+}
 
 // DB represents the database content.
 type DB struct {

@@ -104,14 +104,20 @@ func (db *DB) UpdateTask(id string, title string) (*models.Task, error) {
 //
 // Returns:
 // - error: an error if the task retrieval or deletion fails.
-func (db *DB) DeleteTask(id string) error {
-	_, err := db.GetTaskById(id)
+func (db *DB) DeleteTask(taskId string) error {
+	_, err := db.GetTaskById(taskId)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task")
 		return err
 	}
 
-	delete(db.Tasks, id)
+	// Delete all the effective periods related to the task
+	effectivePeriods := db.GetEffectivePeriodsByTaskId(taskId)
+	for _, effectivePeriod := range effectivePeriods {
+		db.DeleteEffectivePeriod(effectivePeriod.ID.String())
+	}
+
+	delete(db.Tasks, taskId)
 	db.Save()
 
 	return nil

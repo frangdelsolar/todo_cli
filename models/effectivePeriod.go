@@ -72,6 +72,9 @@ func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string
 	var output *EffectivePeriod
 	var err error
 
+	if in_startDate == "" {
+		in_startDate = time.Now().String()[0:10]
+	}
 	st, err := time.Parse(time.DateOnly, in_startDate)
 	if err != nil {
 		log.Err(err).Msg("Error parsing start date")
@@ -94,9 +97,10 @@ func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string
 	}
 
 	if !ValidFrequency(in_frequency) {
-		log.Err(err).Msg("Invalid frequency")
-		return output, err
+		log.Warn().Msg("Invalid frequency. Defaulting to monthly.")
+		in_frequency = string(Monthly)
 	}
+
 	frequency := Frequency(in_frequency)
 
 	now := time.Now().Format(time.RFC3339)
