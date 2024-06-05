@@ -18,23 +18,6 @@ import (
 // flags from the context and calls the CreateEffectivePeriod method of the CLI's
 // DB with the retrieved values.
 //
-// The command has the following flags:
-// - cli.StringFlag:
-//   - Name: "taskId"
-//   - Usage: "The id of the task"
-//   - Required: true
-//   - Aliases: []string{"t"}
-// - cli.StringFlag:
-//   - Name: "startDate"
-//   - Usage: "The start date of the effective period (yyyy-mm-dd)"
-//   - Required: true
-//   - Aliases: []string{"sd"}
-// - cli.StringFlag:
-//   - Name: "endDate"
-//   - Usage: "The end date of the end period (yyyy-mm-dd)"
-//   - Required: false
-//   - Aliases: []string{"ed"}
-//
 // Returns:
 // - *cli.Command: A pointer to the created cli.Command struct.
 func (c *CLI) CreateEffectivePeriodCmd() *cli.Command {
@@ -46,7 +29,8 @@ func (c *CLI) CreateEffectivePeriodCmd() *cli.Command {
 			taskId := cCtx.String("taskId")
 			startDate := cCtx.String("startDate")
 			endDate := cCtx.String("endDate")
-			c.DB.CreateEffectivePeriod(taskId, startDate, endDate)
+			frequency := cCtx.String("frequency")
+			c.DB.CreateEffectivePeriod(taskId, startDate, endDate, frequency)
 			return nil
 		},
 
@@ -71,7 +55,13 @@ func (c *CLI) CreateEffectivePeriodCmd() *cli.Command {
 				Required: false,
 				Aliases:  []string{"ed"},
 			},
+
+			&cli.StringFlag{
+				Name:     "frequency",
+				Usage:    "The frequency of the effective period [daily, weekly, monthly, yearly]",
+				Required: true,
+				Aliases:  []string{"f"},
+			},
 		},
 	}
 }
-

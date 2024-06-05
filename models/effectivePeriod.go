@@ -8,6 +8,31 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type Frequency string
+
+const (
+	Daily   Frequency = "daily"
+	Weekly  Frequency = "weekly"
+	Monthly Frequency = "monthly"
+	Yearly  Frequency = "yearly"
+)
+
+// ValidFrequency checks if the given frequency string is valid.
+//
+// Parameters:
+// - freq: the frequency string to be checked.
+//
+// Returns:
+// - bool: true if the frequency string is valid, false otherwise.
+func ValidFrequency(freq string) bool {
+	switch freq {
+	case string(Daily), string(Weekly), string(Monthly), string(Yearly):
+		return true
+	default:
+		return false
+	}
+}
+
 // EffectivePeriod represents an effective period associated with a task.
 //
 // Fields:
@@ -21,6 +46,7 @@ type EffectivePeriod struct {
 	TaskID    uuid.UUID `json:"taskId"`
 	StartDate string    `json:"startDate"`
 	EndDate   string    `json:"endDate"`
+	Frequency Frequency `json:"frequency"`
 	CreatedAt string    `json:"createdAt"`
 }
 
@@ -42,7 +68,7 @@ func (e *EffectivePeriod) String() string {
 // Returns:
 // - *EffectivePeriod: the newly created EffectivePeriod.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string) (*EffectivePeriod, error) {
+func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string, in_frequency string) (*EffectivePeriod, error) {
 	var output *EffectivePeriod
 	var err error
 
@@ -67,17 +93,24 @@ func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string
 		formatedEndDate = parsedEndDate.Format(time.RFC3339)
 	}
 
+	if !ValidFrequency(in_frequency) {
+		log.Err(err).Msg("Invalid frequency")
+		return output, err
+	}
+	frequency := Frequency(in_frequency)
+
 	now := time.Now().Format(time.RFC3339)
-	output= &EffectivePeriod{
+	output = &EffectivePeriod{
 		ID:        uuid.Must(uuid.NewV4()),
 		TaskID:    uuid.Must(uuid.FromString(in_taskID)),
 		StartDate: formatedStartDate,
-		EndDate:   formatedEndDate ,
+		EndDate:   formatedEndDate,
+		Frequency: frequency,
 		CreatedAt: now,
 	}
 
 	return output, err
-}	
+}
 
 // Update updates the start and end dates of an EffectivePeriod.
 //
@@ -116,10 +149,3 @@ func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 
 	return err
 }
-
-
-
-
-
-
-

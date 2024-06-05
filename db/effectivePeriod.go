@@ -21,7 +21,7 @@ func (db *DB) GetEffectivePeriodById(id string) (*models.EffectivePeriod, error)
 	if ep.ID == uuid.Nil {
 		return nil, fmt.Errorf("EffectivePeriod with ID %s not found", id)
 	}
-	
+
 	return &ep, nil
 }
 
@@ -52,8 +52,8 @@ func (db *DB) GetEffectivePeriodsByTaskId(taskID string) []models.EffectivePerio
 // Returns:
 // - *models.EffectivePeriod: the newly created EffectivePeriod.
 // - error: an error if the EffectivePeriod creation fails.
-func (db *DB) CreateEffectivePeriod(taskID string, startDate string, endDate string) (*models.EffectivePeriod, error) {
-	ep, err := models.NewEffectivePeriod(taskID, startDate, endDate)
+func (db *DB) CreateEffectivePeriod(taskID string, startDate string, endDate string, frequency string) (*models.EffectivePeriod, error) {
+	ep, err := models.NewEffectivePeriod(taskID, startDate, endDate, frequency)
 	if err != nil {
 		log.Err(err).Msg("Error creating new EffectivePeriod")
 		return nil, err
@@ -61,9 +61,9 @@ func (db *DB) CreateEffectivePeriod(taskID string, startDate string, endDate str
 
 	db.EffectivePeriods[ep.ID.String()] = *ep
 	db.Save()
-	
+
 	return ep, nil
-}	
+}
 
 // UpdateEffectivePeriod updates an EffectivePeriod in the database.
 //
@@ -77,14 +77,14 @@ func (db *DB) CreateEffectivePeriod(taskID string, startDate string, endDate str
 // - error: an error if the EffectivePeriod retrieval or update fails.
 func (db *DB) UpdateEffectivePeriod(id string, startDate string, endDate string) (*models.EffectivePeriod, error) {
 	var err error
-	
+
 	// Retrieve effective period
 	ep, err := db.GetEffectivePeriodById(id)
 	if err != nil {
 		log.Err(err).Msg("Error getting EffectivePeriod")
 		return nil, err
 	}
-	
+
 	// Perform update
 	err = ep.Update(startDate, endDate)
 	if err != nil {
@@ -93,7 +93,7 @@ func (db *DB) UpdateEffectivePeriod(id string, startDate string, endDate string)
 	}
 
 	db.Save()
-	
+
 	return ep, nil
 }
 
