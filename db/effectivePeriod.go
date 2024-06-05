@@ -58,7 +58,10 @@ func (db *DB) CreateEffectivePeriod(taskID string, startDate string, endDate str
 		log.Err(err).Msg("Error creating new EffectivePeriod")
 		return nil, err
 	}
+
+	db.EffectivePeriods[ep.ID.String()] = *ep
 	db.Save()
+	
 	return ep, nil
 }	
 

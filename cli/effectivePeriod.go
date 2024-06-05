@@ -41,7 +41,7 @@ func (c *CLI) CreateEffectivePeriodCmd() *cli.Command {
 	return &cli.Command{
 		Name:    "create-effective-period",
 		Usage:   "Create an effective period for a task",
-		Aliases: []string{"ctp"},
+		Aliases: []string{"cep"},
 		Action: func(cCtx *cli.Context) error {
 			taskId := cCtx.String("taskId")
 			startDate := cCtx.String("startDate")

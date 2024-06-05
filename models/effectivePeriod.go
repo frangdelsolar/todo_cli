@@ -104,6 +104,7 @@ func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 
 	e.StartDate = formatedStartDate
 	e.EndDate = formatedEndDate
+
 	return err
 }
 
