@@ -19,6 +19,14 @@ type Task struct {
 	CreatedAt string    `json:"createdAt"`
 }
 
+// String returns a string representation of the Task.
+//
+// Returns:
+// - string: a string representation of the Task.
+func (t *Task) String() string {
+	return fmt.Sprintf("Task %s\nTitle: %s\nCreated At: %s\n\n", t.ID, t.Title, t.CreatedAt)
+}
+
 // Update updates the title of the Task.
 //
 // Parameters:

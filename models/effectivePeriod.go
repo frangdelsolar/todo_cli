@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -21,6 +22,14 @@ type EffectivePeriod struct {
 	StartDate string    `json:"startDate"`
 	EndDate   string    `json:"endDate"`
 	CreatedAt string    `json:"createdAt"`
+}
+
+// String returns a string representation of the EffectivePeriod.
+//
+// Returns:
+// - string: a string representation of the EffectivePeriod.
+func (e *EffectivePeriod) String() string {
+	return fmt.Sprintf("EffectivePeriod %s\nTask ID: %s\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
 }
 
 // NewEffectivePeriod creates a new EffectivePeriod with the given task ID, start date, and end date.

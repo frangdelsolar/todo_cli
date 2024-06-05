@@ -35,7 +35,11 @@ func (c *CLI) CreateTaskCmd() *cli.Command {
 		Aliases: []string{"ct"},
 		Action: func(cCtx *cli.Context) error {
 			title := cCtx.String("title") 
-			c.DB.CreateTask(title)
+			task, err := c.DB.CreateTask(title)
+			if err != nil {
+				return err
+			}
+			fmt.Println(task.String())
 			return nil
 		},
 
@@ -70,7 +74,7 @@ func (c *CLI) ListTasksCmd() *cli.Command {
 		Action: func(cCtx *cli.Context) error {
 			tasks := c.DB.GetAllTasks()
 			for _, task := range tasks {
-				fmt.Println(task)
+				fmt.Println(task.String())
 			}
 			return nil
 		},
@@ -110,7 +114,11 @@ func (c *CLI) UpdateTaskCmd() *cli.Command {
 		Action: func(cCtx *cli.Context) error {
 			id := cCtx.String("id")
 			title := cCtx.String("title")
-			c.DB.UpdateTask(id, title)
+			task, err := c.DB.UpdateTask(id, title)
+			if err != nil {
+				return err
+			}
+			fmt.Println(task.String())
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -159,6 +167,7 @@ func (c *CLI) DeleteTaskCmd() *cli.Command {
 		Action: func(cCtx *cli.Context) error {
 			id := cCtx.String("id")
 			c.DB.DeleteTask(id)
+			fmt.Println("Task deleted successfully")
 			return nil
 		},
 		Flags: []cli.Flag{
@@ -192,7 +201,7 @@ func (c *CLI) ListActiveTasksCmd() *cli.Command {
 		Action: func(cCtx *cli.Context) error {
 			tasks := c.DB.GetActiveTasks()
 			for _, task := range tasks {
-				fmt.Println(task)
+				fmt.Println(task.String())
 			}
 			return nil
 		},
