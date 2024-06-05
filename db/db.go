@@ -22,6 +22,7 @@ func init(){
 type DB struct {
     Tasks map[string]models.Task `json:"tasks"`
 	EffectivePeriods map[string]models.EffectivePeriod `json:"taskPeriods"`
+	TaskCompletionLogs map[string]models.TaskCompletionLog `json:"taskCompletionLogs"`
 }
 
 // NewDB initializes a new DB instance.
@@ -69,6 +70,7 @@ func NewDB() (*DB, error){
 	} else {
 		db.Tasks = map[string]models.Task{}
 		db.EffectivePeriods = map[string]models.EffectivePeriod{}
+		db.TaskCompletionLogs = map[string]models.TaskCompletionLog{}
 	}
 
 	log.Info().Msg("DB initialized")

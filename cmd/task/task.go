@@ -16,6 +16,7 @@ var TaskCmd = &cobra.Command{
 func init() {
 	TaskCmd.AddCommand(AddEffectivePeriodCmd)
 	TaskCmd.AddCommand(CreateTaskCmd)
+	TaskCmd.AddCommand(CompleteTaskCmd)
 	TaskCmd.AddCommand(ListTaskCmd)
 	TaskCmd.AddCommand(UpdateTaskCmd)
 	TaskCmd.AddCommand(DeleteTaskCmd)
