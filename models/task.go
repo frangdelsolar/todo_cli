@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gofrs/uuid"
+	"gorm.io/gorm"
 )
 
 // Task represents a task.
@@ -14,9 +14,11 @@ import (
 // - Title: the title of the task.
 // - CreatedAt: the timestamp when the task was created.
 type Task struct {
-	ID        uuid.UUID `json:"id"`
+	gorm.Model
+	ID        uint      `json:"id" gorm:"primaryKey"`
 	Title     string    `json:"title"`
-	CreatedAt string    `json:"createdAt"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // String returns a string representation of the Task.
@@ -34,7 +36,7 @@ func (t *Task) String() string {
 //
 // Returns:
 // - None.
-func (t *Task) Update(title string) (error) {
+func (t *Task) Update(title string) error {
 	if title == "" {
 		return fmt.Errorf("title cannot be empty")
 	}
@@ -51,17 +53,14 @@ func (t *Task) Update(title string) (error) {
 //
 // Returns:
 // - *Task: a pointer to the newly created Task.
-func NewTask(title string) (*Task, error) {
-	now := time.Now().Format(time.RFC3339)
+func NewTask(title string) (Task, error) {
 
 	if title == "" {
-		return nil, fmt.Errorf("title cannot be empty")
+		return Task{}, fmt.Errorf("title cannot be empty")
 	}
 
-	task := &Task{
-		ID:        uuid.Must(uuid.NewV4()),
-		Title:     title,
-		CreatedAt: now,
+	task := Task{
+		Title: title,
 	}
 	return task, nil
 }

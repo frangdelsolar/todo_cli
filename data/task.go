@@ -1,11 +1,10 @@
-package db
+package data
 
 import (
 	"fmt"
 	"time"
 	"todo_cli/models"
 
-	"github.com/gofrs/uuid"
 	"github.com/rs/zerolog/log"
 )
 
@@ -17,23 +16,30 @@ import (
 // Returns:
 // - *models.Task: a pointer to the retrieved task, or nil if not found.
 // - error: an error if the task retrieval fails.
-func (db *DB) GetTaskById(id string) (*models.Task, error) {
-	task := db.Tasks[id]
-	if task.ID == uuid.Nil {
-		return nil, fmt.Errorf("task with ID %s not found", id)
+func GetTaskById(id uint) (models.Task, error) {
+	var task models.Task
+
+	DB.First(&task, "id = ?", id)
+	if task == (models.Task{}) {
+		return task, fmt.Errorf("task with ID %s not found", id)
 	}
-	return &task, nil
+	return task, nil
 }
 
 // GetAllTasks retrieves all tasks from the database.
 //
 // Returns:
 // - []models.Task: a slice of all tasks in the database.
-func (db *DB) GetAllTasks() []models.Task {
-	tasks := make([]models.Task, 0, len(db.Tasks))
-	for _, task := range db.Tasks {
-		tasks = append(tasks, task)
+func GetAllTasks() []models.Task {
+	var tasks []models.Task
+
+	DB.Find(&tasks)
+
+	if len(tasks) == 0 {
+		log.Warn().Msg("No tasks found")
+		return tasks
 	}
+
 	return tasks
 }
 
@@ -41,15 +47,12 @@ func (db *DB) GetAllTasks() []models.Task {
 //
 // Returns:
 // - []models.Task: a slice of active tasks in the database.
-func (db *DB) GetActiveTasks() []models.Task {
-	tasks := []models.Task{}
-	now := time.Now().Format(time.RFC3339)
-	for _, effectivePeriod := range db.EffectivePeriods {
-		if effectivePeriod.EndDate > now  || effectivePeriod.EndDate==""{
-			task := db.Tasks[effectivePeriod.TaskID.String()]
-			tasks = append(tasks, task)
-		}
-	}
+func GetActiveTasks() []models.Task {
+	var tasks []models.Task
+	now := time.Now()
+
+	DB.Where("end_date > ? OR end_date = ?", now, "").Find(&tasks)
+
 	return tasks
 }
 
@@ -61,14 +64,15 @@ func (db *DB) GetActiveTasks() []models.Task {
 // Returns:
 // - *models.Task: the newly created task.
 // - error: an error if the task creation fails.
-func (db *DB) CreateTask(title string) (*models.Task, error) {
+func CreateTask(title string) (models.Task, error) {
 	task, err := models.NewTask(title)
+
 	if err != nil {
 		log.Err(err).Msg("Error creating new Task")
-		return nil, err
+		return models.Task{}, err
 	}
-	db.Tasks[task.ID.String()] = *task
-	db.Save()
+
+	DB.Create(&task)
 	return task, nil
 }
 
@@ -81,19 +85,21 @@ func (db *DB) CreateTask(title string) (*models.Task, error) {
 // Returns:
 // - *models.Task: the updated task.
 // - error: an error if the task retrieval or update fails.
-func (db *DB) UpdateTask(id string, title string) (*models.Task, error) {
-	task, err := db.GetTaskById(id)
+func UpdateTask(id uint, title string) (models.Task, error) {
+	var task models.Task
+	task, err := GetTaskById(id)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task")
-		return nil, err
+		return task, err
 	}
 	err = task.Update(title)
 	if err != nil {
 		log.Err(err).Msg("Error updating Task")
-		return nil, err
+		return task, err
 	}
-	db.Tasks[task.ID.String()] = *task
-	db.Save()
+
+	DB.Save(&task)
+
 	return task, nil
 }
 
@@ -104,21 +110,20 @@ func (db *DB) UpdateTask(id string, title string) (*models.Task, error) {
 //
 // Returns:
 // - error: an error if the task retrieval or deletion fails.
-func (db *DB) DeleteTask(taskId string) error {
-	_, err := db.GetTaskById(taskId)
+func DeleteTask(taskId uint) error {
+	task, err := GetTaskById(taskId)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task")
 		return err
 	}
 
 	// Delete all the effective periods related to the task
-	effectivePeriods := db.GetEffectivePeriodsByTaskId(taskId)
+	effectivePeriods := GetEffectivePeriodsByTaskId(taskId)
 	for _, effectivePeriod := range effectivePeriods {
-		db.DeleteEffectivePeriod(effectivePeriod.ID.String())
+		DeleteEffectivePeriod(effectivePeriod.ID)
 	}
 
-	delete(db.Tasks, taskId)
-	db.Save()
+	DB.Delete(&task)
 
 	return nil
 }

@@ -1,10 +1,9 @@
-package db
+package data
 
 import (
 	"fmt"
 	"todo_cli/models"
 
-	"github.com/gofrs/uuid"
 	"github.com/rs/zerolog/log"
 )
 
@@ -16,12 +15,13 @@ import (
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the retrieved TaskCompletionLog, or nil if not found.
 // - error: an error if the TaskCompletionLog retrieval fails.
-func (db *DB) GetTaskCompletionLogById(id string) (*models.TaskCompletionLog, error) {
-	tcl := db.TaskCompletionLogs[id]
-	if tcl.ID == uuid.Nil {
-		return nil, fmt.Errorf("task with ID %s not found", id)
+func GetTaskCompletionLogById(id uint) (models.TaskCompletionLog, error) {
+	var tcl models.TaskCompletionLog
+	DB.First(&tcl, "id = ?", id)
+	if tcl == (models.TaskCompletionLog{}) {
+		return tcl, fmt.Errorf("task with ID %s not found", id)
 	}
-	return &tcl, nil
+	return tcl, nil
 }
 
 // GetTaskCompletionLogsByTaskId retrieves all TaskCompletionLogs associated with the given task ID.
@@ -31,13 +31,16 @@ func (db *DB) GetTaskCompletionLogById(id string) (*models.TaskCompletionLog, er
 //
 // Returns:
 // - []models.TaskCompletionLog: a slice of TaskCompletionLogs associated with the given task ID.
-func (db *DB) GetTaskCompletionLogsByTaskId(taskId string) []models.TaskCompletionLog {
-	tasks := []models.TaskCompletionLog{}
-	for _, tcl := range db.TaskCompletionLogs {
-		if tcl.TaskID.String() == taskId {
-			tasks = append(tasks, tcl)
-		}
+func GetTaskCompletionLogsByTaskId(taskId uint) []models.TaskCompletionLog {
+	var tasks []models.TaskCompletionLog
+
+	DB.Where("task_id = ?", taskId).Find(&tasks)
+
+	if len(tasks) == 0 {
+		log.Warn().Msg("No task completion logs found")
+		return tasks
 	}
+
 	return tasks
 }
 
@@ -50,14 +53,13 @@ func (db *DB) GetTaskCompletionLogsByTaskId(taskId string) []models.TaskCompleti
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the newly created TaskCompletionLog.
 // - error: an error if the TaskCompletionLog creation fails.
-func (db *DB) CreateTaskCompletionLog(taskId string, completedAt string) (*models.TaskCompletionLog, error) {
+func CreateTaskCompletionLog(taskId uint, completedAt string) (*models.TaskCompletionLog, error) {
 	tcl, err := models.NewTaskCompletionLog(taskId, completedAt)
 	if err != nil {
 		log.Err(err).Msg("Error creating new Task Completion Log")
 		return nil, err
 	}
-	db.TaskCompletionLogs[tcl.ID.String()] = *tcl
-	db.Save()
+	DB.Create(&tcl)
 	return tcl, nil
 }
 
@@ -70,19 +72,21 @@ func (db *DB) CreateTaskCompletionLog(taskId string, completedAt string) (*model
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the updated TaskCompletionLog.
 // - error: an error if the TaskCompletionLog retrieval or update fails.
-func (db *DB) UpdateTaskCompletionLog(id string, completedAt string) (*models.TaskCompletionLog, error) {
-	tcl, err := db.GetTaskCompletionLogById(id)
+func UpdateTaskCompletionLog(id uint, completedAt string) (models.TaskCompletionLog, error) {
+	var tcl models.TaskCompletionLog
+	tcl, err := GetTaskCompletionLogById(id)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task")
-		return nil, err
+		return tcl, err
 	}
 	err = tcl.Update(completedAt)
 	if err != nil {
 		log.Err(err).Msg("Error updating Task Completion Log")
-		return nil, err
+		return tcl, err
 	}
-	db.TaskCompletionLogs[tcl.ID.String()] = *tcl
-	db.Save()
+
+	DB.Save(&tcl)
+
 	return tcl, nil
 }
 
@@ -93,15 +97,15 @@ func (db *DB) UpdateTaskCompletionLog(id string, completedAt string) (*models.Ta
 //
 // Returns:
 // - error: an error if the TaskCompletionLog retrieval or deletion fails.
-func (db *DB) DeleteTaskCompletionLog(id string) error {
-	_, err := db.GetTaskCompletionLogById(id)
+func DeleteTaskCompletionLog(id uint) error {
+	var tcl models.TaskCompletionLog
+	tcl, err := GetTaskCompletionLogById(id)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task Completion Log")
 		return err
 	}
 
-	delete(db.TaskCompletionLogs, id)
-	db.Save()
+	DB.Delete(&tcl)
 
 	return nil
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"os"
-	"todo_cli/cmd"
+	cmd "todo_cli/internal/cli"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -10,7 +10,7 @@ import (
 
 var APP_VERSION = "0.0.1"
 
-func main(){
+func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	log.Info().Msg("Running TODO App v" + APP_VERSION)
 

@@ -1,16 +1,12 @@
 package taskcmd
 
 import (
-	"todo_cli/db"
-
 	"github.com/spf13/cobra"
 )
 
-var DB, _ = db.NewDB()
-
 var TaskCmd = &cobra.Command{
-	Use:    "task",
-	Short:  "Task actions",
+	Use:   "task",
+	Short: "Task actions",
 }
 
 func init() {

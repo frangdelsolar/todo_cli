@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gofrs/uuid"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 type Frequency string
@@ -42,12 +42,15 @@ func ValidFrequency(freq string) bool {
 // - EndDate: the end date of the EffectivePeriod.
 // - CreatedAt: the timestamp when the EffectivePeriod was created.
 type EffectivePeriod struct {
-	ID        uuid.UUID `json:"id"`
-	TaskID    uuid.UUID `json:"taskId"`
-	StartDate string    `json:"startDate"`
-	EndDate   string    `json:"endDate"`
+	gorm.Model
+	ID        uint      `json:"id" gorm:"primaryKey"`
+	TaskID    uint      `json:"taskId"`
+	Task      *Task     `json:"task" gorm:"foreignKey:TaskID"`
+	StartDate time.Time `json:"startDate"`
+	EndDate   time.Time `json:"endDate" omitempty:"true"`
 	Frequency Frequency `json:"frequency"`
-	CreatedAt string    `json:"createdAt"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 // String returns a string representation of the EffectivePeriod.
@@ -68,32 +71,35 @@ func (e *EffectivePeriod) String() string {
 // Returns:
 // - *EffectivePeriod: the newly created EffectivePeriod.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string, in_frequency string) (*EffectivePeriod, error) {
+func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, in_frequency string) (*EffectivePeriod, error) {
 	var output *EffectivePeriod
 	var err error
 
-	if in_startDate == "" {
-		in_startDate = time.Now().String()[0:10]
-	}
-	st, err := time.Parse(time.DateOnly, in_startDate)
-	if err != nil {
-		log.Err(err).Msg("Error parsing start date")
+	if in_taskId == 0 {
+		log.Err(err).Msg("Task ID cannot be empty")
 		return output, err
 	}
-	formatedStartDate := st.Format(time.RFC3339)
 
-	formatedEndDate := ""
+	// TODO: Validate in_taskId actually exists
+	now := time.Now()
+
+	sd, err := time.Parse(time.DateOnly, in_startDate)
+	if err != nil {
+		log.Warn().Msgf("Error parsing start date: %s", err)
+		sd = now
+	}
+
+	var ed time.Time
 	if in_endDate != "" {
-		parsedEndDate, err := time.Parse(time.DateOnly, in_endDate)
+		ed, err = time.Parse(time.DateOnly, in_endDate)
 		if err != nil {
 			log.Err(err).Msg("Error parsing end date")
 			return output, err
 		}
-		if st.After(parsedEndDate) {
+		if sd.After(ed) {
 			log.Err(err).Msg("Start date is after end date")
 			return output, err
 		}
-		formatedEndDate = parsedEndDate.Format(time.RFC3339)
 	}
 
 	if !ValidFrequency(in_frequency) {
@@ -103,14 +109,14 @@ func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string
 
 	frequency := Frequency(in_frequency)
 
-	now := time.Now().Format(time.RFC3339)
 	output = &EffectivePeriod{
-		ID:        uuid.Must(uuid.NewV4()),
-		TaskID:    uuid.Must(uuid.FromString(in_taskID)),
-		StartDate: formatedStartDate,
-		EndDate:   formatedEndDate,
+		TaskID:    uint(in_taskId),
+		StartDate: sd,
 		Frequency: frequency,
-		CreatedAt: now,
+	}
+
+	if in_endDate != "" {
+		output.EndDate = ed
 	}
 
 	return output, err
@@ -127,29 +133,27 @@ func NewEffectivePeriod(in_taskID string, in_startDate string, in_endDate string
 func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 	var err error
 
-	st, err := time.Parse(time.DateOnly, in_startDate)
+	sd, err := time.Parse(time.DateOnly, in_startDate)
 	if err != nil {
 		log.Err(err).Msg("Error parsing start date")
 		return err
 	}
-	formatedStartDate := st.Format(time.RFC3339)
 
-	formatedEndDate := ""
+	var ed time.Time
 	if in_endDate != "" {
-		parsedEndDate, err := time.Parse(time.DateOnly, in_endDate)
+		ed, err = time.Parse(time.DateOnly, in_endDate)
 		if err != nil {
 			log.Err(err).Msg("Error parsing end date")
 			return err
 		}
-		if st.After(parsedEndDate) {
+		if sd.After(ed) {
 			log.Err(err).Msg("Start date is after end date")
 			return err
 		}
-		formatedEndDate = parsedEndDate.Format(time.RFC3339)
 	}
 
-	e.StartDate = formatedStartDate
-	e.EndDate = formatedEndDate
+	e.StartDate = sd
+	e.EndDate = ed
 
 	return err
 }

@@ -2,14 +2,15 @@ package taskcmd
 
 import (
 	"fmt"
+	"todo_cli/data"
 	"todo_cli/models"
 
 	"github.com/spf13/cobra"
 )
 
 var ListTaskCmd = &cobra.Command{
-	Use:    "list",
-	Short:  "List Tasks",
+	Use:   "list",
+	Short: "List Tasks",
 	Run: func(cmd *cobra.Command, args []string) {
 		tasks := []models.Task{}
 
@@ -17,10 +18,10 @@ var ListTaskCmd = &cobra.Command{
 		active := cmd.Flag("active").Changed
 		// due := cmd.Flag("due").Changed
 		if all {
-			tasks = DB.GetAllTasks()
+			tasks = data.GetAllTasks()
 		} else if active {
-			tasks = DB.GetActiveTasks()
-		} 
+			tasks = data.GetActiveTasks()
+		}
 
 		if len(tasks) == 0 {
 			fmt.Println("No tasks found")

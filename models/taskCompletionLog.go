@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gofrs/uuid"
 	"github.com/rs/zerolog/log"
+	"gorm.io/gorm"
 )
 
 // TaskCompletionLog represents a task completion log.
@@ -15,9 +15,13 @@ import (
 // - TaskID: the ID of the task associated with the task completion log.
 // - CompletedAt: the timestamp when the task was completed.
 type TaskCompletionLog struct {
-	ID          uuid.UUID `json:"id"`
-	TaskID      uuid.UUID `json:"taskId"`
-	CompletedAt string    `json:"completedAt"`
+	gorm.Model
+	ID          uint      `json:"id" gorm:"primaryKey"`
+	TaskID      uint      `json:"taskId"`
+	Task        *Task     `json:"task" gorm:"foreignKey:TaskID"`
+	CompletedAt time.Time `json:"completedAt"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 // String returns a string representation of the TaskCompletionLog.
@@ -41,7 +45,7 @@ func (t *TaskCompletionLog) Update(in_completedAt string) error {
 		log.Err(err).Msg("Error parsing completedAt date")
 		return err
 	}
-	t.CompletedAt = formatedCompletedAt.Format(time.RFC3339)
+	t.CompletedAt = formatedCompletedAt
 	return nil
 }
 
@@ -54,12 +58,14 @@ func (t *TaskCompletionLog) Update(in_completedAt string) error {
 // Returns:
 // - *TaskCompletionLog: a pointer to the newly created TaskCompletionLog.
 // - error: an error if the task ID is empty or if there was a problem parsing the completedAt date.
-func NewTaskCompletionLog(taskID string, completedAt string) (*TaskCompletionLog, error) {
+func NewTaskCompletionLog(taskID uint, completedAt string) (*TaskCompletionLog, error) {
 
-	if taskID == "" {
+	if taskID == 0 {
 		return nil, fmt.Errorf("task ID cannot be empty")
 	}
-	
+
+	// TODO: validate taskID exist in database
+
 	now := time.Now().String()[0:10]
 	if completedAt == "" {
 		log.Warn().Msg("No completedAt date provided, defaulting to current time")
@@ -73,8 +79,7 @@ func NewTaskCompletionLog(taskID string, completedAt string) (*TaskCompletionLog
 	}
 
 	return &TaskCompletionLog{
-		ID:          uuid.Must(uuid.NewV4()),
-		TaskID:      uuid.Must(uuid.FromString(taskID)),
-		CompletedAt: parsedCompletedAt.Format(time.RFC3339),
+		TaskID:      uint(taskID),
+		CompletedAt: parsedCompletedAt,
 	}, nil
 }
