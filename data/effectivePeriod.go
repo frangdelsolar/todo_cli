@@ -54,8 +54,8 @@ func GetEffectivePeriodsByTaskId(taskID uint) []models.EffectivePeriod {
 // Returns:
 // - *models.EffectivePeriod: the newly created EffectivePeriod.
 // - error: an error if the EffectivePeriod creation fails.
-func CreateEffectivePeriod(taskID uint, startDate string, endDate string, frequency string) (*models.EffectivePeriod, error) {
-	ep, err := models.NewEffectivePeriod(taskID, startDate, endDate, frequency)
+func CreateEffectivePeriod(taskID uint, startDate string, endDate string, frequency string, category string) (*models.EffectivePeriod, error) {
+	ep, err := models.NewEffectivePeriod(taskID, startDate, endDate, frequency, category)
 	if err != nil {
 		log.Err(err).Msg("Error creating new EffectivePeriod")
 		return nil, err

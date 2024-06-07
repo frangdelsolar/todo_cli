@@ -9,13 +9,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type Frequency string
+type FrequencyType string
 
 const (
-	Daily   Frequency = "daily"
-	Weekly  Frequency = "weekly"
-	Monthly Frequency = "monthly"
-	Yearly  Frequency = "yearly"
+	Daily   FrequencyType = "daily"
+	Weekly  FrequencyType = "weekly"
+	Monthly FrequencyType = "monthly"
+	Yearly  FrequencyType = "yearly"
+)
+
+type EffectivePeriodCategory string
+
+const (
+	Todo EffectivePeriodCategory = "todo"
 )
 
 // EffectivePeriod represents an effective period associated with a task.
@@ -28,14 +34,15 @@ const (
 // - CreatedAt: the timestamp when the EffectivePeriod was created.
 type EffectivePeriod struct {
 	gorm.Model
-	ID        uint      `json:"id" gorm:"primaryKey"`
-	TaskID    uint      `json:"taskId"`
-	Task      *Task     `json:"task" gorm:"foreignKey:TaskID"`
-	StartDate time.Time `json:"startDate"`
-	EndDate   time.Time `json:"endDate" omitempty:"true"`
-	Frequency Frequency `json:"frequency"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID        uint                    `json:"id" gorm:"primaryKey"`
+	TaskID    uint                    `json:"taskId"`
+	Task      *Task                   `json:"task" gorm:"foreignKey:TaskID"`
+	StartDate time.Time               `json:"startDate"`
+	EndDate   time.Time               `json:"endDate" omitempty:"true"`
+	Frequency FrequencyType           `json:"frequency"`
+	Category  EffectivePeriodCategory `json:"category"`
+	CreatedAt time.Time               `json:"createdAt"`
+	UpdatedAt time.Time               `json:"updatedAt"`
 }
 
 // String returns a string representation of the EffectivePeriod.
@@ -56,7 +63,7 @@ func (e *EffectivePeriod) String() string {
 // Returns:
 // - *EffectivePeriod: the newly created EffectivePeriod.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, in_frequency string) (*EffectivePeriod, error) {
+func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, in_frequency string, in_category string) (*EffectivePeriod, error) {
 	var output *EffectivePeriod
 	var err error
 
@@ -99,12 +106,21 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 		in_frequency = string(Monthly)
 	}
 
-	frequency := Frequency(in_frequency)
+	frequency := FrequencyType(in_frequency)
+
+	err = CategoryValidator(in_category)
+	if err != nil {
+		log.Warn().Msg("Invalid category. Defaulting to todo.")
+		in_category = string(Todo)
+	}
+
+	category := EffectivePeriodCategory(in_category)
 
 	output = &EffectivePeriod{
 		TaskID:    uint(in_taskId),
 		StartDate: sd,
 		Frequency: frequency,
+		Category:  category,
 	}
 
 	if in_endDate != "" {
@@ -165,7 +181,6 @@ func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 // Returns:
 // - error: an error if the task ID is 0, otherwise nil.
 func TaskIDValidator(id uint) error {
-
 	if id == 0 {
 		return errors.New("task ID cannot be 0")
 	}
@@ -200,4 +215,21 @@ func FrequencyValidator(frequency string) error {
 		return nil
 	}
 	return errors.New("invalid frequency")
+}
+
+// CategoryValidator validates the given category string.
+//
+// It checks if the category is equal to the string representation of the Todo constant.
+// If the category is valid, it returns nil. Otherwise, it returns an error with the message "invalid category".
+//
+// Parameters:
+// - category: a string representing the category to be validated.
+//
+// Returns:
+// - error: an error if the category is invalid, otherwise nil.
+func CategoryValidator(category string) error {
+	if category == string(Todo) {
+		return nil
+	}
+	return errors.New("invalid category")
 }

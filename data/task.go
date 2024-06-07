@@ -68,10 +68,16 @@ func GetActiveTasks() []models.Task {
 	return tasks
 }
 
-func GetDueTasks() []models.Task {
-	var tasks []models.Task
+func GetDueTodo(taskId uint, date time.Time) models.Task {
+	var task models.Task
 
-	return tasks
+	DB.Table("task_completion_logs").
+		Select("tasks.*").
+		Joins("join tasks on task_completion_logs.task_id = tasks.id").
+		// Joins("join effective_periods on task_completion_logs.task_id = effective_periods.task_id").
+		Find(&task)
+
+	return task
 }
 
 // CreateTask creates a new task in the database.
@@ -137,8 +143,10 @@ func DeleteTask(taskId uint) error {
 
 	// Delete all the effective periods related to the task
 	effectivePeriods := GetEffectivePeriodsByTaskId(taskId)
-	for _, effectivePeriod := range effectivePeriods {
-		DeleteEffectivePeriod(effectivePeriod.ID)
+	if len(effectivePeriods) != 0 {
+		for _, effectivePeriod := range effectivePeriods {
+			DeleteEffectivePeriod(effectivePeriod.ID)
+		}
 	}
 
 	DB.Delete(&task)
