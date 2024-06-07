@@ -19,7 +19,7 @@ func GetEffectivePeriodById(id uint) (models.EffectivePeriod, error) {
 	var ep models.EffectivePeriod
 	DB.First(&ep, "id = ?", id)
 	if ep == (models.EffectivePeriod{}) {
-		return ep, fmt.Errorf("effective period with ID %s not found", id)
+		return ep, fmt.Errorf("effective period with ID %s not found", fmt.Sprint(id))
 	}
 
 	return ep, nil
@@ -38,7 +38,7 @@ func GetEffectivePeriodsByTaskId(taskID uint) []models.EffectivePeriod {
 	DB.Where("task_id = ?", taskID).Find(&eps)
 
 	if len(eps) == 0 {
-		log.Warn().Msg("No Effective Periods found for task ID: " + string(taskID))
+		log.Warn().Msg("No Effective Periods found for task ID: " + fmt.Sprint(taskID))
 		return eps
 	}
 	return eps

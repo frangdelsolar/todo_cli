@@ -21,7 +21,7 @@ func GetTaskById(id uint) (models.Task, error) {
 
 	DB.First(&task, "id = ?", id)
 	if task == (models.Task{}) {
-		return task, fmt.Errorf("task with ID %s not found", id)
+		return task, fmt.Errorf("task with ID %s not found", fmt.Sprint(id))
 	}
 	return task, nil
 }
@@ -49,9 +49,11 @@ func GetAllTasks() []models.Task {
 // - []models.Task: a slice of active tasks in the database.
 func GetActiveTasks() []models.Task {
 	var tasks []models.Task
-	now := time.Now()
 
-	DB.Where("end_date > ? OR end_date = ?", now, "").Find(&tasks)
+	now := time.Now()
+	nullDate := time.Time{}
+	// bring all tasks from effective periods table join task.id with effectivePeriod.taskId, where startData <= today and (endDate >= today or endDate is null)
+	DB.Table("effective_periods").Select("tasks.*").Joins("join tasks on effective_periods.task_id = tasks.id").Where("effective_periods.start_date <= ? AND (effective_periods.end_date >= ? OR effective_periods.end_date == ?)", now, now, nullDate).Find(&tasks)
 
 	return tasks
 }

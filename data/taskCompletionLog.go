@@ -19,7 +19,7 @@ func GetTaskCompletionLogById(id uint) (models.TaskCompletionLog, error) {
 	var tcl models.TaskCompletionLog
 	DB.First(&tcl, "id = ?", id)
 	if tcl == (models.TaskCompletionLog{}) {
-		return tcl, fmt.Errorf("task with ID %s not found", id)
+		return tcl, fmt.Errorf("task with ID %s not found", fmt.Sprint(id))
 	}
 	return tcl, nil
 }

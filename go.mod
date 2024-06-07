@@ -3,7 +3,7 @@ module todo_cli
 go 1.22.4
 
 require (
-	github.com/gofrs/uuid v4.4.0+incompatible
+	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.8.0
 	gorm.io/driver/sqlite v1.5.5

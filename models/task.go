@@ -26,7 +26,7 @@ type Task struct {
 // Returns:
 // - string: a string representation of the Task.
 func (t *Task) String() string {
-	return fmt.Sprintf("Task %s\nTitle: %s\nCreated At: %s\n", t.ID, t.Title, t.CreatedAt)
+	return fmt.Sprintf("Task %s\nTitle: %s\nCreated At: %s\n", fmt.Sprint(t.ID), t.Title, t.CreatedAt)
 }
 
 // Update updates the title of the Task.
