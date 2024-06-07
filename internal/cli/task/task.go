@@ -2,6 +2,8 @@ package task
 
 import (
 	"fmt"
+	"time"
+	"todo_cli/data"
 	"todo_cli/internal/cli/task/complete"
 	"todo_cli/internal/cli/task/period"
 	"todo_cli/pkg/prompt"
@@ -23,6 +25,18 @@ var TaskCmd = &cobra.Command{
 	Use:   "task",
 	Short: "Task actions",
 	Run: func(cmd *cobra.Command, args []string) {
+
+		// Show pending tasks
+		tasks := data.GetPendingTasksTodoMonthly(time.Now())
+		if len(tasks) > 0 {
+			fmt.Print("These are your pending tasks:")
+			for _, task := range tasks {
+				fmt.Println(task.String())
+			}
+		} else {
+			fmt.Println("No pending tasks today!!!")
+		}
+
 		fmt.Print("Select an action")
 		pc := prompt.PromptContent{
 			Label: "Action",

@@ -96,8 +96,6 @@ func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
 			  `, date, date, nullDate, models.Monthly).
 		Find(&activeTasksIds)
 
-	log.Debug().Interface("activeTasksIds", activeTasksIds).Msg("activeTasksIds")
-
 	// todos that only happen monthly
 	// Is there any completion log for the time?
 	var tasksWithCompletionLog []uint
@@ -109,12 +107,8 @@ func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
 		Where("completed_at BETWEEN ? AND ?", firstDayOfMonth, lastDayOfMonth).
 		Find(&tasksWithCompletionLog)
 
-	log.Debug().Interface("data", tasksWithCompletionLog).Msg("tasksWithCompletionLog")
-
 	// find those tasks that don't have a completion log
 	dueTasksIds := difference(activeTasksIds, tasksWithCompletionLog)
-
-	log.Debug().Interface("data", dueTasksIds).Msg("dueTasksIds")
 
 	var tasks []models.Task
 
