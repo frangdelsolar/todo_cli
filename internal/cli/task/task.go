@@ -16,6 +16,7 @@ var taskCmdActions = []prompt.SelectableItem{
 	{Key: "list", Label: "List tasks"},
 	{Key: "period", Label: "Effective periods"},
 	{Key: "complete", Label: "Complete a task"},
+	{Key: "exit", Label: "Exit"},
 }
 
 var TaskCmd = &cobra.Command{
@@ -42,7 +43,6 @@ var TaskCmd = &cobra.Command{
 		case "complete":
 			complete.CompleteTaskCmd.Run(cmd, args)
 		}
-
 	},
 }
 

@@ -2,6 +2,7 @@ package task
 
 import (
 	"fmt"
+	"time"
 	"todo_cli/data"
 	"todo_cli/models"
 	"todo_cli/pkg/prompt"
@@ -12,6 +13,7 @@ import (
 var ListTaskCmdActions = []prompt.SelectableItem{
 	{Key: "all", Label: "All"},
 	{Key: "active", Label: "Active"},
+	{Key: "pending", Label: "Pending"},
 }
 
 var ListTaskCmd = &cobra.Command{
@@ -29,11 +31,14 @@ var ListTaskCmd = &cobra.Command{
 
 		all := selection.Key == "all"
 		active := selection.Key == "active"
+		pending := selection.Key == "pending"
 
 		if all {
 			tasks = data.GetAllTasks()
 		} else if active {
 			tasks = data.GetActiveTasks()
+		} else if pending {
+			tasks = data.GetPendingTasksTodoMonthly(time.Now())
 		}
 
 		if len(tasks) == 0 {

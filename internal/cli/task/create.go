@@ -33,6 +33,5 @@ var CreateTaskCmd = &cobra.Command{
 			return
 		}
 		log.Info().Interface("task", task).Msg("Task created")
-		log.Debug().Interface("cmd", cmd.Parent()).Msg("cmd")
 	},
 }

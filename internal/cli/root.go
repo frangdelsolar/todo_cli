@@ -32,10 +32,21 @@ and organize your tasks in a centralized and accessible way.
 			taskcmd.TaskCmd.Run(cmd, args)
 		}
 	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		// wait for user to press any key and then execute again
+		fmt.Print("\nPress any key to continue...")
+		fmt.Scanln()
+		// clear screen
+		fmt.Print("\033[2J\033[1;1H")
+
+		cmd.Execute()
+	},
 }
 
 // Execute executes the root command.
 func Execute() error {
+	// clear screen
+	fmt.Print("\033[2J\033[1;1H")
 	return rootCmd.Execute()
 }
 
