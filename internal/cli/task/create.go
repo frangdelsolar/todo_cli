@@ -13,8 +13,6 @@ var CreateTaskCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a task",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Debug().Msg("Creating task")
-
 		var title string
 		pc := prompt.PromptContent{
 			Label: "Title",

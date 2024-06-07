@@ -34,6 +34,6 @@ var UpdateTaskCmd = &cobra.Command{
 			return
 		}
 
-		log.Debug().Interface("task", task).Msg("Task updated")
+		log.Info().Interface("task", task).Msg("Task updated")
 	},
 }

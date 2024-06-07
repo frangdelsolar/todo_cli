@@ -8,8 +8,6 @@ import (
 	"todo_cli/data"
 	"todo_cli/models"
 	"todo_cli/pkg/prompt"
-
-	"github.com/rs/zerolog/log"
 )
 
 type TaskSelection struct {
@@ -57,7 +55,6 @@ func SelectTaskFromAll() (uint, error) {
 }
 
 func SelectTaskFromPending() (uint, error) {
-	log.Debug().Msg("Selecting task from pending")
 	return SelectTask("Select Pending Task", func() []models.Task {
 		return data.GetPendingTasksTodoMonthly(time.Now())
 	})

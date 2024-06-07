@@ -13,8 +13,6 @@ var CompleteTaskCmd = &cobra.Command{
 	Use:   "complete",
 	Short: "Mark a task as completed",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Debug().Msg("Completing task")
-
 		taskId, err := prompts.SelectTaskFromPending()
 		if err != nil || taskId == 0 {
 			log.Err(err).Msg("Error selecting task")
@@ -27,5 +25,7 @@ var CompleteTaskCmd = &cobra.Command{
 		completedAt := prompt.PromptGetInput(pc)
 
 		data.CreateTaskCompletionLog(taskId, completedAt)
+
+		log.Info().Interface("task", taskId).Msg("Task completed")
 	},
 }
