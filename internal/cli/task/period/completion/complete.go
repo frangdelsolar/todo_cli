@@ -1,4 +1,4 @@
-package taskcmd
+package completion
 
 import (
 	"strconv"

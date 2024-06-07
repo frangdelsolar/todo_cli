@@ -2,7 +2,8 @@ package main
 
 import (
 	"os"
-	cmd "todo_cli/internal/cli"
+	"todo_cli/data"
+	"todo_cli/internal/cli"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -15,5 +16,10 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	log.Info().Msg("Running TODO App v" + APP_VERSION)
 
-	cmd.Execute()
+	err := data.ConnectDB()
+	if err != nil {
+		log.Err(err).Msg("Error connecting to database")
+		return
+	}
+	cli.Execute()
 }

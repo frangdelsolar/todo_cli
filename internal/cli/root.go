@@ -1,4 +1,4 @@
-package cmd
+package cli
 
 import (
 	taskcmd "todo_cli/internal/cli/task"

@@ -1,4 +1,4 @@
-package taskcmd
+package period
 
 import (
 	"strconv"
@@ -8,9 +8,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var AddEffectivePeriodCmd = &cobra.Command{
-	Use:   "period",
-	Short: "Add Efective Period",
+var CreateEffectivePeriodCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Add Efective Periods",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Info().Msg("Adding Effective Period to task")
 
@@ -35,8 +35,8 @@ var AddEffectivePeriodCmd = &cobra.Command{
 }
 
 func init() {
-	AddEffectivePeriodCmd.Flags().IntP("taskId", "t", 0, "The id of the task")
-	AddEffectivePeriodCmd.Flags().StringP("startDate", "s", "", "The start date of the effective period. Default is the current date.")
-	AddEffectivePeriodCmd.Flags().StringP("endDate", "e", "", "The end date of the effective period. If not provided, the task will be active until it is an end date is provided.")
-	AddEffectivePeriodCmd.Flags().StringP("frequency", "f", "", "The frequency of the task within the effective period (daily, weekly, monthly, yearly). Default is monthly.")
+	CreateEffectivePeriodCmd.Flags().IntP("taskId", "t", 0, "The id of the task")
+	CreateEffectivePeriodCmd.Flags().StringP("startDate", "s", "", "The start date of the effective period. Default is the current date.")
+	CreateEffectivePeriodCmd.Flags().StringP("endDate", "e", "", "The end date of the effective period. If not provided, the task will be active until it is an end date is provided.")
+	CreateEffectivePeriodCmd.Flags().StringP("frequency", "f", "", "The frequency of the task within the effective period (daily, weekly, monthly, yearly). Default is monthly.")
 }

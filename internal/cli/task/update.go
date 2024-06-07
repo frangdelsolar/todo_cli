@@ -1,4 +1,4 @@
-package taskcmd
+package task
 
 import (
 	"strconv"

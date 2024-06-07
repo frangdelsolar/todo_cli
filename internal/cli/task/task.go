@@ -1,6 +1,8 @@
-package taskcmd
+package task
 
 import (
+	"todo_cli/internal/cli/task/period"
+
 	"github.com/spf13/cobra"
 )
 
@@ -10,10 +12,9 @@ var TaskCmd = &cobra.Command{
 }
 
 func init() {
-	TaskCmd.AddCommand(AddEffectivePeriodCmd)
 	TaskCmd.AddCommand(CreateTaskCmd)
-	TaskCmd.AddCommand(CompleteTaskCmd)
 	TaskCmd.AddCommand(ListTaskCmd)
 	TaskCmd.AddCommand(UpdateTaskCmd)
 	TaskCmd.AddCommand(DeleteTaskCmd)
+	TaskCmd.AddCommand(period.EffectivePeriodCmd)
 }
