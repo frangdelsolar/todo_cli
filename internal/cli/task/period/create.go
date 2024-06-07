@@ -15,14 +15,18 @@ var CreateEffectivePeriodCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Info().Msg("Adding Effective Period to task")
 
-		taskId := prompts.SelectTask()
+		taskId, err := prompts.SelectTaskFromAll()
+		if err != nil {
+			log.Err(err).Msg("Error selecting task")
+			return
+		}
 
 		startDate := prompt.PromptGetInput(prompt.PromptContent{Label: "Start Date"})
 		endDate := prompt.PromptGetInput(prompt.PromptContent{Label: "End Date"})
 		frequency := prompt.PromptGetInput(prompt.PromptContent{Label: "Frequency"})
 		category := prompt.PromptGetInput(prompt.PromptContent{Label: "Category"})
 
-		_, err := data.CreateEffectivePeriod(taskId, startDate, endDate, frequency, category)
+		_, err = data.CreateEffectivePeriod(taskId, startDate, endDate, frequency, category)
 		if err != nil {
 			log.Err(err).Msg("Error creating Effective Period")
 			return

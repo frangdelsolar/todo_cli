@@ -14,7 +14,11 @@ var UpdateTaskCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Update a task",
 	Run: func(cmd *cobra.Command, args []string) {
-		taskId := prompts.SelectTask()
+		taskId, err := prompts.SelectTaskFromAll()
+		if err != nil {
+			log.Err(err).Msg("Error selecting task")
+			return
+		}
 
 		var title string
 		pc := prompt.PromptContent{

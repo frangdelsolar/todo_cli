@@ -70,18 +70,19 @@ func NewTaskCompletionLog(taskID uint, completedAt string) (*TaskCompletionLog, 
 		return nil, err
 	}
 
-	now := time.Now().String()[0:10]
+	now := time.Now()
+	var cd time.Time
 
 	err = DateValidator(completedAt)
 	if err != nil {
-		log.Err(err).Msg("Error validating completedAt date. Defaulting to current time")
-		completedAt = now
+		log.Warn().Msg("Error validating completedAt date. Defaulting to current time")
+		cd = now
+	} else {
+		cd, _ = time.Parse(time.DateOnly, completedAt)
 	}
-
-	parsedCompletedAt, _ := time.Parse(time.DateOnly, completedAt)
 
 	return &TaskCompletionLog{
 		TaskID:      uint(taskID),
-		CompletedAt: parsedCompletedAt,
+		CompletedAt: cd,
 	}, nil
 }

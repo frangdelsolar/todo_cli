@@ -54,7 +54,7 @@ func GetActiveTasks() []models.Task {
 	nullDate := time.Time{}
 
 	DB.Table("effective_periods").
-		Select("tasks.*").
+		Select("DISTINCT tasks.*").
 		Joins("join tasks on effective_periods.task_id = tasks.id").
 		Where(`
 				effective_periods.start_date <= ? AND 
@@ -68,16 +68,63 @@ func GetActiveTasks() []models.Task {
 	return tasks
 }
 
-func GetDueTodo(taskId uint, date time.Time) models.Task {
-	var task models.Task
+type PendingTaskContract struct {
+	TaskID              uint
+	EffectivePeriodId   uint
+	TaskCompletionLogId uint
+}
 
-	DB.Table("task_completion_logs").
+func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
+
+	// Auxiliary variables
+	firstDayOfMonth := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
+	lastDayOfMonth := firstDayOfMonth.AddDate(0, 1, -1)
+	nullDate := time.Time{}
+
+	// Are there any effective period for the time?
+	var activeTasksIds []uint
+	DB.Table("effective_periods").
+		Select("DISTINCT task_id").
+		Joins("join tasks on effective_periods.task_id = tasks.id").
+		Where(`
+				effective_periods.start_date <= ? AND 
+					(
+						effective_periods.end_date >= ? OR 
+						effective_periods.end_date == ?
+					) AND
+				effective_periods.frequency = ?
+			  `, date, date, nullDate, models.Monthly).
+		Find(&activeTasksIds)
+
+	log.Debug().Interface("activeTasksIds", activeTasksIds).Msg("activeTasksIds")
+
+	// todos that only happen monthly
+	// Is there any completion log for the time?
+	var tasksWithCompletionLog []uint
+
+	DB.
+		Table("task_completion_logs").
+		Select("task_id").
+		Where("task_id IN ?", activeTasksIds).
+		Where("completed_at BETWEEN ? AND ?", firstDayOfMonth, lastDayOfMonth).
+		Find(&tasksWithCompletionLog)
+
+	log.Debug().Interface("data", tasksWithCompletionLog).Msg("tasksWithCompletionLog")
+
+	// find those tasks that don't have a completion log
+	dueTasksIds := difference(activeTasksIds, tasksWithCompletionLog)
+
+	log.Debug().Interface("data", dueTasksIds).Msg("dueTasksIds")
+
+	var tasks []models.Task
+
+	DB.
+		Table("tasks").
 		Select("tasks.*").
-		Joins("join tasks on task_completion_logs.task_id = tasks.id").
-		// Joins("join effective_periods on task_completion_logs.task_id = effective_periods.task_id").
-		Find(&task)
+		Where("id IN ?", dueTasksIds).
+		Find(&tasks)
 
-	return task
+	return tasks
 }
 
 // CreateTask creates a new task in the database.
@@ -152,4 +199,18 @@ func DeleteTask(taskId uint) error {
 	DB.Delete(&task)
 
 	return nil
+}
+
+func difference(a []uint, b []uint) []uint {
+	mb := make(map[uint]struct{}, len(b))
+	for _, x := range b {
+		mb[x] = struct{}{}
+	}
+	var diff []uint
+	for _, x := range a {
+		if _, found := mb[x]; !found {
+			diff = append(diff, x)
+		}
+	}
+	return diff
 }

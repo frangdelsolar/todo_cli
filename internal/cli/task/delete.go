@@ -12,8 +12,13 @@ var DeleteTaskCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete a task",
 	Run: func(cmd *cobra.Command, args []string) {
-		taskId := prompts.SelectTask()
-		err := data.DeleteTask(taskId)
+		taskId, err := prompts.SelectTaskFromAll()
+		if err != nil {
+			log.Err(err).Msg("Error selecting task")
+			return
+		}
+
+		err = data.DeleteTask(taskId)
 		if err != nil {
 			log.Err(err).Msg("Error deleting task")
 			return
