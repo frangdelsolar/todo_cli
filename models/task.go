@@ -26,7 +26,7 @@ type Task struct {
 // Returns:
 // - string: a string representation of the Task.
 func (t *Task) String() string {
-	return fmt.Sprintf("Task %s\nTitle: %s\nCreated At: %s\n", fmt.Sprint(t.ID), t.Title, t.CreatedAt)
+	return fmt.Sprintf("Task ID: %s\nTitle: %s\n", fmt.Sprint(t.ID), t.Title)
 }
 
 // Update updates the title of the Task.
@@ -37,8 +37,10 @@ func (t *Task) String() string {
 // Returns:
 // - None.
 func (t *Task) Update(title string) error {
-	if title == "" {
-		return fmt.Errorf("title cannot be empty")
+
+	err := TaskTitleValidator(title)
+	if err != nil {
+		return err
 	}
 
 	t.Title = title
@@ -55,12 +57,28 @@ func (t *Task) Update(title string) error {
 // - *Task: a pointer to the newly created Task.
 func NewTask(title string) (Task, error) {
 
-	if title == "" {
-		return Task{}, fmt.Errorf("title cannot be empty")
+	err := TaskTitleValidator(title)
+	if err != nil {
+		return Task{}, err
 	}
 
 	task := Task{
 		Title: title,
 	}
 	return task, nil
+}
+
+// TaskTitleValidator validates the title of a task.
+//
+// Parameters:
+// - title: the title of the task.
+//
+// Returns:
+// - error: an error if the title is empty.
+func TaskTitleValidator(title string) error {
+	if title == "" {
+		return fmt.Errorf("title cannot be empty")
+	}
+
+	return nil
 }

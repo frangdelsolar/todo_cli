@@ -29,7 +29,7 @@ type TaskCompletionLog struct {
 // Returns:
 // - string: a string representation of the TaskCompletionLog.
 func (t *TaskCompletionLog) String() string {
-	return fmt.Sprintf("TaskCompletionLog %s\nTask ID: %s\nCompleted At: %s\n", t.ID, t.TaskID, t.CompletedAt)
+	return fmt.Sprintf("TaskCompletionLog %d\nTask ID: %d\nCompleted At: %s\n", t.ID, t.TaskID, t.CompletedAt)
 }
 
 // Update updates the completedAt field of the TaskCompletionLog.
@@ -40,12 +40,16 @@ func (t *TaskCompletionLog) String() string {
 // Returns:
 // - error: an error if there was a problem parsing the completedAt date.
 func (t *TaskCompletionLog) Update(in_completedAt string) error {
-	formatedCompletedAt, err := time.Parse(time.DateOnly, in_completedAt)
+
+	err := DateValidator(in_completedAt)
 	if err != nil {
-		log.Err(err).Msg("Error parsing completedAt date")
+		log.Err(err).Msg("Error validating completedAt date")
 		return err
 	}
+
+	formatedCompletedAt, _ := time.Parse(time.DateOnly, in_completedAt)
 	t.CompletedAt = formatedCompletedAt
+
 	return nil
 }
 
@@ -60,23 +64,21 @@ func (t *TaskCompletionLog) Update(in_completedAt string) error {
 // - error: an error if the task ID is empty or if there was a problem parsing the completedAt date.
 func NewTaskCompletionLog(taskID uint, completedAt string) (*TaskCompletionLog, error) {
 
-	if taskID == 0 {
-		return nil, fmt.Errorf("task ID cannot be empty")
+	err := TaskIDValidator(taskID)
+	if err != nil {
+		log.Err(err).Msg("Error validating task ID")
+		return nil, err
 	}
 
-	// TODO: validate taskID exist in database
-
 	now := time.Now().String()[0:10]
-	if completedAt == "" {
-		log.Warn().Msg("No completedAt date provided, defaulting to current time")
+
+	err = DateValidator(completedAt)
+	if err != nil {
+		log.Err(err).Msg("Error validating completedAt date. Defaulting to current time")
 		completedAt = now
 	}
 
-	parsedCompletedAt, err := time.Parse(time.DateOnly, completedAt)
-	if err != nil {
-		log.Warn().Msg("Invalid completedAt date provided, defaulting to current time")
-		parsedCompletedAt, _ = time.Parse(time.DateOnly, now)
-	}
+	parsedCompletedAt, _ := time.Parse(time.DateOnly, completedAt)
 
 	return &TaskCompletionLog{
 		TaskID:      uint(taskID),

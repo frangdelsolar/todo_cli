@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
@@ -16,22 +17,6 @@ const (
 	Monthly Frequency = "monthly"
 	Yearly  Frequency = "yearly"
 )
-
-// ValidFrequency checks if the given frequency string is valid.
-//
-// Parameters:
-// - freq: the frequency string to be checked.
-//
-// Returns:
-// - bool: true if the frequency string is valid, false otherwise.
-func ValidFrequency(freq string) bool {
-	switch freq {
-	case string(Daily), string(Weekly), string(Monthly), string(Yearly):
-		return true
-	default:
-		return false
-	}
-}
 
 // EffectivePeriod represents an effective period associated with a task.
 //
@@ -58,7 +43,7 @@ type EffectivePeriod struct {
 // Returns:
 // - string: a string representation of the EffectivePeriod.
 func (e *EffectivePeriod) String() string {
-	return fmt.Sprintf("EffectivePeriod %s\nTask ID: %s\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
+	return fmt.Sprintf("EffectivePeriod %d\nTask ID: %d\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
 }
 
 // NewEffectivePeriod creates a new EffectivePeriod with the given task ID, start date, and end date.
@@ -75,34 +60,41 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 	var output *EffectivePeriod
 	var err error
 
-	if in_taskId == 0 {
-		log.Err(err).Msg("Task ID cannot be empty")
+	// Run Validations
+	err = TaskIDValidator(in_taskId)
+	if err != nil {
+		log.Err(err).Msg("Error validating task ID")
 		return output, err
 	}
 
-	// TODO: Validate in_taskId actually exists
 	now := time.Now()
 
-	sd, err := time.Parse(time.DateOnly, in_startDate)
+	var sd time.Time
+	err = DateValidator(in_startDate)
 	if err != nil {
-		log.Warn().Msgf("Error parsing start date: %s", err)
+		log.Warn().Msg("Error validating start date. Defaulting to today.")
 		sd = now
+	} else {
+		sd, _ = time.Parse(time.DateOnly, in_startDate)
 	}
 
 	var ed time.Time
 	if in_endDate != "" {
-		ed, err = time.Parse(time.DateOnly, in_endDate)
+		err = DateValidator(in_endDate)
 		if err != nil {
-			log.Err(err).Msg("Error parsing end date")
+			log.Err(err).Msg("Error validating end date")
 			return output, err
 		}
+		ed, _ = time.Parse(time.DateOnly, in_endDate)
+
 		if sd.After(ed) {
 			log.Err(err).Msg("Start date is after end date")
 			return output, err
 		}
 	}
 
-	if !ValidFrequency(in_frequency) {
+	err = FrequencyValidator(in_frequency)
+	if err != nil {
 		log.Warn().Msg("Invalid frequency. Defaulting to monthly.")
 		in_frequency = string(Monthly)
 	}
@@ -133,19 +125,26 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 	var err error
 
-	sd, err := time.Parse(time.DateOnly, in_startDate)
+	now := time.Now()
+
+	var sd time.Time
+	err = DateValidator(in_startDate)
 	if err != nil {
-		log.Err(err).Msg("Error parsing start date")
-		return err
+		log.Warn().Msg("Error validating start date. Defaulting to today.")
+		sd = now
+	} else {
+		sd, _ = time.Parse(time.DateOnly, in_startDate)
 	}
 
 	var ed time.Time
 	if in_endDate != "" {
-		ed, err = time.Parse(time.DateOnly, in_endDate)
+		err = DateValidator(in_endDate)
 		if err != nil {
-			log.Err(err).Msg("Error parsing end date")
+			log.Err(err).Msg("Error validating end date")
 			return err
 		}
+		ed, _ = time.Parse(time.DateOnly, in_endDate)
+
 		if sd.After(ed) {
 			log.Err(err).Msg("Start date is after end date")
 			return err
@@ -156,4 +155,49 @@ func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
 	e.EndDate = ed
 
 	return err
+}
+
+// TaskIDValidator validates a task ID.
+//
+// Parameters:
+// - id: the ID of the task to validate.
+//
+// Returns:
+// - error: an error if the task ID is 0, otherwise nil.
+func TaskIDValidator(id uint) error {
+
+	if id == 0 {
+		return errors.New("task ID cannot be 0")
+	}
+	return nil
+}
+
+// DateValidator validates a date string in the format "YYYY-MM-DD".
+//
+// Parameters:
+// - date: the date string to validate.
+//
+// Returns:
+// - error: an error if the date string is not in the correct format or if the date is invalid, otherwise nil.
+func DateValidator(date string) error {
+	_, err := time.Parse(time.DateOnly, date)
+	return err
+}
+
+// FrequencyValidator validates the given frequency string.
+//
+// It checks if the frequency is one of the following: Daily, Weekly, Monthly, Yearly.
+// If the frequency is not valid, it returns an error with the message "invalid frequency".
+// If the frequency is valid, it returns nil.
+//
+// Parameters:
+// - frequency: a string representing the frequency to be validated.
+//
+// Returns:
+// - error: an error if the frequency is invalid, otherwise nil.
+func FrequencyValidator(frequency string) error {
+	if frequency != string(Daily) && frequency != string(Weekly) && frequency != string(Monthly) && frequency != string(Yearly) {
+		return errors.New("invalid frequency")
+	}
+	return nil
 }
