@@ -5,7 +5,7 @@ import (
 	"time"
 	"todo_cli/data"
 	"todo_cli/internal/cli/task/complete"
-	"todo_cli/internal/cli/task/period"
+	"todo_cli/internal/cli/task/goal"
 	"todo_cli/pkg/prompt"
 
 	"github.com/spf13/cobra"
@@ -16,7 +16,7 @@ var taskCmdActions = []prompt.SelectableItem{
 	{Key: "update", Label: "Update a task"},
 	{Key: "delete", Label: "Delete a task"},
 	{Key: "list", Label: "List tasks"},
-	{Key: "period", Label: "Effective periods"},
+	{Key: "task_goal", Label: "Task goals"},
 	{Key: "complete", Label: "Complete a task"},
 	{Key: "exit", Label: "Exit"},
 }
@@ -52,8 +52,8 @@ var TaskCmd = &cobra.Command{
 			DeleteTaskCmd.Run(cmd, args)
 		case "list":
 			ListTaskCmd.Run(cmd, args)
-		case "period":
-			period.EffectivePeriodCmd.Run(cmd, args)
+		case "task_goal":
+			goal.TaskGoalCmd.Run(cmd, args)
 		case "complete":
 			complete.CompleteTaskCmd.Run(cmd, args)
 		}
@@ -65,6 +65,6 @@ func init() {
 	TaskCmd.AddCommand(ListTaskCmd)
 	TaskCmd.AddCommand(UpdateTaskCmd)
 	TaskCmd.AddCommand(DeleteTaskCmd)
-	TaskCmd.AddCommand(period.EffectivePeriodCmd)
+	TaskCmd.AddCommand(goal.TaskGoalCmd)
 	TaskCmd.AddCommand(complete.CompleteTaskCmd)
 }

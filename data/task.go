@@ -53,14 +53,14 @@ func GetActiveTasks() []models.Task {
 	now := time.Now()
 	nullDate := time.Time{}
 
-	DB.Table("effective_periods").
+	DB.Table("task_goals").
 		Select("DISTINCT tasks.*").
-		Joins("join tasks on effective_periods.task_id = tasks.id").
+		Joins("join tasks on task_goals.task_id = tasks.id").
 		Where(`
-				effective_periods.start_date <= ? AND 
+				task_goals.start_date <= ? AND 
 					(
-						effective_periods.end_date >= ? OR 
-						effective_periods.end_date == ?
+						task_goals.end_date >= ? OR 
+						task_goals.end_date == ?
 					)
 			  `, now, now, nullDate).
 		Find(&tasks)
@@ -68,37 +68,32 @@ func GetActiveTasks() []models.Task {
 	return tasks
 }
 
-type PendingTaskContract struct {
-	TaskID              uint
-	EffectivePeriodId   uint
-	TaskCompletionLogId uint
-}
-
 func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
 
 	// Auxiliary variables
-	firstDayOfMonth := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
-	lastDayOfMonth := firstDayOfMonth.AddDate(0, 1, -1)
+
 	nullDate := time.Time{}
 
-	// Are there any effective period for the time?
+	// Are there any task goal for the time?
 	var activeTasksIds []uint
-	DB.Table("effective_periods").
+	DB.Table("task_goals").
 		Select("DISTINCT task_id").
-		Joins("join tasks on effective_periods.task_id = tasks.id").
+		Joins("join tasks on task_goals.task_id = tasks.id").
 		Where(`
-				effective_periods.start_date <= ? AND 
+				task_goals.start_date <= ? AND 
 					(
-						effective_periods.end_date >= ? OR 
-						effective_periods.end_date == ?
+						task_goals.end_date >= ? OR 
+						task_goals.end_date == ?
 					) AND
-				effective_periods.frequency = ?
+				task_goals.frequency = ?
 			  `, date, date, nullDate, models.Monthly).
 		Find(&activeTasksIds)
 
 	// todos that only happen monthly
 	// Is there any completion log for the time?
 	var tasksWithCompletionLog []uint
+	firstDayOfMonth := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
+	lastDayOfMonth := firstDayOfMonth.AddDate(0, 1, -1)
 
 	DB.
 		Table("task_completion_logs").
@@ -182,11 +177,11 @@ func DeleteTask(taskId uint) error {
 		return err
 	}
 
-	// Delete all the effective periods related to the task
-	effectivePeriods := GetEffectivePeriodsByTaskId(taskId)
-	if len(effectivePeriods) != 0 {
-		for _, effectivePeriod := range effectivePeriods {
-			DeleteEffectivePeriod(effectivePeriod.ID)
+	// Delete all the task goals related to the task
+	taskGoals := GetTaskGoalsByTaskId(taskId)
+	if len(taskGoals) != 0 {
+		for _, taskGoal := range taskGoals {
+			DeleteTaskGoal(taskGoal.ID)
 		}
 	}
 

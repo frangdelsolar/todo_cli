@@ -3,6 +3,7 @@ package task
 import (
 	"errors"
 	"todo_cli/data"
+	"todo_cli/internal/cli/task/goal"
 	"todo_cli/pkg/prompt"
 
 	"github.com/rs/zerolog/log"
@@ -31,5 +32,7 @@ var CreateTaskCmd = &cobra.Command{
 			return
 		}
 		log.Info().Interface("task", task).Msg("Task created")
+
+		goal.CreateTaskGoalCmd.Run(cmd, args)
 	},
 }

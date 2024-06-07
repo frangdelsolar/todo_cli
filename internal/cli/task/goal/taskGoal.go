@@ -1,4 +1,4 @@
-package period
+package goal
 
 import (
 	"fmt"
@@ -7,27 +7,27 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var EffectivePeriodCmdActions = []prompt.SelectableItem{
+var TaskGoalCmdActions = []prompt.SelectableItem{
 	{Key: "add", Label: "Add"},
 }
 
-var EffectivePeriodCmd = &cobra.Command{
-	Use:   "period",
+var TaskGoalCmd = &cobra.Command{
+	Use:   "task_goal",
 	Short: "Manage Efective Periods",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Print("Select an action")
 		pc := prompt.PromptContent{
 			Label: "Action",
-			Items: EffectivePeriodCmdActions,
+			Items: TaskGoalCmdActions,
 		}
 		action := prompt.GetSelectInput(pc)
 		switch action.Key {
 		case "add":
-			CreateEffectivePeriodCmd.Run(cmd, args)
+			CreateTaskGoalCmd.Run(cmd, args)
 		}
 	},
 }
 
 func init() {
-	EffectivePeriodCmd.AddCommand(CreateEffectivePeriodCmd)
+	TaskGoalCmd.AddCommand(CreateTaskGoalCmd)
 }

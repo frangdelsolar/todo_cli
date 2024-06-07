@@ -18,53 +18,53 @@ const (
 	Yearly  FrequencyType = "yearly"
 )
 
-type EffectivePeriodCategory string
+type TaskGoalCategory string
 
 const (
-	Todo EffectivePeriodCategory = "todo"
+	Todo TaskGoalCategory = "todo"
 )
 
-// EffectivePeriod represents an effective period associated with a task.
+// TaskGoal represents an task goal associated with a task.
 //
 // Fields:
-// - ID: the ID of the EffectivePeriod.
-// - TaskID: the ID of the task associated with the EffectivePeriod.
-// - StartDate: the start date of the EffectivePeriod.
-// - EndDate: the end date of the EffectivePeriod.
-// - CreatedAt: the timestamp when the EffectivePeriod was created.
-type EffectivePeriod struct {
+// - ID: the ID of the TaskGoal.
+// - TaskID: the ID of the task associated with the TaskGoal.
+// - StartDate: the start date of the TaskGoal.
+// - EndDate: the end date of the TaskGoal.
+// - CreatedAt: the timestamp when the TaskGoal was created.
+type TaskGoal struct {
 	gorm.Model
-	ID        uint                    `json:"id" gorm:"primaryKey"`
-	TaskID    uint                    `json:"taskId"`
-	Task      *Task                   `json:"task" gorm:"foreignKey:TaskID"`
-	StartDate time.Time               `json:"startDate"`
-	EndDate   time.Time               `json:"endDate" omitempty:"true"`
-	Frequency FrequencyType           `json:"frequency"`
-	Category  EffectivePeriodCategory `json:"category"`
-	CreatedAt time.Time               `json:"createdAt"`
-	UpdatedAt time.Time               `json:"updatedAt"`
+	ID        uint             `json:"id" gorm:"primaryKey"`
+	TaskID    uint             `json:"taskId"`
+	Task      *Task            `json:"task" gorm:"foreignKey:TaskID"`
+	StartDate time.Time        `json:"startDate"`
+	EndDate   time.Time        `json:"endDate" omitempty:"true"`
+	Frequency FrequencyType    `json:"frequency"`
+	Category  TaskGoalCategory `json:"category"`
+	CreatedAt time.Time        `json:"createdAt"`
+	UpdatedAt time.Time        `json:"updatedAt"`
 }
 
-// String returns a string representation of the EffectivePeriod.
+// String returns a string representation of the TaskGoal.
 //
 // Returns:
-// - string: a string representation of the EffectivePeriod.
-func (e *EffectivePeriod) String() string {
-	return fmt.Sprintf("EffectivePeriod %d\nTask ID: %d\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
+// - string: a string representation of the TaskGoal.
+func (e *TaskGoal) String() string {
+	return fmt.Sprintf("TaskGoal %d\nTask ID: %d\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
 }
 
-// NewEffectivePeriod creates a new EffectivePeriod with the given task ID, start date, and end date.
+// NewTaskGoal creates a new TaskGoal with the given task ID, start date, and end date.
 //
 // Parameters:
-// - in_taskID: the ID of the task associated with the EffectivePeriod.
-// - in_startDate: the start date of the EffectivePeriod.
-// - in_endDate: the end date of the EffectivePeriod.
+// - in_taskID: the ID of the task associated with the TaskGoal.
+// - in_startDate: the start date of the TaskGoal.
+// - in_endDate: the end date of the TaskGoal.
 //
 // Returns:
-// - *EffectivePeriod: the newly created EffectivePeriod.
+// - *TaskGoal: the newly created TaskGoal.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, in_frequency string, in_category string) (*EffectivePeriod, error) {
-	var output *EffectivePeriod
+func NewTaskGoal(in_taskId uint, in_startDate string, in_endDate string, in_frequency string, in_category string) (*TaskGoal, error) {
+	var output *TaskGoal
 	var err error
 
 	// Run Validations
@@ -114,9 +114,9 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 		in_category = string(Todo)
 	}
 
-	category := EffectivePeriodCategory(in_category)
+	category := TaskGoalCategory(in_category)
 
-	output = &EffectivePeriod{
+	output = &TaskGoal{
 		TaskID:    uint(in_taskId),
 		StartDate: sd,
 		Frequency: frequency,
@@ -130,7 +130,7 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 	return output, nil
 }
 
-// Update updates the start and end dates of an EffectivePeriod.
+// Update updates the start and end dates of an TaskGoal.
 //
 // Parameters:
 // - in_startDate: the new start date in string format.
@@ -138,7 +138,7 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 //
 // Returns:
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func (e *EffectivePeriod) Update(in_startDate string, in_endDate string) error {
+func (e *TaskGoal) Update(in_startDate string, in_endDate string) error {
 	var err error
 
 	now := time.Now()

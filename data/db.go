@@ -18,7 +18,7 @@ type Database struct {
 
 // ConnectDB establishes a connection to the SQLite database specified by the DATA_BASE_FILE environment variable.
 // If the environment variable is not set, it defaults to "../data.db". It logs the connection details and migrates
-// the schema for the models.Task, models.EffectivePeriod, and models.TaskCompletionLog. It returns an error if the
+// the schema for the models.Task, models.TaskGoal, and models.TaskCompletionLog. It returns an error if the
 // database connection fails.
 //
 // Returns:
@@ -42,7 +42,7 @@ func ConnectDB() error {
 	// Migrate the schema
 	db.AutoMigrate(
 		&models.Task{},
-		&models.EffectivePeriod{},
+		&models.TaskGoal{},
 		&models.TaskCompletionLog{},
 	)
 
