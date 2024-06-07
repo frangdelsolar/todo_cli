@@ -111,7 +111,7 @@ func NewEffectivePeriod(in_taskId uint, in_startDate string, in_endDate string, 
 		output.EndDate = ed
 	}
 
-	return output, err
+	return output, nil
 }
 
 // Update updates the start and end dates of an EffectivePeriod.
@@ -196,8 +196,8 @@ func DateValidator(date string) error {
 // Returns:
 // - error: an error if the frequency is invalid, otherwise nil.
 func FrequencyValidator(frequency string) error {
-	if frequency != string(Daily) && frequency != string(Weekly) && frequency != string(Monthly) && frequency != string(Yearly) {
-		return errors.New("invalid frequency")
+	if frequency == string(Daily) || frequency == string(Weekly) || frequency == string(Monthly) || frequency == string(Yearly) {
+		return nil
 	}
-	return nil
+	return errors.New("invalid frequency")
 }

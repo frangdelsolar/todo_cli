@@ -52,8 +52,24 @@ func GetActiveTasks() []models.Task {
 
 	now := time.Now()
 	nullDate := time.Time{}
-	// bring all tasks from effective periods table join task.id with effectivePeriod.taskId, where startData <= today and (endDate >= today or endDate is null)
-	DB.Table("effective_periods").Select("tasks.*").Joins("join tasks on effective_periods.task_id = tasks.id").Where("effective_periods.start_date <= ? AND (effective_periods.end_date >= ? OR effective_periods.end_date == ?)", now, now, nullDate).Find(&tasks)
+
+	DB.Table("effective_periods").
+		Select("tasks.*").
+		Joins("join tasks on effective_periods.task_id = tasks.id").
+		Where(`
+				effective_periods.start_date <= ? AND 
+					(
+						effective_periods.end_date >= ? OR 
+						effective_periods.end_date == ?
+					)
+			  `, now, now, nullDate).
+		Find(&tasks)
+
+	return tasks
+}
+
+func GetDueTasks() []models.Task {
+	var tasks []models.Task
 
 	return tasks
 }

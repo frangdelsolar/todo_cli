@@ -16,11 +16,14 @@ var ListTaskCmd = &cobra.Command{
 
 		all := cmd.Flag("all").Changed
 		active := cmd.Flag("active").Changed
-		// due := cmd.Flag("due").Changed
+		due := cmd.Flag("due").Changed
+
 		if all {
 			tasks = data.GetAllTasks()
 		} else if active {
 			tasks = data.GetActiveTasks()
+		} else if due {
+			tasks = data.GetDueTasks()
 		}
 
 		if len(tasks) == 0 {
@@ -38,5 +41,5 @@ var ListTaskCmd = &cobra.Command{
 func init() {
 	ListTaskCmd.Flags().BoolP("all", "a", false, "List All tasks")
 	ListTaskCmd.Flags().BoolP("active", "c", false, "List Active tasks")
-	// ListTaskCmd.Flags().BoolP("due", "d", false, "List Due tasks")
+	ListTaskCmd.Flags().BoolP("due", "d", false, "List Due tasks")
 }
