@@ -2,6 +2,7 @@ package task
 
 import (
 	"errors"
+	"fmt"
 	"todo_cli/data"
 	"todo_cli/internal/cli/task/goal"
 	"todo_cli/pkg/prompt"
@@ -33,6 +34,6 @@ var CreateTaskCmd = &cobra.Command{
 		}
 		log.Info().Interface("task", task).Msg("Task created")
 
-		goal.CreateTaskGoalCmd.Run(cmd, args)
+		goal.CreateTaskGoalCmd.Run(cmd, []string{fmt.Sprint(task.ID)})
 	},
 }

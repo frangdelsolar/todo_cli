@@ -2,7 +2,6 @@ package prompts
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"todo_cli/data"
@@ -15,11 +14,11 @@ type TaskSelection struct {
 	Items []prompt.SelectableItem
 }
 
-func SelectTask(title string, taskGetter func() []models.Task) (uint, error) {
+func SelectTask(title string, taskGetter func() []models.Task) (string, error) {
 	tasks := taskGetter()
 
 	if len(tasks) == 0 {
-		return 0, fmt.Errorf("no tasks found")
+		return "", fmt.Errorf("no tasks found")
 	}
 
 	items := convertTasksToSelectableItems(tasks)
@@ -31,12 +30,7 @@ func SelectTask(title string, taskGetter func() []models.Task) (uint, error) {
 
 	selection := prompt.GetSelectInput(pc)
 
-	taskIdInt, err := strconv.Atoi(selection.Key)
-	if err != nil {
-		return 0, fmt.Errorf("error parsing taskId: %w", err)
-	}
-
-	return uint(taskIdInt), nil
+	return selection.Key, nil
 }
 
 func convertTasksToSelectableItems(tasks []models.Task) []prompt.SelectableItem {
@@ -50,11 +44,11 @@ func convertTasksToSelectableItems(tasks []models.Task) []prompt.SelectableItem 
 	return items
 }
 
-func SelectTaskFromAll() (uint, error) {
+func SelectTaskFromAll() (string, error) {
 	return SelectTask("Select Task", data.GetAllTasks)
 }
 
-func SelectTaskFromPending() (uint, error) {
+func SelectTaskFromPending() (string, error) {
 	return SelectTask("Select Pending Task", func() []models.Task {
 		return data.GetPendingTasksTodoMonthly(time.Now())
 	})

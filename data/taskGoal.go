@@ -15,7 +15,7 @@ import (
 // Returns:
 // - *models.TaskGoal: a pointer to the retrieved TaskGoal, or nil if not found.
 // - error: an error if the TaskGoal with the provided ID is not found.
-func GetTaskGoalById(id uint) (models.TaskGoal, error) {
+func GetTaskGoalById(id string) (models.TaskGoal, error) {
 	var ep models.TaskGoal
 	DB.First(&ep, "id = ?", id)
 	if ep == (models.TaskGoal{}) {
@@ -32,7 +32,7 @@ func GetTaskGoalById(id uint) (models.TaskGoal, error) {
 //
 // Returns:
 // - []models.TaskGoal: a slice of TaskGoals associated with the task ID.
-func GetTaskGoalsByTaskId(taskID uint) []models.TaskGoal {
+func GetTaskGoalsByTaskId(taskID string) []models.TaskGoal {
 	var eps []models.TaskGoal
 
 	DB.Where("task_id = ?", taskID).Find(&eps)
@@ -54,7 +54,7 @@ func GetTaskGoalsByTaskId(taskID uint) []models.TaskGoal {
 // Returns:
 // - *models.TaskGoal: the newly created TaskGoal.
 // - error: an error if the TaskGoal creation fails.
-func CreateTaskGoal(taskID uint, startDate string, endDate string, frequency string, category string) (*models.TaskGoal, error) {
+func CreateTaskGoal(taskID string, startDate string, endDate string, frequency string, category string) (*models.TaskGoal, error) {
 	ep, err := models.NewTaskGoal(taskID, startDate, endDate, frequency, category)
 	if err != nil {
 		log.Err(err).Msg("Error creating new TaskGoal")
@@ -76,7 +76,7 @@ func CreateTaskGoal(taskID uint, startDate string, endDate string, frequency str
 // Returns:
 // - *models.TaskGoal: the updated TaskGoal.
 // - error: an error if the TaskGoal retrieval or update fails.
-func UpdateTaskGoal(id uint, startDate string, endDate string) (models.TaskGoal, error) {
+func UpdateTaskGoal(id string, startDate string, endDate string) (models.TaskGoal, error) {
 	var err error
 
 	// Retrieve task goal
@@ -105,7 +105,7 @@ func UpdateTaskGoal(id uint, startDate string, endDate string) (models.TaskGoal,
 //
 // Returns:
 // - error: an error if the TaskGoal retrieval or deletion fails.
-func DeleteTaskGoal(id uint) error {
+func DeleteTaskGoal(id string) error {
 	// verify if taskPeriod exists
 	ep, err := GetTaskGoalById(id)
 	if err != nil {

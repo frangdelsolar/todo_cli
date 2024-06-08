@@ -13,10 +13,18 @@ var CreateTaskGoalCmd = &cobra.Command{
 	Use:   "add",
 	Short: "Add Efective Periods",
 	Run: func(cmd *cobra.Command, args []string) {
-		taskId, err := prompts.SelectTaskFromAll()
-		if err != nil {
-			log.Err(err).Msg("Error selecting task")
-			return
+
+		var taskId string
+		var err error
+
+		if len(args) > 0 {
+			taskId= args[0]
+		} else {
+			taskId, err = prompts.SelectTaskFromAll()
+			if err != nil {
+				log.Err(err).Msg("Error selecting task")
+				return
+			}
 		}
 
 		startDate := prompt.PromptGetInput(prompt.PromptContent{Label: "Start Date"})

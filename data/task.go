@@ -16,7 +16,7 @@ import (
 // Returns:
 // - *models.Task: a pointer to the retrieved task, or nil if not found.
 // - error: an error if the task retrieval fails.
-func GetTaskById(id uint) (models.Task, error) {
+func GetTaskById(id string) (models.Task, error) {
 	var task models.Task
 
 	DB.First(&task, "id = ?", id)
@@ -67,6 +67,8 @@ func GetActiveTasks() []models.Task {
 
 	return tasks
 }
+
+
 
 func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
 
@@ -145,7 +147,7 @@ func CreateTask(title string) (models.Task, error) {
 // Returns:
 // - *models.Task: the updated task.
 // - error: an error if the task retrieval or update fails.
-func UpdateTask(id uint, title string) (models.Task, error) {
+func UpdateTask(id string, title string) (models.Task, error) {
 	var task models.Task
 	task, err := GetTaskById(id)
 	if err != nil {
@@ -170,7 +172,7 @@ func UpdateTask(id uint, title string) (models.Task, error) {
 //
 // Returns:
 // - error: an error if the task retrieval or deletion fails.
-func DeleteTask(taskId uint) error {
+func DeleteTask(taskId string) error {
 	task, err := GetTaskById(taskId)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving Task")

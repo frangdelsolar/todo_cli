@@ -15,7 +15,7 @@ import (
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the retrieved TaskCompletionLog, or nil if not found.
 // - error: an error if the TaskCompletionLog retrieval fails.
-func GetTaskCompletionLogById(id uint) (models.TaskCompletionLog, error) {
+func GetTaskCompletionLogById(id string) (models.TaskCompletionLog, error) {
 	var tcl models.TaskCompletionLog
 	DB.First(&tcl, "id = ?", id)
 	if tcl == (models.TaskCompletionLog{}) {
@@ -31,7 +31,7 @@ func GetTaskCompletionLogById(id uint) (models.TaskCompletionLog, error) {
 //
 // Returns:
 // - []models.TaskCompletionLog: a slice of TaskCompletionLogs associated with the given task ID.
-func GetTaskCompletionLogsByTaskId(taskId uint) []models.TaskCompletionLog {
+func GetTaskCompletionLogsByTaskId(taskId string) []models.TaskCompletionLog {
 	var tasks []models.TaskCompletionLog
 
 	DB.Where("task_id = ?", taskId).Find(&tasks)
@@ -53,8 +53,8 @@ func GetTaskCompletionLogsByTaskId(taskId uint) []models.TaskCompletionLog {
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the newly created TaskCompletionLog.
 // - error: an error if the TaskCompletionLog creation fails.
-func CreateTaskCompletionLog(taskId uint, completedAt string) (*models.TaskCompletionLog, error) {
-	tcl, err := models.NewTaskCompletionLog(taskId, completedAt)
+func CreateTaskCompletionLog(taskId string, completedAt string, taskGoalId string) (*models.TaskCompletionLog, error) {
+	tcl, err := models.NewTaskCompletionLog(taskId, completedAt, taskGoalId)
 	if err != nil {
 		log.Err(err).Msg("Error creating new Task Completion Log")
 		return nil, err
@@ -72,7 +72,7 @@ func CreateTaskCompletionLog(taskId uint, completedAt string) (*models.TaskCompl
 // Returns:
 // - *models.TaskCompletionLog: a pointer to the updated TaskCompletionLog.
 // - error: an error if the TaskCompletionLog retrieval or update fails.
-func UpdateTaskCompletionLog(id uint, completedAt string) (models.TaskCompletionLog, error) {
+func UpdateTaskCompletionLog(id string, completedAt string) (models.TaskCompletionLog, error) {
 	var tcl models.TaskCompletionLog
 	tcl, err := GetTaskCompletionLogById(id)
 	if err != nil {
@@ -97,7 +97,7 @@ func UpdateTaskCompletionLog(id uint, completedAt string) (models.TaskCompletion
 //
 // Returns:
 // - error: an error if the TaskCompletionLog retrieval or deletion fails.
-func DeleteTaskCompletionLog(id uint) error {
+func DeleteTaskCompletionLog(id string) error {
 	var tcl models.TaskCompletionLog
 	tcl, err := GetTaskCompletionLogById(id)
 	if err != nil {

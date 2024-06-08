@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -34,8 +35,8 @@ const (
 // - CreatedAt: the timestamp when the TaskGoal was created.
 type TaskGoal struct {
 	gorm.Model
-	ID        uint             `json:"id" gorm:"primaryKey"`
-	TaskID    uint             `json:"taskId"`
+	ID        string             `json:"id" gorm:"primaryKey"`
+	TaskID    string             `json:"taskId"`
 	Task      *Task            `json:"task" gorm:"foreignKey:TaskID"`
 	StartDate time.Time        `json:"startDate"`
 	EndDate   time.Time        `json:"endDate" omitempty:"true"`
@@ -63,7 +64,7 @@ func (e *TaskGoal) String() string {
 // Returns:
 // - *TaskGoal: the newly created TaskGoal.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewTaskGoal(in_taskId uint, in_startDate string, in_endDate string, in_frequency string, in_category string) (*TaskGoal, error) {
+func NewTaskGoal(in_taskId string, in_startDate string, in_endDate string, in_frequency string, in_category string) (*TaskGoal, error) {
 	var output *TaskGoal
 	var err error
 
@@ -117,7 +118,7 @@ func NewTaskGoal(in_taskId uint, in_startDate string, in_endDate string, in_freq
 	category := TaskGoalCategory(in_category)
 
 	output = &TaskGoal{
-		TaskID:    uint(in_taskId),
+		TaskID:    in_taskId,
 		StartDate: sd,
 		Frequency: frequency,
 		Category:  category,
@@ -173,18 +174,25 @@ func (e *TaskGoal) Update(in_startDate string, in_endDate string) error {
 	return err
 }
 
-// TaskIDValidator validates a task ID.
+// TaskGoalIDValidator validates a task ID.
 //
 // Parameters:
-// - id: the ID of the task to validate.
+// - id: the ID of the task goal to validate.
 //
 // Returns:
 // - error: an error if the task ID is 0, otherwise nil.
-func TaskIDValidator(id uint) error {
-	if id == 0 {
-		return errors.New("task ID cannot be 0")
+func TaskGoalIDValidator(id string) error {
+
+	var err error
+	if id == "" {
+		err = errors.New("task goal ID cannot be empty")
+		return err
 	}
-	return nil
+
+	_, err = strconv.ParseUint(id, 10, 64)
+	err = fmt.Errorf("invalid task goal ID: %w", err)
+	return err
+
 }
 
 // DateValidator validates a date string in the format "YYYY-MM-DD".
