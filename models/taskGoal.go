@@ -3,21 +3,13 @@ package models
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
-type FrequencyType string
 
-const (
-	Daily   FrequencyType = "daily"
-	Weekly  FrequencyType = "weekly"
-	Monthly FrequencyType = "monthly"
-	Yearly  FrequencyType = "yearly"
-)
 
 type TaskGoalCategory string
 
@@ -35,12 +27,13 @@ const (
 // - CreatedAt: the timestamp when the TaskGoal was created.
 type TaskGoal struct {
 	gorm.Model
-	ID        string             `json:"id" gorm:"primaryKey"`
+	ID        uint             `json:"id" gorm:"primaryKey"`
 	TaskID    string             `json:"taskId"`
 	Task      *Task            `json:"task" gorm:"foreignKey:TaskID"`
 	StartDate time.Time        `json:"startDate"`
 	EndDate   time.Time        `json:"endDate" omitempty:"true"`
-	Frequency FrequencyType    `json:"frequency"`
+	FrequencyID string           `json:"frequencyId"`
+	Frequency TaskFrequency    `json:"frequency"`
 	Category  TaskGoalCategory `json:"category"`
 	CreatedAt time.Time        `json:"createdAt"`
 	UpdatedAt time.Time        `json:"updatedAt"`
@@ -51,7 +44,7 @@ type TaskGoal struct {
 // Returns:
 // - string: a string representation of the TaskGoal.
 func (e *TaskGoal) String() string {
-	return fmt.Sprintf("TaskGoal %d\nTask ID: %d\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
+	return fmt.Sprintf("TaskGoal %d\nTask ID: %s\nStart Date: %s\nEnd Date: %s\nCreated At: %s\n\n", e.ID, e.TaskID, e.StartDate, e.EndDate, e.CreatedAt)
 }
 
 // NewTaskGoal creates a new TaskGoal with the given task ID, start date, and end date.
@@ -64,7 +57,14 @@ func (e *TaskGoal) String() string {
 // Returns:
 // - *TaskGoal: the newly created TaskGoal.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
-func NewTaskGoal(in_taskId string, in_startDate string, in_endDate string, in_frequency string, in_category string) (*TaskGoal, error) {
+func NewTaskGoal(
+		in_taskId string, 
+		in_startDate string, 
+		in_endDate string, 
+		in_frequency string, 
+		in_category string,
+	) (*TaskGoal, error) {
+	
 	var output *TaskGoal
 	var err error
 
@@ -101,14 +101,6 @@ func NewTaskGoal(in_taskId string, in_startDate string, in_endDate string, in_fr
 		}
 	}
 
-	err = FrequencyValidator(in_frequency)
-	if err != nil {
-		log.Warn().Msg("Invalid frequency. Defaulting to monthly.")
-		in_frequency = string(Monthly)
-	}
-
-	frequency := FrequencyType(in_frequency)
-
 	err = CategoryValidator(in_category)
 	if err != nil {
 		log.Warn().Msg("Invalid category. Defaulting to todo.")
@@ -120,7 +112,7 @@ func NewTaskGoal(in_taskId string, in_startDate string, in_endDate string, in_fr
 	output = &TaskGoal{
 		TaskID:    in_taskId,
 		StartDate: sd,
-		Frequency: frequency,
+		FrequencyID: in_frequency,
 		Category:  category,
 	}
 
@@ -189,8 +181,6 @@ func TaskGoalIDValidator(id string) error {
 		return err
 	}
 
-	_, err = strconv.ParseUint(id, 10, 64)
-	err = fmt.Errorf("invalid task goal ID: %w", err)
 	return err
 
 }
@@ -205,39 +195,4 @@ func TaskGoalIDValidator(id string) error {
 func DateValidator(date string) error {
 	_, err := time.Parse(time.DateOnly, date)
 	return err
-}
-
-// FrequencyValidator validates the given frequency string.
-//
-// It checks if the frequency is one of the following: Daily, Weekly, Monthly, Yearly.
-// If the frequency is not valid, it returns an error with the message "invalid frequency".
-// If the frequency is valid, it returns nil.
-//
-// Parameters:
-// - frequency: a string representing the frequency to be validated.
-//
-// Returns:
-// - error: an error if the frequency is invalid, otherwise nil.
-func FrequencyValidator(frequency string) error {
-	if frequency == string(Daily) || frequency == string(Weekly) || frequency == string(Monthly) || frequency == string(Yearly) {
-		return nil
-	}
-	return errors.New("invalid frequency")
-}
-
-// CategoryValidator validates the given category string.
-//
-// It checks if the category is equal to the string representation of the Todo constant.
-// If the category is valid, it returns nil. Otherwise, it returns an error with the message "invalid category".
-//
-// Parameters:
-// - category: a string representing the category to be validated.
-//
-// Returns:
-// - error: an error if the category is invalid, otherwise nil.
-func CategoryValidator(category string) error {
-	if category == string(Todo) {
-		return nil
-	}
-	return errors.New("invalid category")
 }

@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"time"
 	"todo_cli/models"
 
 	"github.com/rs/zerolog/log"
@@ -43,6 +44,111 @@ func GetTaskCompletionLogsByTaskId(taskId string) []models.TaskCompletionLog {
 
 	return tasks
 }
+
+type PendingTCLContract struct {
+	taskID        string
+	taskGoalID    string
+	dueDate       time.Time
+	Label         string
+}
+
+type GoalsContract struct {
+	TaskGoalID string
+	TaskID string
+	StartDate time.Time
+	EndDate time.Time
+	Label string
+	Frequency models.TaskFrequency
+	Category models.TaskGoalCategory
+}
+
+type CompletionContract struct {
+	TaskGoalID string
+	TaskID string
+	CompletedAt time.Time	
+}
+
+// refDate is the date where the query is done. It will limit the results up to that date.
+func GetPendingTaskCompletionLogs(refDate time.Time) []PendingTCLContract {
+	const limit = 10
+	var tcls []PendingTCLContract
+
+	// Get goals for reference date
+	var taskGoals []GoalsContract
+
+	DB.Table("task_goals").
+		Select(`DISTINCT 
+					task_goals.id as TaskGoalID,
+					task_goals.start_date as StartDate,
+					task_goals.end_date as EndDate,
+					task_goals.category as Category,
+					task_goals.frequency as Frequency,
+					tasks.id as TaskID, 
+					tasks.title as Label`,
+				).
+		Joins("join tasks on task_goals.task_id = tasks.id").
+		Where(`
+				task_goals.start_date <= ? AND 
+					(
+						task_goals.end_date >= ? OR 
+						task_goals.end_date == ?
+					)
+			  `, refDate, refDate, time.Time{}).
+		Find(&taskGoals)
+
+	log.Debug().Interface("taskGoals", taskGoals).Msg("Task Goals")
+
+
+	
+	for _, tg := range taskGoals {
+		var completionLogs []CompletionContract
+
+		DB.Table("task_completion_logs").
+			Select(`DISTINCT
+						task_completion_logs.task_id as TaskID,
+						task_completion_logs.task_goal_id as TaskGoalID,
+						task_completion_logs.completed_at as CompletedAt`,
+					).
+			Where(
+				`task_completion_logs.task_goal_id = ? AND
+					task_completion_logs.completed_at <= ? AND
+					task_completion_logs.completed_at >= ?`,
+				tg.TaskGoalID, refDate, tg.StartDate,
+			).
+			Order("task_completion_logs.completed_at desc").
+			Find(&completionLogs)
+
+		log.Debug().Interface("completionLogs", completionLogs).Msg("Completion Logs")
+
+		// create a map with date as key
+		var dates = make(map[time.Time]CompletionContract)
+
+		for _, cl := range completionLogs {
+			dates[cl.CompletedAt] = cl
+		}
+
+		// Traverse time according to frquency type and create pendign tasks
+
+		// if tg.Frequency == models.Daily {
+		// 	log.Debug().Msg("Do somehting about daily")
+		// } else if tg.Frequency == models.Weekly {
+		// 	log.Debug().Msg("Do somehting about weekly")
+		// } else if tg.Frequency == models.Monthly {
+		// 	log.Debug().Msg("Do somehting about monthly")
+
+		// 	for i := 0; i < limit; i++ {
+
+		// 	}
+
+		// } else if tg.Frequency == models.Yearly {
+		// 	log.Debug().Msg("Do somehting about yearly")
+		// }
+	}
+
+
+	return tcls
+}
+
 
 // CreateTaskCompletionLog creates a new TaskCompletionLog in the database.
 //

@@ -44,6 +44,7 @@ func ConnectDB() error {
 		&models.Task{},
 		&models.TaskGoal{},
 		&models.TaskCompletionLog{},
+		&models.TaskFrequency{},
 	)
 
 	DB = &Database{db}

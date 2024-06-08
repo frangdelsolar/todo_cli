@@ -47,10 +47,9 @@ func GetAllTasks() []models.Task {
 //
 // Returns:
 // - []models.Task: a slice of active tasks in the database.
-func GetActiveTasks() []models.Task {
+func GetActiveTasks(refDate time.Time) []models.Task {
 	var tasks []models.Task
 
-	now := time.Now()
 	nullDate := time.Time{}
 
 	DB.Table("task_goals").
@@ -62,57 +61,7 @@ func GetActiveTasks() []models.Task {
 						task_goals.end_date >= ? OR 
 						task_goals.end_date == ?
 					)
-			  `, now, now, nullDate).
-		Find(&tasks)
-
-	return tasks
-}
-
-
-
-func GetPendingTasksTodoMonthly(date time.Time) []models.Task {
-
-	// Auxiliary variables
-
-	nullDate := time.Time{}
-
-	// Are there any task goal for the time?
-	var activeTasksIds []uint
-	DB.Table("task_goals").
-		Select("DISTINCT task_id").
-		Joins("join tasks on task_goals.task_id = tasks.id").
-		Where(`
-				task_goals.start_date <= ? AND 
-					(
-						task_goals.end_date >= ? OR 
-						task_goals.end_date == ?
-					) AND
-				task_goals.frequency = ?
-			  `, date, date, nullDate, models.Monthly).
-		Find(&activeTasksIds)
-
-	// todos that only happen monthly
-	// Is there any completion log for the time?
-	var tasksWithCompletionLog []uint
-	firstDayOfMonth := time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, time.UTC)
-	lastDayOfMonth := firstDayOfMonth.AddDate(0, 1, -1)
-
-	DB.
-		Table("task_completion_logs").
-		Select("task_id").
-		Where("task_id IN ?", activeTasksIds).
-		Where("completed_at BETWEEN ? AND ?", firstDayOfMonth, lastDayOfMonth).
-		Find(&tasksWithCompletionLog)
-
-	// find those tasks that don't have a completion log
-	dueTasksIds := difference(activeTasksIds, tasksWithCompletionLog)
-
-	var tasks []models.Task
-
-	DB.
-		Table("tasks").
-		Select("tasks.*").
-		Where("id IN ?", dueTasksIds).
+			  `, refDate, refDate, nullDate).
 		Find(&tasks)
 
 	return tasks
@@ -183,7 +132,7 @@ func DeleteTask(taskId string) error {
 	taskGoals := GetTaskGoalsByTaskId(taskId)
 	if len(taskGoals) != 0 {
 		for _, taskGoal := range taskGoals {
-			DeleteTaskGoal(taskGoal.ID)
+			DeleteTaskGoal(fmt.Sprint(taskGoal.ID))
 		}
 	}
 

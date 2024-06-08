@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"gorm.io/gorm"
@@ -17,7 +16,7 @@ import (
 // - CreatedAt: the timestamp when the task was created.
 type Task struct {
 	gorm.Model
-	ID        string      `json:"id" gorm:"primaryKey"`
+	ID        uint      `json:"id" gorm:"primaryKey"`
 	Title     string    `json:"title"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -28,7 +27,7 @@ type Task struct {
 // Returns:
 // - string: a string representation of the Task.
 func (t *Task) String() string {
-	return fmt.Sprintf("%s | %s", t.ID, t.Title)
+	return fmt.Sprintf("%d | %s", t.ID, t.Title)
 }
 
 // Update updates the title of the Task.
@@ -97,11 +96,9 @@ func TaskIDValidator(id string) error {
 
 	var err error
 	if id == "" {
-		err = errors.New("task goal ID cannot be empty")
+		err = errors.New("task ID cannot be empty")
 		return err
 	}
 
-	_, err = strconv.ParseUint(id, 10, 64)
-	err = fmt.Errorf("invalid task goal ID: %w", err)
 	return err
 }

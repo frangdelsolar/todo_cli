@@ -9,13 +9,15 @@ import (
 	"todo_cli/pkg/prompt"
 )
 
-type TaskSelection struct {
+type ItemSelection struct {
 	Label string
 	Items []prompt.SelectableItem
 }
 
-func SelectTask(title string, taskGetter func() []models.Task) (string, error) {
-	tasks := taskGetter()
+
+
+func SelectTaskFromAll() (string, error) {
+	tasks := data.GetAllTasks()
 
 	if len(tasks) == 0 {
 		return "", fmt.Errorf("no tasks found")
@@ -24,7 +26,7 @@ func SelectTask(title string, taskGetter func() []models.Task) (string, error) {
 	items := convertTasksToSelectableItems(tasks)
 
 	pc := prompt.PromptContent{
-		Label: title,
+		Label: "Select Task",
 		Items: items,
 	}
 
@@ -44,12 +46,32 @@ func convertTasksToSelectableItems(tasks []models.Task) []prompt.SelectableItem 
 	return items
 }
 
-func SelectTaskFromAll() (string, error) {
-	return SelectTask("Select Task", data.GetAllTasks)
+func SelectTaskFromPending() (string, error) {
+	pending := data.GetPendingTaskCompletionLogs(time.Now())
+
+	if len(pending) == 0 {
+		return "", fmt.Errorf("no pending tasks found")
+	}
+
+	items := convertPendingsToSelectableItems(pending)
+
+	pc := prompt.PromptContent{
+		Label: "Select Task",
+		Items: items,
+	}
+
+	selection := prompt.GetSelectInput(pc)
+
+	return selection.Key, nil
 }
 
-func SelectTaskFromPending() (string, error) {
-	return SelectTask("Select Pending Task", func() []models.Task {
-		return data.GetPendingTasksTodoMonthly(time.Now())
-	})
+func convertPendingsToSelectableItems(pending []data.PendingTCLContract) []prompt.SelectableItem {
+	var items []prompt.SelectableItem
+	for index, item := range pending {
+		items = append(items, prompt.SelectableItem{
+			Label: item.Label,
+			Key:   fmt.Sprint(index),
+		})
+	}
+	return items
 }

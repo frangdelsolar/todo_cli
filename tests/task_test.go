@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"fmt"
 	"testing"
 	"todo_cli/data"
 )
@@ -18,7 +19,7 @@ func TestCreateTask(t *testing.T) {
 }
 
 func TestGetTaskById(t *testing.T) {
-	task, err := data.GetTaskById(1)
+	task, err := data.GetTaskById("1")
 	if err != nil {
 		t.Errorf("GetTaskById() returned an error: %v", err)
 	}
@@ -32,7 +33,7 @@ func TestUpdateTask(t *testing.T) {
 	task := data.GetAllTasks()[0]
 	updatedTitle := "Some test title"
 	task.Title = updatedTitle
-	task, err := data.UpdateTask(task.ID, task.Title)
+	task, err := data.UpdateTask(fmt.Sprint(task.ID), task.Title)
 	if err != nil {
 		t.Errorf("UpdateTask() returned an error: %v", err)
 	}
@@ -60,7 +61,7 @@ func TestGetAllTasks(t *testing.T) {
 
 func TestDeleteTask(t *testing.T) {
 	task := data.GetAllTasks()[0]
-	err := data.DeleteTask(task.ID)
+	err := data.DeleteTask(fmt.Sprint(task.ID))
 	if err != nil {
 		t.Errorf("DeleteTask() returned an error: %v", err)
 	}

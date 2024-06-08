@@ -16,7 +16,7 @@ import (
 // - CompletedAt: the timestamp when the task was completed.
 type TaskCompletionLog struct {
 	gorm.Model
-	ID          string      `json:"id" gorm:"primaryKey"`
+	ID          uint      `json:"id" gorm:"primaryKey"`
 	TaskID      string      `json:"taskId"`
 	Task        *Task     `json:"task" gorm:"foreignKey:TaskID"`
 	TaskGoalID  string      `json:"taskGoalId"`

@@ -3,7 +3,6 @@ module todo_cli
 go 1.22.4
 
 require (
-	github.com/google/go-cmp v0.6.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.8.0

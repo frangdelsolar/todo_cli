@@ -27,11 +27,11 @@ var TaskCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Show pending tasks
-		tasks := data.GetPendingTasksTodoMonthly(time.Now())
+		tasks := data.GetPendingTaskCompletionLogs(time.Now())
 		if len(tasks) > 0 {
 			fmt.Print("These are your pending tasks:")
 			for _, task := range tasks {
-				fmt.Println(task.String())
+				fmt.Println(task.Label)
 			}
 		} else {
 			fmt.Println("No pending tasks today!!!")
