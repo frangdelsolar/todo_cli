@@ -2,6 +2,7 @@ package prompts
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"todo_cli/data"
@@ -46,11 +47,11 @@ func convertTasksToSelectableItems(tasks []models.Task) []prompt.SelectableItem 
 	return items
 }
 
-func SelectTaskFromPending() (string, error) {
+func SelectTaskFromPending() (data.PendingTCLContract, error) {
 	pending := data.GetPendingTaskCompletionLogs(time.Now())
 
 	if len(pending) == 0 {
-		return "", fmt.Errorf("no pending tasks found")
+		return data.PendingTCLContract{}, fmt.Errorf("no pending tasks found")
 	}
 
 	items := convertPendingsToSelectableItems(pending)
@@ -62,14 +63,16 @@ func SelectTaskFromPending() (string, error) {
 
 	selection := prompt.GetSelectInput(pc)
 
-	return selection.Key, nil
+	ix, _ := strconv.Atoi(selection.Key)
+
+	return pending[ix], nil
 }
 
 func convertPendingsToSelectableItems(pending []data.PendingTCLContract) []prompt.SelectableItem {
 	var items []prompt.SelectableItem
 	for index, item := range pending {
 		items = append(items, prompt.SelectableItem{
-			Label: item.Label,
+			Label: fmt.Sprintf("%s - %s", item.Label, item.DueDate.Local().String()),
 			Key:   fmt.Sprint(index),
 		})
 	}

@@ -61,7 +61,7 @@ var CreateTaskGoalCmd = &cobra.Command{
 		if err != nil {
 			log.Warn().Msgf("Error creating Task Frequency: %s", err.Error())
 			frequencyInstance, _ = data.CreateTaskFrequency(
-				string(models.Daily), 
+				string(models.Monthly), 
 				"1", 
 				"1", 
 				"1",

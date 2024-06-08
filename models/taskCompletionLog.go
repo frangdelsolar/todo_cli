@@ -21,7 +21,7 @@ type TaskCompletionLog struct {
 	Task        *Task     `json:"task" gorm:"foreignKey:TaskID"`
 	TaskGoalID  string      `json:"taskGoalId"`
 	TaskGoal    *TaskGoal `json:"taskGoal" gorm:"foreignKey:TaskGoalID"`
-	CompletedAt time.Time `json:"completedAt"`
+	DueDate time.Time `json:"completedAt"` // Stores the date of the corresponding period
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
@@ -31,7 +31,7 @@ type TaskCompletionLog struct {
 // Returns:
 // - string: a string representation of the TaskCompletionLog.
 func (t *TaskCompletionLog) String() string {
-	return fmt.Sprintf("TaskCompletionLog %d\nTask ID: %d\nCompleted At: %s\n", t.ID, t.TaskID, t.CompletedAt)
+	return fmt.Sprintf("TaskCompletionLog %d\nTask ID: %d\nCompleted At: %s\n", t.ID, t.TaskID, t.DueDate)
 }
 
 // Update updates the completedAt field of the TaskCompletionLog.
@@ -50,7 +50,7 @@ func (t *TaskCompletionLog) Update(in_completedAt string) error {
 	}
 
 	formatedCompletedAt, _ := time.Parse(time.DateOnly, in_completedAt)
-	t.CompletedAt = formatedCompletedAt
+	t.DueDate = formatedCompletedAt
 
 	return nil
 }
@@ -91,7 +91,7 @@ func NewTaskCompletionLog(taskID string, completedAt string, taskGoalID string) 
 
 	return &TaskCompletionLog{
 		TaskID:      taskID,
-		CompletedAt: cd,
+		DueDate: cd,
 		TaskGoalID: taskGoalID,
 	}, nil
 }

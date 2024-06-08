@@ -94,8 +94,9 @@ func getGoalsData(refDate time.Time) []GoalsContract {
 type CompletionContract struct {
 	TaskGoalID string
 	TaskID string
-	CompletedAt time.Time	
+	DueDate time.Time	
 }
+
 func getCompletionLogsByTaskGoalAndDate(refDate time.Time, tg GoalsContract) []CompletionContract{
 	var completionLogs []CompletionContract
 
@@ -103,92 +104,112 @@ func getCompletionLogsByTaskGoalAndDate(refDate time.Time, tg GoalsContract) []C
 		Select(`DISTINCT
 					task_completion_logs.task_id as TaskID,
 					task_completion_logs.task_goal_id as TaskGoalID,
-					task_completion_logs.completed_at as CompletedAt`,
+					task_completion_logs.due_date as DueDate`,
 				).
 		Where(
 			`task_completion_logs.task_goal_id = ? AND
-				task_completion_logs.completed_at <= ? AND
-				task_completion_logs.completed_at >= ?`,
+				task_completion_logs.due_date <= ? AND
+				task_completion_logs.due_date >= ?`,
 			tg.TaskGoalID, refDate, tg.StartDate,
 		).
-		Order("task_completion_logs.completed_at desc").
+		Order("task_completion_logs.due_date desc").
 		Find(&completionLogs)
 
 	return completionLogs
 }
 
-
 type PendingTCLContract struct {
-	taskID        string
-	taskGoalID    string
-	dueDate       time.Time
+	TaskID        string
+	TaskGoalID    string
+	DueDate       time.Time
 	Label         string
+}
+
+func getTCLs(
+	refDate time.Time, 
+	existingLogsDates []time.Time, 
+	tg GoalsContract, 
+	limit int,
+	validation func(time.Time, time.Time) bool,
+) []PendingTCLContract {
+	var tcls = []PendingTCLContract{}
+
+	for i := 0; i < limit; i++ {
+		nextDate := refDate.AddDate(0, -i, 0)
+		if nextDate.Before(tg.StartDate) {
+			break
+		}
+		skip:= false
+		for _, d := range existingLogsDates {
+			if validation(d, nextDate) {
+				log.Debug().Msgf("Matched %s. There's a completion log for this date:", d.Format("2006-01-02"))
+				skip = true
+			}
+		} 
+		if !skip {
+			tcl:= PendingTCLContract{
+				TaskID: tg.TaskID,
+				TaskGoalID: tg.TaskGoalID,
+				DueDate: nextDate,
+				Label: tg.Label,
+			}
+			tcls = append(tcls, tcl)
+		}
+	}
+	return tcls
 }
 
 // refDate is the date where the query is done. It will limit the results up to that date.
 func GetPendingTaskCompletionLogs(refDate time.Time) []PendingTCLContract {
-	const limit = 100
+	const limit = 50
 	var tcls = []PendingTCLContract{}
 
 	taskGoals := getGoalsData(refDate)
-	log.Debug().Interface("taskGoals", taskGoals).Msg("Task Goals")
-
 	for _, tg := range taskGoals {
 		
 		completionLogs := getCompletionLogsByTaskGoalAndDate(refDate, tg)
-		log.Debug().Interface("completionLogs", completionLogs).Msg("Completion Logs")
-		
-		// create a map with date as key
-		var dates = []time.Time{}
+
+		var completedPeriods = []time.Time{}
 
 		for _, cl := range completionLogs {
-			dates = append(dates, cl.CompletedAt)
+			/*
+				It should use as a reference the date set to be due
+				Not the date of the completion
+			*/
+			completedPeriods = append(completedPeriods, cl.DueDate)
 		}
 
 		// Traverse time according to frquency type and create pendign tasks
 		if tg.FrequencyType == string(models.Daily) {
-			log.Debug().Msg("Do somehting about daily")
+			log.Debug().Msg("Do something about daily")
+
+			dailyPeriodValidation := func (period time.Time, completedPeriod time.Time) bool {
+				return (
+					period.Day() == completedPeriod.Day() && 
+					period.Month() == completedPeriod.Month() && 
+					period.Year() == completedPeriod.Year() )
+			}
+			monthlyTCLs := getTCLs(refDate, completedPeriods, tg, limit, dailyPeriodValidation)
+			
+			tcls = append(tcls, monthlyTCLs...)
 		} else if tg.FrequencyType == string(models.Weekly) {
 			log.Debug().Msg("Do somehting about weekly")
 		} else if tg.FrequencyType == string(models.Monthly) {
 			log.Debug().Msg("Do something about monthly")
 
-			// While nextDate is >= tg.StartDate or Limit is reached
-
-
-			for i := 0; i < limit; i++ {
-				nextDate := refDate.AddDate(0, -i, 0)
-				if nextDate.Before(tg.StartDate) {
-					break
-				}
-				log.Debug().Msgf("RefDate: %s, NextDate: %s", refDate.Format("2006-01-02"), nextDate.Format("2006-01-02"))
-
-				for _, d := range dates {
-					if d.Month() == nextDate.Month() {
-						log.Debug().Msgf("Matched %s. There's a completion log for this date:", d.Format("2006-01-02"))
-						
-					}
-				} 
-				
-				tcl:= PendingTCLContract{
-					taskID: tg.TaskID,
-					taskGoalID: tg.TaskGoalID,
-					dueDate: nextDate,
-					Label: tg.Label,
-				}
-				tcls = append(tcls, tcl)
+			monthPeriodValidation := func (period time.Time, completedPeriod time.Time) bool {
+				return (
+					period.Month() == completedPeriod.Month() && 
+					period.Year() == completedPeriod.Year() )
 			}
+			monthlyTCLs := getTCLs(refDate, completedPeriods, tg, limit, monthPeriodValidation)
 
-
+			tcls = append(tcls, monthlyTCLs...)
 		} else if tg.FrequencyType == string(models.Yearly) {
 			log.Debug().Msg("Do somehting about yearly")
 		}
-
-
-
 	}
 
-	log.Debug().Interface("tcls", tcls).Msg("tcls")
 	return tcls
 }
 
