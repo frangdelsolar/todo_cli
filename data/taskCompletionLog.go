@@ -142,11 +142,10 @@ func getTCLs(
 	for i := 0; i < limit; i++ {
 		nextDate := calcNextDate(tg, refDate, -i)
 
-		log.Debug().Msgf("tg.StartDate: %s, nextDate: %s", tg.StartDate.Format("2006-01-02"), nextDate.Format("2006-01-02"))
-		// TODO: should first due date, poosiblre refDate also needs same fix
 		if nextDate.Before(tg.StartDate) {
 			break
 		}
+
 		skip:= false
 		for _, d := range existingLogsDates {
 			if validation(d, nextDate) {
@@ -202,16 +201,27 @@ func (wf WeeklyFrequency) calculateNextDate(tg GoalsContract, referenceDate time
 }
 
 func (wf WeeklyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
-    // Implement logic to check if periods fall on the same weekday within the same week
-    // (e.g., using time.ISOWeek)
-    return false // Replace with actual weekly period validation
+	py, pw := period.ISOWeek()
+	cy, cw := completedPeriod.ISOWeek()
+	if py != cy || pw != cw {
+		return false
+	}
+    return true 
 }
 
 // MonthlyFrequency implements the Frequency interface for monthly tasks.
 type MonthlyFrequency struct{}
 
 func (mf MonthlyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
-	return referenceDate.AddDate(0, i, 0)
+	nextDate := referenceDate.AddDate(0, i, 0)
+	dueDate := time.Date(nextDate.Year(), nextDate.Month(), tg.FrequencyDay, 0, 0, 0, 0, time.UTC)
+
+	if dueDate.Before(nextDate) {
+		nextDate = nextDate.AddDate(0, 1, 0)
+		dueDate = time.Date(nextDate.Year(), nextDate.Month(), tg.FrequencyDay, 0, 0, 0, 0, time.UTC)
+	}
+
+	return dueDate
 }
 
 func (mf MonthlyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
@@ -223,7 +233,15 @@ func (mf MonthlyFrequency) validatePeriod(period time.Time, completedPeriod time
 type YearlyFrequency struct{}
 
 func (yf YearlyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
-	return referenceDate.AddDate(i, 0, 0)
+	nextDate := referenceDate.AddDate(i, 0, 0)
+	dueDate := time.Date(nextDate.Year(), time.Month(tg.FrequencyMonth), tg.FrequencyDay, 0, 0, 0, 0, time.UTC)
+
+	if dueDate.Before(nextDate) {
+		nextDate = nextDate.AddDate(1, 0, 0)
+		dueDate = time.Date(nextDate.Year(), time.Month(tg.FrequencyMonth), tg.FrequencyDay, 0, 0, 0, 0, time.UTC)
+	}
+
+	return dueDate
 }
 
 func (yf YearlyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
