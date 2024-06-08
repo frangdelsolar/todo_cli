@@ -72,7 +72,7 @@ func convertPendingsToSelectableItems(pending []data.PendingTCLContract) []promp
 	var items []prompt.SelectableItem
 	for index, item := range pending {
 		items = append(items, prompt.SelectableItem{
-			Label: fmt.Sprintf("%s - %s", item.Label, item.DueDate.Local().String()),
+			Label: fmt.Sprintf("%d | %s", index, item.String()),
 			Key:   fmt.Sprint(index),
 		})
 	}

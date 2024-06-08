@@ -125,24 +125,32 @@ type PendingTCLContract struct {
 	Label         string
 }
 
+func (t PendingTCLContract) String() string {
+	return fmt.Sprintf("%s | %s", t.Label, t.DueDate.Format("2006-01-02"))
+}
+
 func getTCLs(
 	refDate time.Time, 
 	existingLogsDates []time.Time, 
 	tg GoalsContract, 
 	limit int,
+	calcNextDate func(GoalsContract, time.Time, int) time.Time,
 	validation func(time.Time, time.Time) bool,
 ) []PendingTCLContract {
 	var tcls = []PendingTCLContract{}
 
 	for i := 0; i < limit; i++ {
-		nextDate := refDate.AddDate(0, -i, 0)
+		nextDate := calcNextDate(tg, refDate, -i)
+
+		log.Debug().Msgf("tg.StartDate: %s, nextDate: %s", tg.StartDate.Format("2006-01-02"), nextDate.Format("2006-01-02"))
+		// TODO: should first due date, poosiblre refDate also needs same fix
 		if nextDate.Before(tg.StartDate) {
 			break
 		}
 		skip:= false
 		for _, d := range existingLogsDates {
 			if validation(d, nextDate) {
-				log.Debug().Msgf("Matched %s. There's a completion log for this date:", d.Format("2006-01-02"))
+				// log.Debug().Msgf("Matched %s. There's a completion log for this date:", d.Format("2006-01-02"))
 				skip = true
 			}
 		} 
@@ -157,6 +165,69 @@ func getTCLs(
 		}
 	}
 	return tcls
+}
+
+// Frequency interface defines methods for calculating next date and validating period based on frequency type.
+type Frequency interface {
+    calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time
+    validatePeriod(period time.Time, completedPeriod time.Time) bool
+}
+
+// DailyFrequency implements the Frequency interface for daily tasks.
+type DailyFrequency struct{}
+
+func (df DailyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
+    return referenceDate.AddDate(0, 0, i)
+}
+
+func (df DailyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
+    return period.Year() == completedPeriod.Year() &&
+        period.Month() == completedPeriod.Month() &&
+        period.Day() == completedPeriod.Day()
+}
+
+// WeeklyFrequency implements the Frequency interface for weekly tasks.
+type WeeklyFrequency struct{}
+
+func (wf WeeklyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
+	dowRefDate := referenceDate.Weekday()
+
+	if dowRefDate == time.Weekday(tg.FrequencyDayOfWeek) {
+    	return referenceDate.AddDate(0, 0, 7*i)
+	} else if dowRefDate < time.Weekday(tg.FrequencyDayOfWeek) {
+		return referenceDate.AddDate(0, 0, 7*i + 7 - int(dowRefDate))
+	} else {
+		return referenceDate.AddDate(0, 0, 7*i + int(time.Weekday(tg.FrequencyDayOfWeek)) - int(dowRefDate))
+	}
+}
+
+func (wf WeeklyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
+    // Implement logic to check if periods fall on the same weekday within the same week
+    // (e.g., using time.ISOWeek)
+    return false // Replace with actual weekly period validation
+}
+
+// MonthlyFrequency implements the Frequency interface for monthly tasks.
+type MonthlyFrequency struct{}
+
+func (mf MonthlyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
+	return referenceDate.AddDate(0, i, 0)
+}
+
+func (mf MonthlyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
+	return period.Year() == completedPeriod.Year() &&
+		period.Month() == completedPeriod.Month()
+}
+
+// YearlyFrequency implements the Frequency interface for yearly tasks.
+type YearlyFrequency struct{}
+
+func (yf YearlyFrequency) calculateNextDate(tg GoalsContract, referenceDate time.Time, i int) time.Time {
+	return referenceDate.AddDate(i, 0, 0)
+}
+
+func (yf YearlyFrequency) validatePeriod(period time.Time, completedPeriod time.Time) bool {
+	return period.Year() == completedPeriod.Year()
 }
 
 // refDate is the date where the query is done. It will limit the results up to that date.
@@ -180,34 +251,30 @@ func GetPendingTaskCompletionLogs(refDate time.Time) []PendingTCLContract {
 		}
 
 		// Traverse time according to frquency type and create pendign tasks
-		if tg.FrequencyType == string(models.Daily) {
-			log.Debug().Msg("Do something about daily")
+		var nextDateCallback func(GoalsContract, time.Time, int) time.Time
+        var periodValidation func(time.Time, time.Time) bool
 
-			dailyPeriodValidation := func (period time.Time, completedPeriod time.Time) bool {
-				return (
-					period.Day() == completedPeriod.Day() && 
-					period.Month() == completedPeriod.Month() && 
-					period.Year() == completedPeriod.Year() )
-			}
-			monthlyTCLs := getTCLs(refDate, completedPeriods, tg, limit, dailyPeriodValidation)
-			
-			tcls = append(tcls, monthlyTCLs...)
-		} else if tg.FrequencyType == string(models.Weekly) {
-			log.Debug().Msg("Do somehting about weekly")
-		} else if tg.FrequencyType == string(models.Monthly) {
-			log.Debug().Msg("Do something about monthly")
+        switch tg.FrequencyType {
+        case string(models.Daily):
+            nextDateCallback = DailyFrequency{}.calculateNextDate
+            periodValidation = DailyFrequency{}.validatePeriod
+        case string(models.Weekly):
+            nextDateCallback = WeeklyFrequency{}.calculateNextDate
+            periodValidation = WeeklyFrequency{}.validatePeriod
+        case string(models.Monthly):
+            nextDateCallback = MonthlyFrequency{}.calculateNextDate
+            periodValidation = MonthlyFrequency{}.validatePeriod
+        case string(models.Yearly):
+            nextDateCallback = YearlyFrequency{}.calculateNextDate
+            periodValidation = YearlyFrequency{}.validatePeriod
+        }
 
-			monthPeriodValidation := func (period time.Time, completedPeriod time.Time) bool {
-				return (
-					period.Month() == completedPeriod.Month() && 
-					period.Year() == completedPeriod.Year() )
-			}
-			monthlyTCLs := getTCLs(refDate, completedPeriods, tg, limit, monthPeriodValidation)
-
-			tcls = append(tcls, monthlyTCLs...)
-		} else if tg.FrequencyType == string(models.Yearly) {
-			log.Debug().Msg("Do somehting about yearly")
-		}
+        if nextDateCallback != nil && periodValidation != nil {
+            pendingTCLs := getTCLs(refDate, completedPeriods, tg, limit, nextDateCallback, periodValidation)
+            tcls = append(tcls, pendingTCLs...)
+        } else {
+            log.Warn().Msgf("Unsupported frequency type: %s", tg.FrequencyType)
+        }
 	}
 
 	return tcls

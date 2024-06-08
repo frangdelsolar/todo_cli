@@ -29,9 +29,9 @@ var TaskCmd = &cobra.Command{
 		// Show pending tasks
 		tasks := data.GetPendingTaskCompletionLogs(time.Now())
 		if len(tasks) > 0 {
-			fmt.Print("These are your pending tasks:")
-			for _, task := range tasks {
-				fmt.Println(task.Label)
+			fmt.Print("These are your pending tasks: \n")
+			for ix, task := range tasks {
+				fmt.Printf("%d | %s \n", ix, task.String())
 			}
 		} else {
 			fmt.Println("No pending tasks today!!!")

@@ -41,10 +41,12 @@ var CreateTaskGoalCmd = &cobra.Command{
 		dayOfWeek := "1"
 		switch frequency {
 			case string(models.Daily):
-				dayOfWeek = prompt.PromptGetInput(prompt.PromptContent{Label: "Day of Week"})
+				break
 			case string(models.Weekly):
-				day = prompt.PromptGetInput(prompt.PromptContent{Label: "Day of Month"})
+				dayOfWeek = prompt.PromptGetInput(prompt.PromptContent{Label: "Day of Week"})
 			case string(models.Monthly):
+				day = prompt.PromptGetInput(prompt.PromptContent{Label: "Day of Month"})
+			case string(models.Yearly):
 				day = prompt.PromptGetInput(prompt.PromptContent{Label: "Day of Month"})
 				month = prompt.PromptGetInput(prompt.PromptContent{Label: "Month"})
 			default:
