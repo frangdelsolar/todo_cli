@@ -1,9 +1,7 @@
 package data
 
 import (
-	"todo_cli/models"
-
-	"github.com/rs/zerolog/log"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
 
 

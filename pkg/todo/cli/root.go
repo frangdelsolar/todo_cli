@@ -2,17 +2,24 @@ package cli
 
 import (
 	"fmt"
-	taskcmd "todo_cli/internal/cli/task"
-	"todo_cli/pkg/prompt"
 
+	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
+	taskcmd "github.com/frangdelsolar/todo_cli/pkg/todo/cli/task"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 	"github.com/spf13/cobra"
 )
+
+var log models.Logger
 
 var rootCmdActions = []prompt.SelectableItem{
 	{Key: "task", Label: "Task actions"},
 }
 
 var rootCmd = &cobra.Command{
+	PreRun: func(cmd *cobra.Command, args []string) {
+		// clear screen
+		fmt.Print("\033[2J\033[1;1H")
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Print("TODO: A Powerful Command-Line Task Management Tool\n\n")
 		fmt.Print(`Take control of your to-do list with TODO, 
@@ -43,13 +50,19 @@ and organize your tasks in a centralized and accessible way.
 	},
 }
 
-// Execute executes the root command.
-func Execute() error {
-	// clear screen
-	fmt.Print("\033[2J\033[1;1H")
-	return rootCmd.Execute()
-}
 
 func init() {
 	rootCmd.AddCommand(taskcmd.TaskCmd)
 }
+
+type CLI struct {
+	*cobra.Command
+}
+
+// Execute executes the root command.
+func NewCLI(lg *models.Logger) *CLI {
+	// log =models.Logger{lg}
+
+	return &CLI{rootCmd}
+}
+

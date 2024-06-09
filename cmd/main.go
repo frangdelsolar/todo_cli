@@ -2,24 +2,35 @@ package main
 
 import (
 	"os"
-	"todo_cli/data"
-	"todo_cli/internal/cli"
+	"todo_app/data"
+	"todo_app/models"
 
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+
+	t "github.com/frangdelsolar/todo_cli/pkg/todo"
 )
 
-var APP_VERSION = "0.0.1"
+var APP_VERSION = "1.0.0"
+
+
+
 
 func main() {
 
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
-	log.Info().Msg("Running TODO App v" + APP_VERSION)
+	log := models.Logger{zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).With().Timestamp().Logger()}
 
-	err := data.ConnectDB()
+	db, err := data.ConnectDB(log)
 	if err != nil {
-		log.Err(err).Msg("Error connecting to database")
-		return
+		log.Fatal().Err(err).Msg("Failed to connect to database")
 	}
+
+	todoConfig := t.TodoConfig{
+		Logger: log.Logger,
+		DB: db,
+	}
+	cli := t.Todo(todoConfig)
 	cli.Execute()
+
+	log.Info().Msg("Running TODO APP v" + APP_VERSION)
+
 }

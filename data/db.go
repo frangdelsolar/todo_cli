@@ -2,19 +2,11 @@ package data
 
 import (
 	"os"
-	"todo_cli/models"
+	"todo_app/models"
 
-	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
-
-var DB *Database
-
-// Database represents a connection to the SQLite database.
-type Database struct {
-	*gorm.DB
-}
 
 // ConnectDB establishes a connection to the SQLite database specified by the DATA_BASE_FILE environment variable.
 // If the environment variable is not set, it defaults to "../data.db". It logs the connection details and migrates
@@ -23,7 +15,7 @@ type Database struct {
 //
 // Returns:
 // - error: an error if the database connection fails.
-func ConnectDB() error {
+func ConnectDB(log models.Logger) (*gorm.DB, error) {
 
 	// Get the DATA_BASE_FILE environment variable
 	dataBaseFile := os.Getenv("DATA_BASE_FILE")
@@ -35,21 +27,6 @@ func ConnectDB() error {
 
 	// Connect to the SQLite database
 	db, err := gorm.Open(sqlite.Open(dataBaseFile), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
 
-	// Migrate the schema
-	db.AutoMigrate(
-		&models.Task{},
-		&models.TaskGoal{},
-		&models.TaskCompletionLog{},
-		&models.TaskFrequency{},
-	)
-
-	DB = &Database{db}
-
-	log.Debug().Msg("Initialized SQLite DB")
-
-	return nil
+	return db, err
 }

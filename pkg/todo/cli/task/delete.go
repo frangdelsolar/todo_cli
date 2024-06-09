@@ -1,9 +1,8 @@
 package task
 
 import (
-	"todo_cli/data"
-	"todo_cli/internal/cli/prompts"
-
+	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompts"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )

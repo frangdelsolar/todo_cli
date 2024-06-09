@@ -2,8 +2,8 @@ package goal
 
 import (
 	"fmt"
-	"todo_cli/pkg/prompt"
 
+	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
 	"github.com/spf13/cobra"
 )
 

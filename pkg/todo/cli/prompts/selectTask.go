@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"todo_cli/data"
-	"todo_cli/models"
-	"todo_cli/pkg/prompt"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
 
 type ItemSelection struct {

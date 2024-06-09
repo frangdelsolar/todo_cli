@@ -3,9 +3,8 @@ package data
 import (
 	"fmt"
 	"time"
-	"todo_cli/models"
 
-	"github.com/rs/zerolog/log"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
 
 // GetTaskById retrieves a task from the database by its ID.
