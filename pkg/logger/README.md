@@ -1,4 +1,4 @@
-# Logger v1.0.2
+# Logger v1.0.3
 
 The `logger` package provides a wrapper around the popular zerolog logging library (https://github.com/rs/zerolog) with additional context specific to your TODO application. It offers a simple interface for setting and retrieving a configured zerolog logger instance.
 
