@@ -1,10 +1,19 @@
-package main
+package currency
 
 import (
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/pkg/data"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"gorm.io/gorm"
 )
+
+
+var PKG_NAME = "Currency PKG"
+var PKG_VERSION = "1.0.0"
+
+var log *logger.Logger
+var logLevel = "debug"
 
 type CurrencyUnit string
 
@@ -24,3 +33,16 @@ type Currency struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
+func InitCurrency() {
+	log = logger.NewLogger(logLevel, PKG_NAME, PKG_VERSION)
+	log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
+
+	// db := data.GetDB()
+	db, err := data.InitDB("./data.db")
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to connect to database")
+	}
+	
+	db.AutoMigrate(&Currency{})
+	
+}
