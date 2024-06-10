@@ -4,7 +4,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-var PKG_VERSION = "1.0.1"
+var PKG_VERSION = "1.0.0"
 
 var log Logger
 
