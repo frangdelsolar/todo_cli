@@ -3,7 +3,7 @@ module github.com/frangdelsolar/todo_cli/pkg/todo
 go 1.22.4
 
 require (
-	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.1
+	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.2
 	github.com/manifoldco/promptui v0.9.0
 	github.com/rs/zerolog v1.33.0
 	github.com/spf13/cobra v1.8.0
