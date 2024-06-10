@@ -11,7 +11,7 @@ import (
 	"github.com/rs/zerolog"
 )
 
-var APP_VERSION = "1.0.0"
+var APP_VERSION = "1.0.2"
 
 var log *logger.Logger
 var logLevel = zerolog.DebugLevel
