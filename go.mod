@@ -1,13 +1,12 @@
 module github.com/frangdelsolar/todo_cli
 
-go 1.22.4 // Go version used for the project
+go 1.22.4
 
 require (
-	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.2
-	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.2
+	github.com/frangdelsolar/todo_cli/pkg/data v1.0.0
+	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
+	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.4
 	github.com/rs/zerolog v1.33.0
-	gorm.io/driver/sqlite v1.5.5
-	gorm.io/gorm v1.25.10
 )
 
 require (
@@ -22,4 +21,6 @@ require (
 	github.com/spf13/cobra v1.8.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/sys v0.12.0 // indirect
+	gorm.io/driver/sqlite v1.5.5 // indirect
+	gorm.io/gorm v1.25.10 // indirect
 )
