@@ -1,9 +1,9 @@
 package todo
 
 import (
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli"
 	db "github.com/frangdelsolar/todo_cli/pkg/todo/data"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 	"github.com/rs/zerolog"
 	"gorm.io/gorm"

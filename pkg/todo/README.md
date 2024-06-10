@@ -1,6 +1,6 @@
-# Todo PKG v1.0.0
+# Todo PKG v1.0.1
 
 ## Requirements
 
--   Logger zerolog
+-   Logger
 -   Database gorm and sqlite

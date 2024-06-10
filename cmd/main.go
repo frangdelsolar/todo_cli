@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/frangdelsolar/todo_cli/data"
-	"github.com/frangdelsolar/todo_cli/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 
 	"github.com/rs/zerolog"
 

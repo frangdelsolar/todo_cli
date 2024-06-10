@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/manifoldco/promptui"
 )
 

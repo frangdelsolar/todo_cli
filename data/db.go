@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/frangdelsolar/todo_cli/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -30,7 +30,6 @@ func ConnectDB() (*gorm.DB, error) {
 		dataBaseFile = "../data.db"
 	}
 
-	fmt.Printf("About to log something %s", log)
 	log.Info().Msgf("Connecting to SQLite DB: %s", dataBaseFile)
 
 	// Connect to the SQLite database

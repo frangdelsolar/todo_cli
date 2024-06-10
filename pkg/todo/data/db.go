@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 
 	"gorm.io/gorm"
 )

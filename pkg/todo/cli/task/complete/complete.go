@@ -3,9 +3,9 @@ package complete
 import (
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompts"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 	"github.com/spf13/cobra"
 )
 

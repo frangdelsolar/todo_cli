@@ -81,7 +81,6 @@ func FrequencyValidator(
 	in_frequency_month string, 
 	in_frequency_day_of_week string,
 ) error {
-	log.Debug().Msgf("in_frequency_name: %s, in_frequency_day: %s, in_frequency_month: %s, in_frequency_day_of_week: %s", in_frequency_name, in_frequency_day, in_frequency_month, in_frequency_day_of_week)
 	switch in_frequency_name{
 		case string(Daily):
 			return nil
