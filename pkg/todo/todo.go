@@ -13,7 +13,7 @@ import (
 )
 
 
-const PKG_VERSION = "1.0.0"
+const PKG_VERSION = "1.0.2"
 
 var log *logger.Logger
 var logLevel = zerolog.DebugLevel
