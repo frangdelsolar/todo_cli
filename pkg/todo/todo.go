@@ -9,7 +9,7 @@ import (
 
 
 const PKG_NAME = "TODO PKG"
-const PKG_VERSION = "1.0.4"
+const PKG_VERSION = "1.0.41"
 
 var log *logger.Logger
 var logLevel = "debug"
