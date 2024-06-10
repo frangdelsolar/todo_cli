@@ -5,11 +5,9 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
 	taskcmd "github.com/frangdelsolar/todo_cli/pkg/todo/cli/task"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 	"github.com/spf13/cobra"
 )
 
-var log models.Logger
 
 var rootCmdActions = []prompt.SelectableItem{
 	{Key: "task", Label: "Task actions"},
@@ -60,7 +58,7 @@ type CLI struct {
 }
 
 // Execute executes the root command.
-func NewCLI(lg *models.Logger) *CLI {
+func NewCLI() *CLI {
 	// log =models.Logger{lg}
 
 	return &CLI{rootCmd}

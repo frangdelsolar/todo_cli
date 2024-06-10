@@ -30,7 +30,7 @@ func Todo(config TodoConfig) *cli.CLI {
 		&models.TaskFrequency{},
 	)
 
-	db.InitDB(config.DB, &log)
+	db.InitDB(config.DB, &config.Logger)
 	
-	return cli.NewCLI(&log)
+	return cli.NewCLI()
 }
