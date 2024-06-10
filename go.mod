@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	github.com/frangdelsolar/todo_cli/pkg/data v1.0.0
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
-	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.3
+	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.4
 	github.com/rs/zerolog v1.33.0
 )
 
