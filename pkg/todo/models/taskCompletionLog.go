@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 

@@ -2,6 +2,8 @@ module github.com/frangdelsolar/todo_cli
 
 go 1.22.4 // Go version used for the project
 
+replace github.com/frangdelsolar/todo_cli/pkg/todo => /Users/frangdelsolar/Desktop/code/todoProject/todo_app/pkg/todo
+
 require (
 	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.0
 	github.com/rs/zerolog v1.33.0

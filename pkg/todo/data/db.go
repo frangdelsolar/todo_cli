@@ -1,20 +1,24 @@
 package data
 
 import (
-	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 
-	"github.com/rs/zerolog"
 	"gorm.io/gorm"
 )
 
-var log models.Logger
+var log *logger.Logger
 
 var DB *Database
 type Database struct{ 
 	*gorm.DB
 }
 
-func InitDB(db *gorm.DB, lg *zerolog.Logger) {
+
+
+func InitDB(db *gorm.DB) {
 	DB = &Database{db}
-	log = models.Logger{lg}
+}
+
+func init(){
+	log = logger.GetLogger()
 }

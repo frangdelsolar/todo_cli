@@ -8,8 +8,12 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/task/complete"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/task/goal"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 	"github.com/spf13/cobra"
 )
+
+var log = logger.GetLogger()
+
 
 var taskCmdActions = []prompt.SelectableItem{
 	{Key: "create", Label: "Add a task"},

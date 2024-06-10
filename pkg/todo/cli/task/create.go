@@ -7,9 +7,9 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/task/goal"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
+
 
 var CreateTaskCmd = &cobra.Command{
 	Use:   "create",

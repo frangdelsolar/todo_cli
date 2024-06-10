@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 	"github.com/manifoldco/promptui"
-	"github.com/rs/zerolog/log"
 )
+
+var log = logger.GetLogger()
 
 type SelectableItem struct {
 	Label string

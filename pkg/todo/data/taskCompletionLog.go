@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
@@ -157,7 +158,7 @@ func getTCLs(
 				TaskID: tg.TaskID,
 				TaskGoalID: tg.TaskGoalID,
 				DueDate: nextDate,
-				Label: tg.Label,
+				Label: fmt.Sprintf("%s | %s", strings.ToUpper(string(tg.Category)), tg.Label) ,
 			}
 			tcls = append(tcls, tcl)
 		}

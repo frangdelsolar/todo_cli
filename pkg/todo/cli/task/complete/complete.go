@@ -5,9 +5,11 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompts"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
-	"github.com/rs/zerolog/log"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/logger"
 	"github.com/spf13/cobra"
 )
+
+var log = logger.GetLogger()
 
 var CompleteTaskCmd = &cobra.Command{
 	Use:   "complete",

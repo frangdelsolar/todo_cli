@@ -5,7 +5,6 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompts"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
 
