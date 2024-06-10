@@ -1,14 +1,13 @@
-module todo_app
+module github.com/frangdelsolar/todo_cli
 
 go 1.22.4 // Go version used for the project
-
-replace github.com/frangdelsolar/todo_cli/pkg/todo v1.0.0 => /Users/frangdelsolar/Desktop/code/todoProject/todo_app/pkg/todo // Replace the remote package with the local one
 
 require (
 	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.0
 	github.com/rs/zerolog v1.33.0
 	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.10
+
 )
 
 require (

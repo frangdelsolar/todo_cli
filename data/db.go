@@ -2,7 +2,8 @@ package data
 
 import (
 	"os"
-	"todo_app/models"
+
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -15,7 +16,7 @@ import (
 //
 // Returns:
 // - error: an error if the database connection fails.
-func ConnectDB(log models.Logger) (*gorm.DB, error) {
+func ConnectDB(log *models.Logger) (*gorm.DB, error) {
 
 	// Get the DATA_BASE_FILE environment variable
 	dataBaseFile := os.Getenv("DATA_BASE_FILE")

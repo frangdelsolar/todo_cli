@@ -2,22 +2,22 @@ package main
 
 import (
 	"os"
-	"todo_app/data"
-	"todo_app/models"
+
+	"github.com/frangdelsolar/todo_cli/data"
 
 	"github.com/rs/zerolog"
 
 	t "github.com/frangdelsolar/todo_cli/pkg/todo"
+	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
 
 var APP_VERSION = "1.0.0"
 
-
-
-
 func main() {
 
-	log := models.Logger{zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).With().Timestamp().Logger()}
+	zlog := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).With().Timestamp().Logger()
+
+	log := models.NewLogger(&zlog)
 
 	db, err := data.ConnectDB(log)
 	if err != nil {
@@ -25,7 +25,7 @@ func main() {
 	}
 
 	todoConfig := t.TodoConfig{
-		Logger: log.Logger,
+		Logger: *log.Logger,
 		DB: db,
 	}
 	cli := t.Todo(todoConfig)
