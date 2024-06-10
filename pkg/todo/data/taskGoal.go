@@ -125,7 +125,7 @@ func DeleteTaskGoal(id string) error {
 		return err
 	}
 
-	db.Delete(ep)
+	db.Delete(&ep)
 
 	return nil
 }
