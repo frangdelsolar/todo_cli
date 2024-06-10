@@ -1,31 +1,32 @@
 package logger
 
 import (
-	"os"
-
 	"github.com/rs/zerolog"
 )
 
-var log Logger
+var PKG_VERSION = "1.0.1"
 
-var APP_VERSION = "1.0.0"
+var log Logger
 
 type Logger struct{
 	*zerolog.Logger
 }
 
-
-
-func SetLogger(logger *zerolog.Logger) Logger{
-	log = Logger{logger}
-	return log
+// NewLogger creates a new Logger instance with the provided zerolog.Logger.
+//
+// Parameters:
+// - logger: A pointer to a zerolog.Logger instance.
+//
+// Returns:
+// - A pointer to the newly created Logger instance.
+func NewLogger(logger *zerolog.Logger) *Logger{
+	return &Logger{logger}
 }
 
+// GetLogger returns a pointer to the Logger instance.
+//
+// Returns:
+// - *Logger: A pointer to the Logger instance.
 func GetLogger() *Logger {
 	return &log
-}
-
-func init(){
-	lg := zerolog.New(os.Stderr).With().Timestamp().Logger()
-	lg.Info().Msgf("Running TODO APP v%s", APP_VERSION)
 }
