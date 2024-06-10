@@ -23,6 +23,6 @@ func CreateTaskFrequency(
 		log.Err(err).Msg("Error creating new Task Frequency")
 		return nil, err
 	}
-	DB.Create(&tf)
+	db.Create(&tf)
 	return tf, nil
 }
