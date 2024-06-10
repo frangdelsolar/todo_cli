@@ -18,7 +18,7 @@ import (
 // - error: an error if the TaskCompletionLog retrieval fails.
 func GetTaskCompletionLogById(id string) (models.TaskCompletionLog, error) {
 	var tcl models.TaskCompletionLog
-	DB.First(&tcl, "id = ?", id)
+	db.First(&tcl, "id = ?", id)
 	if tcl == (models.TaskCompletionLog{}) {
 		return tcl, fmt.Errorf("task with ID %s not found", fmt.Sprint(id))
 	}
@@ -35,7 +35,7 @@ func GetTaskCompletionLogById(id string) (models.TaskCompletionLog, error) {
 func GetTaskCompletionLogsByTaskId(taskId string) []models.TaskCompletionLog {
 	var tasks []models.TaskCompletionLog
 
-	DB.Where("task_id = ?", taskId).Find(&tasks)
+	db.Where("task_id = ?", taskId).Find(&tasks)
 
 	if len(tasks) == 0 {
 		log.Warn().Msg("No task completion logs found")
@@ -63,7 +63,7 @@ func getGoalsData(refDate time.Time) []GoalsContract {
 	// Get goals for reference date
 	var taskGoals []GoalsContract
 
-	DB.Table("task_goals").
+	db.Table("task_goals").
 		Select(`DISTINCT 
 					task_goals.id as TaskGoalID,
 					task_goals.start_date as StartDate,
@@ -100,7 +100,7 @@ type CompletionContract struct {
 func getCompletionLogsByTaskGoalAndDate(refDate time.Time, tg GoalsContract) []CompletionContract{
 	var completionLogs []CompletionContract
 
-	DB.Table("task_completion_logs").
+	db.Table("task_completion_logs").
 		Select(`DISTINCT
 					task_completion_logs.task_id as TaskID,
 					task_completion_logs.task_goal_id as TaskGoalID,
@@ -314,7 +314,7 @@ func CreateTaskCompletionLog(taskId string, completedAt string, taskGoalId strin
 		log.Err(err).Msg("Error creating new Task Completion Log")
 		return nil, err
 	}
-	DB.Create(&tcl)
+	db.Create(&tcl)
 	return tcl, nil
 }
 
@@ -340,7 +340,7 @@ func UpdateTaskCompletionLog(id string, completedAt string) (models.TaskCompleti
 		return tcl, err
 	}
 
-	DB.Save(&tcl)
+	db.Save(&tcl)
 
 	return tcl, nil
 }
@@ -360,7 +360,7 @@ func DeleteTaskCompletionLog(id string) error {
 		return err
 	}
 
-	DB.Delete(&tcl)
+	db.Delete(&tcl)
 
 	return nil
 }

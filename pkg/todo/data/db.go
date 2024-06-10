@@ -1,24 +1,14 @@
 package data
 
 import (
+	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
-
-	"gorm.io/gorm"
 )
 
 var log *logger.Logger
-
-var DB *Database
-type Database struct{ 
-	*gorm.DB
-}
-
-
-
-func InitDB(db *gorm.DB) {
-	DB = &Database{db}
-}
+var db *data.Database
 
 func init(){
 	log = logger.GetLogger()
+	db = data.GetDB()
 }

@@ -18,7 +18,7 @@ import (
 func GetTaskById(id string) (models.Task, error) {
 	var task models.Task
 
-	DB.First(&task, "id = ?", id)
+	db.First(&task, "id = ?", id)
 	if task == (models.Task{}) {
 		return task, fmt.Errorf("task with ID %s not found", fmt.Sprint(id))
 	}
@@ -32,7 +32,7 @@ func GetTaskById(id string) (models.Task, error) {
 func GetAllTasks() []models.Task {
 	var tasks []models.Task
 
-	DB.Find(&tasks)
+	db.Find(&tasks)
 
 	if len(tasks) == 0 {
 		log.Warn().Msg("No tasks found")
@@ -51,7 +51,7 @@ func GetActiveTasks(refDate time.Time) []models.Task {
 
 	nullDate := time.Time{}
 
-	DB.Table("task_goals").
+	db.Table("task_goals").
 		Select("DISTINCT tasks.*").
 		Joins("join tasks on task_goals.task_id = tasks.id").
 		Where(`
@@ -82,7 +82,7 @@ func CreateTask(title string) (models.Task, error) {
 		return models.Task{}, err
 	}
 
-	DB.Create(&task)
+	db.Create(&task)
 	return task, nil
 }
 
@@ -108,7 +108,7 @@ func UpdateTask(id string, title string) (models.Task, error) {
 		return task, err
 	}
 
-	DB.Save(&task)
+	db.Save(&task)
 
 	return task, nil
 }
@@ -135,7 +135,7 @@ func DeleteTask(taskId string) error {
 		}
 	}
 
-	DB.Delete(&task)
+	db.Delete(&task)
 
 	return nil
 }
