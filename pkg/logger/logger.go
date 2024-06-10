@@ -20,7 +20,8 @@ type Logger struct{
 // Returns:
 // - A pointer to the newly created Logger instance.
 func NewLogger(logger *zerolog.Logger) *Logger{
-	return &Logger{logger}
+	log = Logger{logger}
+	return &log
 }
 
 // GetLogger returns a pointer to the Logger instance.

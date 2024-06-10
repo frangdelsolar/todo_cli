@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
@@ -11,9 +10,6 @@ import (
 
 var log = logger.GetLogger()
 
-func init(){
-	fmt.Print("Getting Logger")
-}
 
 // ConnectDB establishes a connection to the SQLite database specified by the DATA_BASE_FILE environment variable.
 // If the environment variable is not set, it defaults to "../data.db". It logs the connection details and migrates
