@@ -2,10 +2,8 @@ module github.com/frangdelsolar/todo_cli/pkg/todo
 
 go 1.22.4
 
-replace github.com/frangdelsolar/todo_cli/pkg/data => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/data
-
 require (
-	github.com/frangdelsolar/todo_cli/pkg/data v1.0.1
+	github.com/frangdelsolar/todo_cli/pkg/data v1.0.0
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
 	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.8.0
