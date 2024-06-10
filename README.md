@@ -1,4 +1,4 @@
-# Todo APP v1.0.2
+# Todo APP v1.0.3
 
 Todo APP is a command-line tool that empowers you to efficiently manage your tasks. It provides a user-friendly interface to add, view, edit, and complete tasks, making it easy to stay organized and on top of your goals.
 
