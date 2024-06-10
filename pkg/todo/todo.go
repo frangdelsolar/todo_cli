@@ -9,7 +9,7 @@ import (
 )
 
 
-const APP_VERSION = "1.0.1"
+const APP_VERSION = "1.0.0"
 
 var log zerolog.Logger
 
