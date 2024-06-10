@@ -45,7 +45,7 @@ Todo APP is a command-line tool that empowers you to efficiently manage your tas
 
 ## Usage
 
-Todo APP offers a variety of commands for task management. Run todo --help or todo help in your terminal to view a list of available commands and their usage details. Here are some common examples:
+Todo APP offers a variety of commands for task management. Run `todo --help` or `todo help` in your terminal to view a list of available commands and their usage details. Here are some common examples:
 
 ### - Navigation
 
