@@ -151,7 +151,7 @@ func DateValidator(date string) error {
 
 
 func InitCurrency() {
-	// var err error
+	var err error
 	log = logger.NewLogger(logLevel, PKG_NAME, PKG_VERSION)
 	log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
@@ -159,22 +159,22 @@ func InitCurrency() {
 	/*
 		Comment this to initialize a new database
 	*/
-	db = data.GetDB()
-	log.Debug().Interface("Database", db).Msg("Initialized Database")
+	// db = data.GetDB()
+	// log.Debug().Interface("Database", db).Msg("Initialized Database")
 
 	/*
 		Uncomment this to initialize a new database.
 		Comment the previous line
 	*/
 
-	// db, err = data.InitDB("./data.db")
-	// if err != nil {
-	// 	log.Err(err).Msg("Error initializing database")
-	// 	return
-	// }
+	db, err = data.InitDB("./data.db")
+	if err != nil {
+		log.Err(err).Msg("Error initializing database")
+		return
+	}
 
 
-	db.AutoMigrate(&Currency{})
+	db.AutoMigrate(&Currency{}, &Account{}, &Transaction{})
 
 	log.Debug().Interface("Database", db).Msg("Initialized Database")
 	

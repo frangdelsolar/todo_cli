@@ -25,6 +25,13 @@ func main(){
 
 	a, _ := c.CreateCurrency("ARS", "1", date.Format(time.DateOnly))
 	fmt.Println(a)
+
+	acc, err := c.NewAccount("test", "ARS", *a, false)
+	if err != nil {
+		log.Err(err).Msg("Error creating account")
+		return
+	}
+	log.Info().Interface("Account", acc).Msg("Account created")
 }
 
 
