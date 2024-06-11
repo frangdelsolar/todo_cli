@@ -169,14 +169,14 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 	if err != nil {
 		log.Warn().Msgf("File does not exist: %s", RATES_FILE)
 		refreshFile = true
+	} else {
+		// Check file is not too old
+		if time.Since(info.ModTime()) > 24*time.Hour {
+			log.Warn().Msgf("File is older than 24 hours: %s", RATES_FILE)
+			refreshFile = true
+		}
 	}
 	
-	// Check file is not too old
-	if time.Since(info.ModTime()) > 24*time.Hour {
-		log.Warn().Msgf("File is older than 24 hours: %s", RATES_FILE)
-		refreshFile = true
-	}
-
 	// Download rates
 	if refreshFile {
 		err := DownloadRates()
@@ -188,6 +188,7 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 	// Read rates
 	file, err := os.ReadFile(RATES_FILE)
 	if err != nil {
+		log.Err(err).Msgf("Error reading file %s", RATES_FILE)
 		return Rate{}, err
 	}
 
@@ -195,6 +196,7 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 	var ratesMap RateMap
 	err = json.Unmarshal(file, &ratesMap)
 	if err != nil {
+		log.Err(err).Msgf("Error parsing rates from file %s", RATES_FILE)
 		return Rate{}, err
 	}
 
@@ -203,6 +205,7 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 
 	for {
 		if date.Before(minDate) {
+			log.Warn().Msgf("No rate found for date: %s", date.Format("2006-01-02"))
 			return Rate{}, fmt.Errorf("no rate found for date: %s", date.Format("2006-01-02"))
 		}
 		if rate, ok := ratesMap[date.Format("2006-01-02")]; ok {
