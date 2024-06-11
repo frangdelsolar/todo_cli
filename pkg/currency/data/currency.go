@@ -1,7 +1,9 @@
-package currency
+package data
 
 import (
 	"fmt"
+
+	m "github.com/frangdelsolar/todo_cli/pkg/currency/models"
 )
 
 // CreateCurrency creates a new Currency object in the database.
@@ -14,10 +16,10 @@ import (
 // Returns:
 // - *Currency: the created Currency object.
 // - error: an error if the creation failed.
-func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*Currency, error) {
-	var c *Currency
+func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*m.Currency, error) {
+	var c *m.Currency
 
-	c, err := NewCurrency(currencyCode, amount, exchangeDate)
+	c, err := m.NewCurrency(currencyCode, amount, exchangeDate)
 	if err != nil {
 		return c, err
 	}
@@ -35,11 +37,11 @@ func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*C
 // Returns:
 // - Currency: the retrieved Currency object, or an empty Currency object if not found.
 // - error: an error if the Currency retrieval fails.
-func GetCurrencyById(id string) (Currency, error) {
-	var c Currency
+func GetCurrencyById(id string) (m.Currency, error) {
+	var c m.Currency
 
 	db.First(&c, "id = ?", id)
-	if c == (Currency{}) {
+	if c == (m.Currency{}) {
 		return c, fmt.Errorf("currency with ID %s not found", fmt.Sprint(id))
 	}
 	return c, nil
@@ -50,8 +52,8 @@ func GetCurrencyById(id string) (Currency, error) {
 //
 // Returns:
 // - []Currency: a slice of Currency objects representing all the currencies.
-func GetAllCurrencies() []Currency {
-	var cs []Currency
+func GetAllCurrencies() []m.Currency {
+	var cs []m.Currency
 
 	db.Find(&cs)
 

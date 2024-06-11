@@ -1,4 +1,4 @@
-package currency
+package models
 
 import (
 	"encoding/csv"
@@ -28,7 +28,6 @@ type Rate struct {
 	Official Source `json:"oficial"`
 	Blue Source  `json:"blue"`
 }
-
 
 type RateMap map[string]Rate
 
