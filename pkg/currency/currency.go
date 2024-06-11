@@ -159,13 +159,14 @@ func InitCurrency() {
 	/*
 		Comment this to initialize a new database
 	*/
-	db := data.GetDB()
+	db = data.GetDB()
+	log.Debug().Interface("Database", db).Msg("Initialized Database")
 
 	/*
 		Uncomment this to initialize a new database.
 		Comment the previous line
 	*/
-	
+
 	// db, err = data.InitDB("./data.db")
 	// if err != nil {
 	// 	log.Err(err).Msg("Error initializing database")
