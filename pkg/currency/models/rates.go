@@ -15,18 +15,18 @@ import (
 type SourceType string
 
 const (
-	Blue SourceType = "Blue"
+	Blue     SourceType = "Blue"
 	Official SourceType = "Oficial"
 )
 
 type Source struct {
-	ValueBuy float64 `json:"buy"`
+	ValueBuy  float64 `json:"buy"`
 	ValueSell float64 `json:"sell"`
 }
 
 type Rate struct {
 	Official Source `json:"oficial"`
-	Blue Source  `json:"blue"`
+	Blue     Source `json:"blue"`
 }
 
 type RateMap map[string]Rate
@@ -41,14 +41,18 @@ const RATES_FILE = "rates.json"
 func NewRate() Rate {
 	return Rate{
 		Official: Source{
-			ValueBuy: 0,
+			ValueBuy:  0,
 			ValueSell: 0,
 		},
 		Blue: Source{
-			ValueBuy: 0,
+			ValueBuy:  0,
 			ValueSell: 0,
 		},
 	}
+}
+
+func (r *Rate) GetBlueAverage() float64 {
+	return (r.Blue.ValueBuy + r.Blue.ValueSell) / 2
 }
 
 // SetOfficial sets the buy and sell values of the Official Source in the Rate struct.
@@ -84,21 +88,21 @@ func (r *Rate) SetBlue(buy, sell float64) {
 // Returns:
 // - error: an error if there was an issue downloading or writing the rates.
 func DownloadRates() error {
-    url := BASE_URL + "evolution.csv"
+	url := BASE_URL + "evolution.csv"
 
-    log.Info().Msgf("Getting Rates from URL: %s", url)
+	log.Info().Msgf("Getting Rates from URL: %s", url)
 
-    resp, err := http.Get(url)
-    if err != nil {
-        log.Err(err).Msg("Error getting rates")
-        return err
-    }
-    defer resp.Body.Close()
+	resp, err := http.Get(url)
+	if err != nil {
+		log.Err(err).Msg("Error getting rates")
+		return err
+	}
+	defer resp.Body.Close()
 
-    if resp.StatusCode != 200 {
-        log.Warn().Msgf("Error getting rates. Status code: %d", resp.StatusCode)
-        return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-    }
+	if resp.StatusCode != 200 {
+		log.Warn().Msgf("Error getting rates. Status code: %d", resp.StatusCode)
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
 	var ratesMap RateMap = make(map[string]Rate)
 
 	reader := csv.NewReader(resp.Body)
@@ -155,14 +159,13 @@ func DownloadRates() error {
 		return fmt.Errorf("error writing rates to file: %w", err)
 	}
 
-
-    log.Info().Interface("file", RATES_FILE).Msg("Downloaded rates and wrote to file")
-    return nil
+	log.Info().Interface("file", RATES_FILE).Msg("Downloaded rates and wrote to file")
+	return nil
 }
 
 func GetRatesByDate(date time.Time) (Rate, error) {
 	refreshFile := false
-	
+
 	// Check file exists
 	info, err := os.Stat(RATES_FILE)
 	if err != nil {
@@ -175,7 +178,7 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 			refreshFile = true
 		}
 	}
-	
+
 	// Download rates
 	if refreshFile {
 		err := DownloadRates()
@@ -213,4 +216,3 @@ func GetRatesByDate(date time.Time) (Rate, error) {
 		date = date.AddDate(0, 0, -1)
 	}
 }
-
