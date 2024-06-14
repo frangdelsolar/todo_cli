@@ -19,6 +19,19 @@ type Account struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
+func (a *Account) String() string {
+	return fmt.Sprintf("%s (%s)", a.Name, a.Currency)
+}
+
+func (a *Account) Update(name string) error {
+	if err := AccountNameValidator(name); err != nil {
+		log.Err(err).Msg("Error validating account name")
+		return err
+	}
+	a.Name = name
+	return nil
+}
+
 func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, error) {
 
 	if err := AccountNameValidator(name); err != nil {
@@ -40,4 +53,5 @@ func AccountNameValidator(name string) error {
 	}
 	return nil
 }
+
 

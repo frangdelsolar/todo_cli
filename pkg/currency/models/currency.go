@@ -28,6 +28,26 @@ type Currency struct {
 	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
+func (c *Currency) String() string {
+	return fmt.Sprintf("Currency: %s, Amount: %f", c.Currency, c.Amount)
+}
+
+func AddCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
+	output := &Currency{}
+
+	if a.Currency == b.Currency {
+		output, _ = NewCurrency(
+			string(a.Currency),
+			fmt.Sprintf("%f", a.Amount + b.Amount),
+			date.Format(time.DateOnly),
+		)
+	}
+
+
+
+	return output, nil
+}
+
 // NewCurrency creates a new Currency object with the given currency code, amount, and exchange date.
 //
 // Parameters:

@@ -4,7 +4,7 @@ This package provides functionalities for working with currencies, including:
 
 -   Downloading currency exchange rates from an external API.
 -   Representing exchange rates for different sources (Official, Blue).
--   Converting currency amounts based on exchange rates and dates.
+-   Converting currency amounts based on exchange rates and dates. It uses an average between buy and sell of Blue rate.
 
 ## Installation
 
