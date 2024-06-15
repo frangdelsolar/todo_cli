@@ -7,7 +7,7 @@ import (
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.0.0"
+const PKG_VERSION = "1.0.1"
 
 var log *logger.Logger
 var logLevel = "debug"
@@ -39,6 +39,16 @@ func InitDB(filepath string) (*Database, error) {
 	return &DB, err
 }
 
-func GetDB() *Database {
-	return &DB
+func GetDB() (*Database, error) {
+
+	if DB == (Database{}) {
+		db, err := InitDB("")
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to connect to database")
+		}
+		log.Warn().Msg("Database was not initialized. Using default.")
+		return db, nil
+	}
+
+	return &DB, nil
 }
