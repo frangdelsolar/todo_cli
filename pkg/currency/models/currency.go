@@ -8,7 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type CurrencyUnit string
 
 const (
@@ -18,14 +17,14 @@ const (
 
 type Currency struct {
 	gorm.Model
-	ID          uint      `json:"id" gorm:"primaryKey"`
-	Currency    CurrencyUnit    `json:"currency"`
-	Amount      float64   `json:"amount"`
-	ExchangeRate float64   `json:"exchangeRate"`
-	Conversion   float64   `json:"conversion"`
-	ExchangeDate time.Time `json:"exchangeDate"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
+	ID           uint         `json:"id" gorm:"primaryKey"`
+	Currency     CurrencyUnit `json:"currency"`
+	Amount       float64      `json:"amount"`
+	ExchangeRate float64      `json:"exchangeRate"`
+	Conversion   float64      `json:"conversion"`
+	ExchangeDate time.Time    `json:"exchangeDate"`
+	CreatedAt    time.Time    `json:"createdAt"`
+	UpdatedAt    time.Time    `json:"updatedAt"`
 }
 
 func (c *Currency) String() string {
@@ -58,14 +57,14 @@ func AddCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 // Returns:
 // - *Currency: a pointer to the newly created Currency object.
 // - error: an error if any validation fails or if there is an error getting the exchange rate.
-func NewCurrency (currencyCode string, amount string, exchangeDate string) (*Currency, error) {
-	
+func NewCurrency(currencyCode string, amount string, exchangeDate string) (*Currency, error) {
+
 	// Run Validations
 	if err := CurrencyCodeValidator(currencyCode); err != nil {
 		log.Err(err).Msg("Error validating currency code")
 		return nil, err
 	}
-	
+
 	if err := CurrencyAmountValidator(amount); err != nil {
 		log.Err(err).Msg("Error validating currency amount")
 		return nil, err
@@ -85,7 +84,7 @@ func NewCurrency (currencyCode string, amount string, exchangeDate string) (*Cur
 
 	if cc == USD {
 		er = 1
-		conversion = 1
+		conversion = amountFloat
 	} else if cc == ARS {
 		rates, err := GetRatesByDate(eDate)
 		if err != nil {
@@ -93,16 +92,16 @@ func NewCurrency (currencyCode string, amount string, exchangeDate string) (*Cur
 			return nil, err
 		}
 
-		er = (rates.Blue.ValueBuy + rates.Blue.ValueSell) / 2
+		er = rates.GetBlueAverage()
 		conversion = amountFloat / er
 	}
 
 	return &Currency{
-		Currency: cc,
-		Amount: amountFloat,
+		Currency:     cc,
+		Amount:       amountFloat,
 		ExchangeDate: eDate,
 		ExchangeRate: er,
-		Conversion: conversion,
+		Conversion:   conversion,
 	}, nil
 }
 
@@ -139,7 +138,7 @@ func CurrencyAmountValidator(amount string) error {
 // Returns:
 // - error: an error if the currency code is invalid, otherwise nil.
 func CurrencyCodeValidator(currency string) error {
-	if currency == string(USD) || currency == string(ARS){
+	if currency == string(USD) || currency == string(ARS) {
 		return nil
 	}
 
