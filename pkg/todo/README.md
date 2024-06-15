@@ -1,3 +1,3 @@
-# Todo PKG v1.0.41
+# Todo PKG v1.0.5
 
-CLI
+This just holds the models and methods to handle tasks. They can be implemented in a cli app or an api/gql as you wish.
