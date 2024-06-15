@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
+	"github.com/frangdelsolar/todo_cli/cli/prompt"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
@@ -14,8 +14,6 @@ type ItemSelection struct {
 	Label string
 	Items []prompt.SelectableItem
 }
-
-
 
 func SelectTaskFromAll() (string, error) {
 	tasks := data.GetAllTasks()

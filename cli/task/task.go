@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/cli/prompt"
+	"github.com/frangdelsolar/todo_cli/cli/task/complete"
+	"github.com/frangdelsolar/todo_cli/cli/task/goal"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/task/complete"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/task/goal"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/spf13/cobra"
 )

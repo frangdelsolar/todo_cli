@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
-	taskcmd "github.com/frangdelsolar/todo_cli/pkg/todo/cli/task"
+	"github.com/frangdelsolar/todo_cli/cli/prompt"
+	taskcmd "github.com/frangdelsolar/todo_cli/cli/task"
 	"github.com/spf13/cobra"
 )
 
