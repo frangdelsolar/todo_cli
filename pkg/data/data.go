@@ -24,7 +24,7 @@ func InitDB(filepath string) (*Database, error) {
 	log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
 	if filepath == "" {
-		filepath = "../data.db"
+		filepath = "./data.db"
 	}
 
 	log.Info().Msgf("Connecting to SQLite DB: %s", filepath)
