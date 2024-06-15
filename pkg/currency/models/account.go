@@ -32,6 +32,44 @@ func (a *Account) Update(name string) error {
 	return nil
 }
 
+func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency, date time.Time, concept string, strTType string) (*Transaction, error) {
+	updatedBalance := &Currency{}
+	var err error
+
+	if err = TransactionTypeValidator(strTType); err != nil {
+		log.Err(err).Msg("Error validating transaction type")
+		return nil, err
+	}
+	tType := TransactionType(strTType)
+
+	if tType == Credit {
+		updatedBalance, err = AddCurrency(amount, currentBalance, date)
+		if err != nil {
+			log.Err(err).Msg("Error crediting account")
+			return nil, err
+		}
+	} else if tType == Debit {
+		updatedBalance, err = SubCurrency(amount, currentBalance, date)
+		if err != nil {
+			log.Err(err).Msg("Error debiting account")
+			return nil, err
+		}
+	} else {
+		log.Err(err).Msg("Invalid transaction type")
+		return nil, fmt.Errorf("invalid transaction type")
+	}
+
+	a.Total = updatedBalance
+
+	transaction, err := NewTransaction(strTType, a, amount, date, concept)
+	if err != nil {
+		log.Err(err).Msg("Error creating transaction")
+		return nil, err
+	}
+
+	return transaction, nil
+}
+
 func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, error) {
 
 	if err := AccountNameValidator(name); err != nil {
@@ -41,7 +79,7 @@ func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, e
 
 	return &Account{
 		Name: name,
-		Currency: total.Currency,
+		Currency: total.CurrencyCode,
 		Total: total,
 		DefaultAccount: defaultAccount,
 	}, nil
