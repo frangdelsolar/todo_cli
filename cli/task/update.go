@@ -1,8 +1,8 @@
 package task
 
 import (
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompts"
+	"github.com/frangdelsolar/todo_cli/cli/prompt"
+	"github.com/frangdelsolar/todo_cli/cli/prompts"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 	"github.com/spf13/cobra"

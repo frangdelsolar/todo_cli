@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/frangdelsolar/todo_cli/pkg/todo/cli/prompt"
+	"github.com/frangdelsolar/todo_cli/cli/prompt"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/data"
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 

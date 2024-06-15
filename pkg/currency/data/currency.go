@@ -1,8 +1,43 @@
-package currency
+package data
 
 import (
 	"fmt"
+	"time"
+
+	m "github.com/frangdelsolar/todo_cli/pkg/currency/models"
 )
+
+func AddCurrency(a *m.Currency, b *m.Currency, date time.Time) (*m.Currency, error) {
+	output := &m.Currency{}
+	var err error
+
+	amount := ""
+	cCode := ""
+	eDate := date.Format(time.DateOnly)
+	eRate, err := m.GetRatesByDate(date)
+	if err != nil {
+		return output, err
+	}
+
+	if a.Currency == b.Currency {
+		amount = fmt.Sprint(a.Amount + b.Amount)
+		cCode = string(a.Currency)
+	} else {
+		if a.Currency == m.USD {
+			amount = fmt.Sprint(a.Conversion + b.Conversion)
+			cCode = string(m.USD)
+		} else if a.Currency == m.ARS {
+			amount = fmt.Sprint((a.Conversion + b.Conversion) * eRate.GetBlueAverage())
+			cCode = string(m.ARS)
+		}
+	}
+
+	output, err = CreateCurrency(cCode, amount, eDate)
+	if err != nil {
+		return output, err
+	}
+	return output, nil
+}
 
 // CreateCurrency creates a new Currency object in the database.
 //
@@ -14,16 +49,16 @@ import (
 // Returns:
 // - *Currency: the created Currency object.
 // - error: an error if the creation failed.
-func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*Currency, error) {
-	var c *Currency
+func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*m.Currency, error) {
+	var c *m.Currency
 
-	c, err := NewCurrency(currencyCode, amount, exchangeDate)
+	c, err := m.NewCurrency(currencyCode, amount, exchangeDate)
 	if err != nil {
 		return c, err
 	}
 
 	db.Create(&c)
-	
+
 	return c, nil
 }
 
@@ -35,23 +70,22 @@ func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*C
 // Returns:
 // - Currency: the retrieved Currency object, or an empty Currency object if not found.
 // - error: an error if the Currency retrieval fails.
-func GetCurrencyById(id string) (Currency, error) {
-	var c Currency
+func GetCurrencyById(id string) (m.Currency, error) {
+	var c m.Currency
 
 	db.First(&c, "id = ?", id)
-	if c == (Currency{}) {
+	if c == (m.Currency{}) {
 		return c, fmt.Errorf("currency with ID %s not found", fmt.Sprint(id))
 	}
 	return c, nil
 }
 
-
 // GetAllCurrencies retrieves all the currencies from the database.
 //
 // Returns:
 // - []Currency: a slice of Currency objects representing all the currencies.
-func GetAllCurrencies() []Currency {
-	var cs []Currency
+func GetAllCurrencies() []m.Currency {
+	var cs []m.Currency
 
 	db.Find(&cs)
 

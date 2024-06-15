@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/frangdelsolar/todo_cli/cli"
+	cr "github.com/frangdelsolar/todo_cli/pkg/currency"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	t "github.com/frangdelsolar/todo_cli/pkg/todo"
@@ -24,7 +26,14 @@ func main() {
 
 	log.Info().Interface("db", db).Msg("Database connected")
 
-	cli := t.Todo()
-	cli.Execute()
-	log.Debug().Interface("cli", cli).Msg("CLI initialized")
+	t.Todo()
+
+	command := cli.NewCLI(APP_VERSION)
+	command.Execute()
+	log.Debug().Interface("cli", command).Msg("CLI initialized")
+
+	cr.InitCurrency()
+	a, err := cr.CreateCurrency("ARS", "1", "2023-12-12")
+	log.Debug().Interface("a", a).Msg("a")
+	log.Debug().Err(err).Msg("err")
 }
