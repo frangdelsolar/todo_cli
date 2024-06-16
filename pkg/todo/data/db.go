@@ -9,6 +9,13 @@ var log *logger.Logger
 var db *data.Database
 
 func init(){
+	var err error
+	
 	log = logger.GetLogger()
-	db = data.GetDB()
+	db, err = data.GetDB()
+
+	if err != nil {
+		log.Fatal().Err(err).Msg("Failed to connect to database")
+		return
+	}
 }
