@@ -1,4 +1,4 @@
 *.env*
 *.db
 *vendor
-*rates.json
+rates.json
