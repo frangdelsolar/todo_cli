@@ -10,7 +10,7 @@ import (
 )
 
 var APP_NAME= "TODO APP"
-var APP_VERSION = "1.0.3"
+var APP_VERSION = "1.0.4"
 
 var log *logger.Logger
 var logLevel = "debug"

@@ -3,6 +3,7 @@ module github.com/frangdelsolar/todo_cli
 go 1.22.4
 
 require (
+	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.1
 	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/data v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
@@ -18,7 +19,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-sqlite3 v1.14.17 // indirect
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/sys v0.21.0 // indirect
