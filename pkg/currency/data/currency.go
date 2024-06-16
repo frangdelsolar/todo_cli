@@ -2,42 +2,9 @@ package data
 
 import (
 	"fmt"
-	"time"
 
 	m "github.com/frangdelsolar/todo_cli/pkg/currency/models"
 )
-
-func AddCurrency(a *m.Currency, b *m.Currency, date time.Time) (*m.Currency, error) {
-	output := &m.Currency{}
-	var err error
-
-	amount := ""
-	cCode := ""
-	eDate := date.Format(time.DateOnly)
-	eRate, err := m.GetRatesByDate(date)
-	if err != nil {
-		return output, err
-	}
-
-	if a.Currency == b.Currency {
-		amount = fmt.Sprint(a.Amount + b.Amount)
-		cCode = string(a.Currency)
-	} else {
-		if a.Currency == m.USD {
-			amount = fmt.Sprint(a.Conversion + b.Conversion)
-			cCode = string(m.USD)
-		} else if a.Currency == m.ARS {
-			amount = fmt.Sprint((a.Conversion + b.Conversion) * eRate.GetBlueAverage())
-			cCode = string(m.ARS)
-		}
-	}
-
-	output, err = CreateCurrency(cCode, amount, eDate)
-	if err != nil {
-		return output, err
-	}
-	return output, nil
-}
 
 // CreateCurrency creates a new Currency object in the database.
 //
