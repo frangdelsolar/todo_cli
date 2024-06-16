@@ -3,7 +3,7 @@ module github.com/frangdelsolar/todo_cli/pkg/currency
 go 1.22.4
 
 require (
-	github.com/frangdelsolar/todo_cli/pkg/data v1.0.0
+	github.com/frangdelsolar/todo_cli/pkg/data v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
 	gorm.io/gorm v1.25.10
 )

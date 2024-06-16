@@ -51,6 +51,10 @@ func NewRate() Rate {
 	}
 }
 
+// GetBlueAverage calculates the average value of the Blue Source in the Rate struct.
+//
+// It returns the average of the buy and sell values of the Blue Source.
+// The return type is float64.
 func (r *Rate) GetBlueAverage() float64 {
 	return (r.Blue.ValueBuy + r.Blue.ValueSell) / 2
 }
@@ -163,6 +167,14 @@ func DownloadRates() error {
 	return nil
 }
 
+// GetRatesByDate retrieves the exchange rate for a given date.
+//
+// Parameters:
+// - date: the date for which the exchange rate is requested (time.Time).
+//
+// Returns:
+// - Rate: the exchange rate for the given date (models.Rate).
+// - error: an error if the exchange rate cannot be retrieved (error).
 func GetRatesByDate(date time.Time) (Rate, error) {
 	refreshFile := false
 

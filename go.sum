@@ -15,8 +15,8 @@ github.com/frangdelsolar/todo_cli/pkg/data v1.0.2 h1:+MI7dW4N+cHYIrWSbhkIe+Rmdos
 github.com/frangdelsolar/todo_cli/pkg/data v1.0.2/go.mod h1:hrlUNjNpjyjO9o5RzA9DIHAgJr1X/Xz/bv1vdSO6VLM=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3 h1:hbS987gSXhmak9uak8lo1txQdWQzXgkZ/7rBZjSCNEA=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3/go.mod h1:3PKqNuwiR2H7X9t/+fnGwUzmsg03CKYNeuXl+xz0sbM=
-github.com/frangdelsolar/todo_cli/pkg/todo v1.0.41 h1:d7xwRrkHlBQuH7bday+XUhpUzNS4d6zxGHXKesOyzXY=
-github.com/frangdelsolar/todo_cli/pkg/todo v1.0.41/go.mod h1:VasQ3LqK9pSPr7Slxc9GzwnKn1HFslNcxXMJoIhI0Bk=
+github.com/frangdelsolar/todo_cli/pkg/todo v1.0.5 h1:znuqyQ/QDLnscR2b8fZF2wNJEKngr8Dh8R9IZkSjyLI=
+github.com/frangdelsolar/todo_cli/pkg/todo v1.0.5/go.mod h1:VasQ3LqK9pSPr7Slxc9GzwnKn1HFslNcxXMJoIhI0Bk=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=

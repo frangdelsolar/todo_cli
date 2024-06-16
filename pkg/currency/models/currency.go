@@ -18,7 +18,7 @@ const (
 type Currency struct {
 	gorm.Model
 	ID           uint         `json:"id" gorm:"primaryKey"`
-	Currency     CurrencyUnit `json:"currency"`
+	CurrencyCode     CurrencyUnit `json:"currencyCode"`
 	Amount       float64      `json:"amount"`
 	ExchangeRate float64      `json:"exchangeRate"`
 	Conversion   float64      `json:"conversion"`
@@ -28,24 +28,94 @@ type Currency struct {
 }
 
 func (c *Currency) String() string {
-	return fmt.Sprintf("Currency: %s, Amount: %f", c.Currency, c.Amount)
+	return fmt.Sprintf("Currency: %s, Amount: %f", c.CurrencyCode, c.Amount)
 }
 
+
+// AddCurrency adds two currencies together based on their conversion rates and
+// stores the result in the database. It takes two Currency pointers and a
+// time.Time value as parameters. The first currency pointer represents the
+// first currency to be added, the second currency pointer represents the second
+// currency to be added, and the date parameter represents the date of the
+// exchange rate. The function returns a pointer to a Currency object and an
+// error. The returned Currency object contains the result of adding the two
+// currencies, and the error indicates if there was an error during the
+// calculation or database insertion.
 func AddCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 	output := &Currency{}
+	var err error
 
-	if a.Currency == b.Currency {
-		output, _ = NewCurrency(
-			string(a.Currency),
-			fmt.Sprintf("%f", a.Amount + b.Amount),
-			date.Format(time.DateOnly),
-		)
+	amount := ""
+	cCode := ""
+	eDate := date.Format(time.DateOnly)
+	eRate, err := GetRatesByDate(date)
+	if err != nil {
+		return output, err
 	}
 
+	if a.CurrencyCode == b.CurrencyCode {
+		amount = fmt.Sprint(a.Amount + b.Amount)
+		cCode = string(a.CurrencyCode)
+	} else {
+		if a.CurrencyCode == USD {
+			amount = fmt.Sprint(a.Conversion + b.Conversion)
+			cCode = string(USD)
+		} else if a.CurrencyCode == ARS {
+			amount = fmt.Sprint((a.Conversion + b.Conversion) * eRate.GetBlueAverage())
+			cCode = string(ARS)
+		}
+	}
 
+	output, err = NewCurrency(cCode, amount, eDate)
+	if err != nil {
+		return output, err
+	}
+	return output, nil
+}
+
+// SubCurrency subtracts two currencies together based on their conversion rates and stores the result in the database.
+//
+// Parameters:
+// - a: a pointer to a Currency object representing the first currency to be subtracted.
+// - b: a pointer to a Currency object representing the second currency to be subtracted.
+// - date: a time.Time value representing the date of the exchange rate.
+//
+// Returns:
+// - a pointer to a Currency object containing the result of subtracting the two currencies, and an error if there was an error during the calculation or database insertion.
+func SubCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
+	
+	output := &Currency{}
+	var err error
+
+	amount := ""
+	cCode := ""
+	eDate := date.Format(time.DateOnly)
+	eRate, err := GetRatesByDate(date)
+	if err != nil {
+		return output, err
+	}
+
+	if a.CurrencyCode == b.CurrencyCode {
+		amount = fmt.Sprint(a.Amount - b.Amount)
+		cCode = string(a.CurrencyCode)
+	} else {
+		if a.CurrencyCode == USD {
+			amount = fmt.Sprint(a.Conversion - b.Conversion)
+			cCode = string(USD)
+		} else if a.CurrencyCode == ARS {
+			amount = fmt.Sprint((a.Conversion - b.Conversion) * eRate.GetBlueAverage())
+			cCode = string(ARS)
+		}
+	}
+
+	output, err = NewCurrency(cCode, amount, eDate)
+	if err != nil {
+		return output, err
+	}
 
 	return output, nil
 }
+
 
 // NewCurrency creates a new Currency object with the given currency code, amount, and exchange date.
 //
@@ -97,7 +167,7 @@ func NewCurrency(currencyCode string, amount string, exchangeDate string) (*Curr
 	}
 
 	return &Currency{
-		Currency:     cc,
+		CurrencyCode:     cc,
 		Amount:       amountFloat,
 		ExchangeDate: eDate,
 		ExchangeRate: er,
