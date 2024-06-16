@@ -14,13 +14,19 @@ func main() {
 		This is just a playground to test the currency package.
 		Feel free to use it as a template.
 	*/
-	c.InitCurrency()
 
-	db := data.GetDB()
 	log := logger.GetLogger()
+
+	db, err := data.GetDB()
+	if err != nil {
+		log := logger.GetLogger()
+		log.Err(err).Msg("Error connecting to database")
+		return
+	}
 
 	log.Debug().Interface("DB", db).Msg("main.go")
 
+	c.InitCurrency()
 
 	acc, err := d.CreateAccount("test", "1000", "ARS", false)
 	if err != nil {

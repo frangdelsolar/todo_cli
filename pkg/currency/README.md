@@ -1,67 +1,111 @@
-# Currency PKG v1.0.0
+# Currency PKG v1.0.1
 
-This package provides functionalities for working with currencies, including:
+This package provides functionalities for managing currencies and their exchange rates, accounts, and transactions within your Go application. It offers a set of models and methods for:
 
--   Downloading currency exchange rates from an external API.
--   Representing exchange rates for different sources (Official, Blue).
--   Converting currency amounts based on exchange rates and dates. It uses an average between buy and sell of Blue rate.
+-   **Currencies**: Represents different currencies with associated exchange rates.
+-   **Accounts**: Stores details about financial accounts, including their balance and associated currency.
+-   **Transactions**: Tracks financial transactions with amounts, dates, and types (credit/debit).
 
-## Installation
+## Installation:
+
+Use the `go get` command to install the package:
 
 ```bash
-    go get -u github.com/your-username/currency
+    go get github.com/frangdelsolar/todo_cli/pkg/currency
 ```
 
-## Usage
+## Initialization:
 
-### Downloading Rates
+**Important**: The currency package requires explicit initialization before use. This step establishes connections, performs database migrations for schema management, and configures the logger.
+
+1. Import the InitCurrency function:
 
 ```go
-    package main
+    import (
+        "github.com/frangdelsolar/todo_cli/pkg/currency"
+    )
+```
 
+Call `InitCurrency` at the beginning of your application's main function or a dedicated initialization function:
+
+```go
+    func main() {
+        currency.InitCurrency()
+        // ... your application code using currency package methods
+    }
+```
+
+## API Documentation:
+
+The detailed API documentation for each function is available within the package source code. Comments within the code provide a quick overview of functionalities.
+
+## Example Usage:
+
+### Creating a Currency:
+
+```go
     import (
         "fmt"
 
         "github.com/frangdelsolar/todo_cli/pkg/currency"
+        "github.com/frangdelsolar/todo_cli/pkg/currency/models"
     )
 
     func main() {
-        err := currency.DownloadRates()
+        currency.InitCurrency()
+
+        newCurrency, err := currency.CreateCurrency("USD", "1000.00", time.Now().Format(time.DateOnly))
         if err != nil {
-            fmt.Println("Error downloading rates:", err)
+            fmt.Println("Error creating currency:", err)
             return
         }
-        fmt.Println("Downloaded currency rates successfully!")
+
+        fmt.Printf("Successfully created currency: %s\n", newCurrency.Code)
     }
 ```
 
-**Note**: It will store the file `rates.json` in the folder you run this command.
-
-### Getting Rates for a Date
+### Creating an Account:
 
 ```go
-    package main
-
     import (
         "fmt"
-        "time"
 
-        "github.com/your-username/currency"
+        "github.com/frangdelsolar/todo_cli/pkg/currency"
+        "github.com/frangdelsolar/todo_cli/pkg/currency/models"
     )
 
     func main() {
-        date, err := time.Parse("2006-01-02", "2023-06-10") // Replace with desired date
+        currency.InitCurrency()
+
+        newAccount, err := currency.CreateAccount("My Savings Account", "1000.00", "USD", true)
         if err != nil {
-            fmt.Println("Error parsing date:", err)
+            fmt.Println("Error creating account:", err)
             return
         }
-        rates, err := currency.GetRatesByDate(date)
+
+        fmt.Printf("Successfully created account: %s (ID: %s)\n", newAccount.Name, newAccount.ID)
+    }
+```
+
+### Updating Account Balance:
+
+```go
+    import (
+        "fmt"
+
+        "github.com/frangdelsolar/todo_cli/pkg/currency"
+        "github.com/frangdelsolar/todo_cli/pkg/currency/models"
+    )
+
+    func main() {
+        currency.InitCurrency()
+
+        transaction, err := currency.UpdateAccountBalance("acc_id", "USD", "100.00", time.Now().Format(time.DateOnly), "Deposit", "credit")
         if err != nil {
-            fmt.Println("Error getting rates:", err)
+            fmt.Println("Error updating account balance:", err)
             return
         }
-        fmt.Printf("Exchange rates for %s:\n", date.Format("2006-01-02"))
-        fmt.Printf("  Official: Buy %.2f, Sell %.2f\n", rates.Official.ValueBuy, rates.Official.ValueSell)
-        fmt.Printf("  Blue: Buy %.2f, Sell %.2f\n", rates.Blue.ValueBuy, rates.Blue.ValueSell)
+
+        fmt.Printf("Successfully updated account balance. Transaction ID: %s\n", transaction.ID)
     }
 ```

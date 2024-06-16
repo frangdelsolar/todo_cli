@@ -23,7 +23,14 @@ func (a *Account) String() string {
 	return fmt.Sprintf("%s (%s)", a.Name, a.Currency)
 }
 
-func (a *Account) Update(name string) error {
+// UpdateName updates the name of the account.
+//
+// Parameters:
+// - name: the new name for the account.
+//
+// Returns:
+// - error: an error if there was a problem updating the account name.
+func (a *Account) UpdateName(name string) error {
 	if err := AccountNameValidator(name); err != nil {
 		log.Err(err).Msg("Error validating account name")
 		return err
@@ -32,6 +39,18 @@ func (a *Account) Update(name string) error {
 	return nil
 }
 
+// RegisterTransaction registers a transaction for the account.
+//
+// Parameters:
+// - currentBalance: the current balance of the account.
+// - amount: the amount of the transaction.
+// - date: the date of the transaction.
+// - concept: the concept of the transaction.
+// - strTType: the type of the transaction as a string.
+//
+// Returns:
+// - *Transaction: the registered transaction.
+// - error: an error if there was a problem registering the transaction.
 func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency, date time.Time, concept string, strTType string) (*Transaction, error) {
 	updatedBalance := &Currency{}
 	var err error
@@ -70,6 +89,16 @@ func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency
 	return transaction, nil
 }
 
+// NewAccount creates a new account with the given name, total Currency, and defaultAccount flag.
+//
+// Parameters:
+// - name: the name of the account.
+// - total: the total Currency of the account.
+// - defaultAccount: a boolean indicating if it is the default account.
+//
+// Returns:
+// - *Account: the newly created Account.
+// - error: an error if there was a problem during creation.
 func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, error) {
 
 	if err := AccountNameValidator(name); err != nil {
@@ -85,6 +114,13 @@ func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, e
 	}, nil
 }
 
+// AccountNameValidator validates the name of an account.
+//
+// Parameters:
+// - name: the name of the account to be validated.
+//
+// Returns:
+// - error: an error if the account name is empty, otherwise nil.
 func AccountNameValidator(name string) error {
 	if name == "" {
 		return fmt.Errorf("account name cannot be empty")

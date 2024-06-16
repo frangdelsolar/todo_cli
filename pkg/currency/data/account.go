@@ -7,6 +7,16 @@ import (
 	m "github.com/frangdelsolar/todo_cli/pkg/currency/models"
 )
 
+// UpdateAccountBalance updates the account balance based on the provided parameters.
+//
+// Parameters:
+// - accountId: the ID of the account to update.
+// - currencyCode: the currency code for the transaction.
+// - amount: the amount to update the balance.
+// - date: the date of the transaction.
+// - concept: the concept of the transaction.
+// - tType: the type of transaction (credit or debit).
+// Returns a pointer to the updated transaction and an error if any.
 func UpdateAccountBalance(accountId, currencyCode string, amount string, date string, concept string, tType string) (*m.Transaction, error) {
 	acc, err := GetAccountById(accountId)
 	if err != nil {
@@ -125,7 +135,7 @@ func UpdateAccountName(id string, accountName string) (*m.Account, error) {
 		return nil, err
 	}
 
-	err = acc.Update(accountName)
+	err = acc.UpdateName(accountName)
 	if err != nil {
 		return nil, err
 	}
