@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	accountcmd "github.com/frangdelsolar/todo_cli/cli/accounts"
 	"github.com/frangdelsolar/todo_cli/cli/prompt"
 	taskcmd "github.com/frangdelsolar/todo_cli/cli/task"
 	"github.com/spf13/cobra"
@@ -11,6 +12,7 @@ import (
 var APP_VERSION string
 var rootCmdActions = []prompt.SelectableItem{
 	{Key: "task", Label: "Task actions"},
+	{Key: "account", Label: "Account actions"},
 }
 
 var rootCmd = &cobra.Command{
@@ -35,6 +37,8 @@ and organize your tasks in a centralized and accessible way.
 		switch selection.Key {
 		case "task":
 			taskcmd.TaskCmd.Run(cmd, args)
+		case "account":
+			accountcmd.AccountCmd.Run(cmd, args)
 		}
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
@@ -48,6 +52,7 @@ and organize your tasks in a centralized and accessible way.
 
 func init() {
 	rootCmd.AddCommand(taskcmd.TaskCmd)
+	rootCmd.AddCommand(accountcmd.AccountCmd)
 }
 
 type CLI struct {

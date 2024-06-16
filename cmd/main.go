@@ -26,14 +26,12 @@ func main() {
 
 	log.Info().Interface("db", db).Msg("Database connected")
 
-	t.Todo()
+	t.InitTodo()
+	cr.InitCurrency()
 
 	command := cli.NewCLI(APP_VERSION)
 	command.Execute()
+	
 	log.Debug().Interface("cli", command).Msg("CLI initialized")
 
-	cr.InitCurrency()
-	a, err := cr.CreateCurrency("ARS", "1", "2023-12-12")
-	log.Debug().Interface("a", a).Msg("a")
-	log.Debug().Err(err).Msg("err")
 }
