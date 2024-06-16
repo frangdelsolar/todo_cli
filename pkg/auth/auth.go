@@ -1,4 +1,4 @@
-package currency
+package auth
 
 import (
 	m "github.com/frangdelsolar/todo_cli/pkg/auth/models"
