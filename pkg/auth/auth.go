@@ -1,4 +1,4 @@
-package currency
+package auth
 
 import (
 	m "github.com/frangdelsolar/todo_cli/pkg/auth/models"
@@ -8,7 +8,7 @@ import (
 
 
 var PKG_NAME = "Auth PKG"
-var PKG_VERSION = "1.0.1"
+var PKG_VERSION = "1.0.2"
 
 var log *logger.Logger
 var logLevel = "debug"
