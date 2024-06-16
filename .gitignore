@@ -2,3 +2,4 @@
 *.db
 *vendor
 rates.json
+*secrets*
