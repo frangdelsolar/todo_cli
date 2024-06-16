@@ -5,12 +5,14 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/cli/prompt"
 	taskcmd "github.com/frangdelsolar/todo_cli/cli/task"
+	usercmd "github.com/frangdelsolar/todo_cli/cli/user"
 	"github.com/spf13/cobra"
 )
 
 var APP_VERSION string
 var rootCmdActions = []prompt.SelectableItem{
 	{Key: "task", Label: "Task actions"},
+	{Key: "user", Label: "User actions"},
 }
 
 var rootCmd = &cobra.Command{
@@ -35,6 +37,8 @@ and organize your tasks in a centralized and accessible way.
 		switch selection.Key {
 		case "task":
 			taskcmd.TaskCmd.Run(cmd, args)
+		case "user":
+			usercmd.UserCmd.Run(cmd, args)
 		}
 	},
 	PostRun: func(cmd *cobra.Command, args []string) {
@@ -48,6 +52,7 @@ and organize your tasks in a centralized and accessible way.
 
 func init() {
 	rootCmd.AddCommand(taskcmd.TaskCmd)
+	rootCmd.AddCommand(usercmd.UserCmd)
 }
 
 type CLI struct {
