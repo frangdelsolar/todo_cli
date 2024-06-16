@@ -7,7 +7,7 @@ replace github.com/frangdelsolar/todo_cli/pkg/auth => /Users/frangdelsolar/Deskt
 require (
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.0
 	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.1
-	github.com/frangdelsolar/todo_cli/pkg/data v1.0.0
+	github.com/frangdelsolar/todo_cli/pkg/data v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
 	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.41
 	github.com/manifoldco/promptui v0.9.0
