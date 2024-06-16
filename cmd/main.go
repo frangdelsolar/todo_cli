@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/frangdelsolar/todo_cli/cli"
+	auth "github.com/frangdelsolar/todo_cli/pkg/auth"
 	cr "github.com/frangdelsolar/todo_cli/pkg/currency"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
@@ -25,7 +26,8 @@ func main() {
 	}
 
 	log.Info().Interface("db", db).Msg("Database connected")
-
+	
+	auth.InitAuth()
 	t.InitTodo()
 	cr.InitCurrency()
 

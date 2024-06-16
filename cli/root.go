@@ -6,12 +6,14 @@ import (
 	accountcmd "github.com/frangdelsolar/todo_cli/cli/accounts"
 	"github.com/frangdelsolar/todo_cli/cli/prompt"
 	taskcmd "github.com/frangdelsolar/todo_cli/cli/task"
+	usercmd "github.com/frangdelsolar/todo_cli/cli/user"
 	"github.com/spf13/cobra"
 )
 
 var APP_VERSION string
 var rootCmdActions = []prompt.SelectableItem{
 	{Key: "task", Label: "Task actions"},
+	{Key: "user", Label: "User actions"},
 	{Key: "account", Label: "Account actions"},
 }
 
@@ -37,11 +39,12 @@ and organize your tasks in a centralized and accessible way.
 		switch selection.Key {
 		case "task":
 			taskcmd.TaskCmd.Run(cmd, args)
+		case "user":
+			usercmd.UserCmd.Run(cmd, args)
 		case "account":
 			accountcmd.AccountCmd.Run(cmd, args)
 		}
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
 		// wait for user to press any key and then execute again
 		fmt.Print("\nPress any key to continue...")
 		fmt.Scanln()
@@ -52,6 +55,7 @@ and organize your tasks in a centralized and accessible way.
 
 func init() {
 	rootCmd.AddCommand(taskcmd.TaskCmd)
+	rootCmd.AddCommand(usercmd.UserCmd)
 	rootCmd.AddCommand(accountcmd.AccountCmd)
 }
 
