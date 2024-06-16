@@ -11,8 +11,8 @@ github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSV
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/frangdelsolar/todo_cli/pkg/currency v1.0.1 h1:tUHRMW2c9R3YrmTK2Uh+Q3Fpk2kvjbouo3/Lv+FDGoA=
 github.com/frangdelsolar/todo_cli/pkg/currency v1.0.1/go.mod h1:8P4L5UtaEOBVq3inMnuQ9sTkFA3Fbud+5K8vKCbr5JY=
-github.com/frangdelsolar/todo_cli/pkg/data v1.0.0 h1:Ib9gHaCiws+MiPYaCKOYUo6C+OYdqNClttdbPCEPzJE=
-github.com/frangdelsolar/todo_cli/pkg/data v1.0.0/go.mod h1:hrlUNjNpjyjO9o5RzA9DIHAgJr1X/Xz/bv1vdSO6VLM=
+github.com/frangdelsolar/todo_cli/pkg/data v1.0.2 h1:+MI7dW4N+cHYIrWSbhkIe+RmdosxEzllbQMtGbhA+U8=
+github.com/frangdelsolar/todo_cli/pkg/data v1.0.2/go.mod h1:hrlUNjNpjyjO9o5RzA9DIHAgJr1X/Xz/bv1vdSO6VLM=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3 h1:hbS987gSXhmak9uak8lo1txQdWQzXgkZ/7rBZjSCNEA=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3/go.mod h1:3PKqNuwiR2H7X9t/+fnGwUzmsg03CKYNeuXl+xz0sbM=
 github.com/frangdelsolar/todo_cli/pkg/todo v1.0.41 h1:d7xwRrkHlBQuH7bday+XUhpUzNS4d6zxGHXKesOyzXY=
