@@ -44,7 +44,6 @@ and organize your tasks in a centralized and accessible way.
 		case "account":
 			accountcmd.AccountCmd.Run(cmd, args)
 		}
-	},
 		// wait for user to press any key and then execute again
 		fmt.Print("\nPress any key to continue...")
 		fmt.Scanln()
