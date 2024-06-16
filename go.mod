@@ -4,10 +4,10 @@ go 1.22.4
 
 require (
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.0
-	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.1
+	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/data v1.0.2
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
-	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.5
+	github.com/frangdelsolar/todo_cli/pkg/todo v1.0.6
 	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.8.0
 )
