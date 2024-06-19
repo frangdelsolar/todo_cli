@@ -1,7 +1,6 @@
 package data
 
 import (
-	auth "github.com/frangdelsolar/todo_cli/pkg/auth/models"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/rs/zerolog/log"
@@ -10,20 +9,12 @@ import (
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.1.3"
+const PKG_VERSION = "1.0.3"
 
 var DB *Database
 
 type Database struct {
 	*gorm.DB
-}
-
-type SystemData struct {
-	gorm.Model
-	CreatedBy   *auth.User
-	CreatedByID uint
-	UpdatedBy   *auth.User
-	UpdatedByID uint
 }
 
 // LoadDB initializes a new SQLite database connection and returns a pointer to the Database struct and an error.

@@ -1,8 +1,10 @@
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
-github.com/frangdelsolar/todo_cli/pkg/auth v1.0.3 h1:4NObqKgC3QSaj88H1XZwKY8DIvn/qOUsKmvnyTP3Cb4=
-github.com/frangdelsolar/todo_cli/pkg/auth v1.0.3/go.mod h1:z/DEMnZPrnNy5tj0MjCYF1F1y56YnXz+dgyKMsINjBk=
+github.com/frangdelsolar/todo_cli/pkg/config v1.0.1 h1:YK6jnKLE5Bn+vq8bMoqqft9KYNXx9s44ZAj7j8i1QsQ=
+github.com/frangdelsolar/todo_cli/pkg/config v1.0.1/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2 h1:gFBWAFltcoNBiq30Mhw0fCbaTKU6FG7t8h/+YKIHmEU=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.0.0 h1:xQHUPcD88Kyn6YzO9fk5A2F6t8zRxjVHAl5nEgcY7z0=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.0.0/go.mod h1:3PKqNuwiR2H7X9t/+fnGwUzmsg03CKYNeuXl+xz0sbM=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0 h1:5QundD+CvZHubxtd+12VaYgZojFp3edVxJ0Fn1K8CRg=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0/go.mod h1:aTKq0391/gaWu79e5rXjUQn53ENGZgslo9fRPM5VQ6U=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
@@ -17,8 +19,8 @@ github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovk
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
 github.com/mattn/go-isatty v0.0.19 h1:JITubQf0MOLdlGRuRq+jtsDlekdYPia9ZFsB8h/APPA=
 github.com/mattn/go-isatty v0.0.19/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6YIM=
-github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
+github.com/mattn/go-sqlite3 v1.14.22 h1:2gZY6PC6kBnID23Tichd1K+Z0oS6nE/XwU+Vz/5o4kU=
+github.com/mattn/go-sqlite3 v1.14.22/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/rs/xid v1.5.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
 github.com/rs/zerolog v1.33.0 h1:1cU2KZkvPxNyfgEmhHAz/1A9Bz+llsdYzklWFzgp0r8=
@@ -27,7 +29,7 @@ golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.12.0 h1:CM0HF96J0hcLAwsHPJZjfdNzs0gftsLfgKt57wWHJ0o=
 golang.org/x/sys v0.12.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-gorm.io/driver/sqlite v1.5.5 h1:7MDMtUZhV065SilG62E0MquljeArQZNfJnjd9i9gx3E=
-gorm.io/driver/sqlite v1.5.5/go.mod h1:6NgQ7sQWAIFsPrJJl1lSNSu2TABh0ZZ/zm5fosATavE=
+gorm.io/driver/sqlite v1.5.6 h1:fO/X46qn5NUEEOZtnjJRWRzZMe8nqJiQ9E+0hi+hKQE=
+gorm.io/driver/sqlite v1.5.6/go.mod h1:U+J8craQU6Fzkcvu8oLeAQmi50TkwPEhHDEjQZXDah4=
 gorm.io/gorm v1.25.10 h1:dQpO+33KalOA+aFYGlK+EfxcI5MbO7EP2yYygwh9h+s=
 gorm.io/gorm v1.25.10/go.mod h1:hbnx/Oo0ChWMn1BIhpy1oYozzpM15i4YPuHDmfYtwg8=
