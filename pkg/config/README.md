@@ -1,4 +1,4 @@
-# Config PKG v2.0.0
+# Config PKG v1.0.3
 This package provides a centralized and structured approach to managing environment variables in your Go applications. It offers functionality for loading environment variables from files and accessing them throughout your code.
 
 ## Features
