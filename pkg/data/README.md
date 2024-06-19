@@ -11,7 +11,6 @@ Data PKG is a Go package that simplifies database interaction for your applicati
 
 ## Installation
 
-
 ### 1. Using `go get`:
 
 ```bash
@@ -29,26 +28,32 @@ require github.com/frangdelsolar/todo_cli/pkg/data <VERSION>
 ## Usage
 
 ### 1. Configure Database Path on your environment
-- Set the path to your SQlite database in your environment file, like so:
+
+-   Set the path to your SQlite database in your environment file, like so:
+
 ```
     DB_PATH="dev.db"
 ```
+
 NOTE: Refer to `config` package (documentation)[https://github.com/frangdelsolar/todo_cli/blob/master/pkg/config/README.md] to get instructions on how to approach this.
 
 ### 2. Initialize Database
 
 Call the `data.LoadDB` function to establish a connection to your SQLite database.
+
 ```go
     db, err := data.LoadDB()
     if err != nil {
         // Handle error
     }
 ```
+
 This will return a reference to the database object.
 
 ### 2. Access Database Connection:
 
-Use the `data.GetDB` function to retrieve the underlying database instance for further data manipulation. 
+Use the `data.GetDB` function to retrieve the underlying database instance for further data manipulation.
+
 ```go
     db, err := data.GetDB()
     if err != nil {
@@ -61,6 +66,7 @@ Use the `data.GetDB` function to retrieve the underlying database instance for f
 Use the standard GORM API methods on the retrieved gormDB instance to interact with your database tables. Refer to the GORM documentation for details: https://gorm.io/docs/index.html
 
 ### 4. Declaring models
+
 This package offers a structure to keep track of system data like: createdBy and updatedBy as well as some usefull info stored by gorm.Model.
 
 ```go
@@ -94,6 +100,7 @@ This package offers a structure to keep track of system data like: createdBy and
 ```
 
 Your model will become:
+
 ```go
     type Example struct {
         ID        uint           `gorm:"primaryKey"`
@@ -108,4 +115,3 @@ Your model will become:
         Field2 string
     }
 ```
-
