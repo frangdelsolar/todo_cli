@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/frangdelsolar/todo_cli/pkg/config"
+	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
 var APP_NAME = "TODO APP"
@@ -16,6 +15,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(cfg.DBPath)
-
+	log := logger.NewLogger(APP_NAME, APP_VERSION)
+	log.Info().Msgf("Running %s v%s", APP_NAME, APP_VERSION)
+	log.Debug().Interface("Config", cfg).Msg("Loaded Config")
 }
