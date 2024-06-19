@@ -1,4 +1,4 @@
-package models
+package currency
 
 import (
 	"encoding/csv"

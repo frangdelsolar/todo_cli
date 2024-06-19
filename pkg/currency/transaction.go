@@ -1,10 +1,10 @@
-package models
+package currency
 
 import (
 	"fmt"
 	"time"
 
-	"gorm.io/gorm"
+	d "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
 type TransactionType string
@@ -15,7 +15,7 @@ const (
 )
 
 type Transaction struct {
-	gorm.Model
+	d.SystemData
 	ID          uint      `json:"id" gorm:"primaryKey"`
 	DateOfTransaction time.Time `json:"dateOfTransaction"`
 	TypeOfTrasaction TransactionType    `json:"typeOfTrasaction"`
