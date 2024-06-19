@@ -1,9 +1,7 @@
-package data
+package auth
 
 import (
 	"fmt"
-
-	m "github.com/frangdelsolar/todo_cli/pkg/auth/models"
 )
 
 // GetUserById retrieves a user from the database by their ID.
@@ -12,12 +10,12 @@ import (
 // - id: the ID of the user to retrieve.
 //
 // Returns:
-// - *m.User
-func GetUserById(id string) (*m.User, error) {
-	var u m.User
+// - *User
+func GetUserById(id string) (*User, error) {
+	var u User
 	
 	db.First(&u, "id = ?", id)
-	if u == (m.User{}) {
+	if u == (User{}) {
 		return nil, fmt.Errorf("user with ID %s not found", fmt.Sprint(id))
 	}
 	
@@ -28,9 +26,9 @@ func GetUserById(id string) (*m.User, error) {
 // GetAllUsers retrieves all users from the database.
 //
 // Returns:
-// - []m.User
-func GetAllUsers() []m.User {
-	var users []m.User
+// - []User
+func GetAllUsers() []User {
+	var users []User
 	
 	db.Find(&users)
 
@@ -47,11 +45,11 @@ func GetAllUsers() []m.User {
 // - name: the name of the user.
 // - email: the email of the user.
 // Returns:
-// - *m.User: the newly created user.
+// - *User: the newly created user.
 // - error: an error if the user creation fails.
-func CreateUser(name string, email string) (*m.User, error) {
+func CreateUser(name string, email string) (*User, error) {
 
-	u, err := m.NewUser(name, email)
+	u, err := NewUser(name, email)
 	if err != nil {
 		log.Err(err).Msg("Error creating user")
 		return u, err
@@ -71,8 +69,8 @@ func CreateUser(name string, email string) (*m.User, error) {
 // - requestedBy: the ID of the user requesting the update.
 //
 // Returns:
-// - *m.User
-func UpdateUser(id string, name string, email string, requestedBy string) (*m.User, error) {
+// - *User
+func UpdateUser(id string, name string, email string, requestedBy string) (*User, error) {
 
 	u, err := GetUserById(id)
 	if err != nil {
