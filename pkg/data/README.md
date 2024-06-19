@@ -1,4 +1,4 @@
-# DATA PKG v1.1.0
+# DATA PKG v1.1.1
 
 Data PKG is a Go package that simplifies database interaction for your application. It provides a lightweight wrapper around the popular GORM library (https://gorm.io/docs/query.html) specifically for SQLite databases.
 
@@ -58,8 +58,7 @@ Use the standard GORM API methods on the retrieved gormDB instance to interact w
 ### 4. 
 
 ```go
-    type Model struct {
-        ID        uint `json:"id" gorm:"primaryKey"`
+    type SystemData struct {
         CreatedAt time.Time
         CreatedBy auth.User
         UpdatedAt time.Time

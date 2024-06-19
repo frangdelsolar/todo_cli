@@ -10,7 +10,7 @@ import (
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.1.0"
+const PKG_VERSION = "1.1.1"
 
 var log *logger.Logger
 var logLevel = "debug"
@@ -21,8 +21,7 @@ type Database struct {
 	*gorm.DB
 }
 
-type Model struct {
-	ID        uint `json:"id" gorm:"primaryKey"`
+type SystemData struct {
 	CreatedAt time.Time
 	CreatedBy auth.User
 	UpdatedAt time.Time
