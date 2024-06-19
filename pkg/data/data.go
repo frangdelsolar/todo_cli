@@ -9,7 +9,7 @@ import (
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.0.3"
+const PKG_VERSION = "1.1.4"
 
 var DB *Database
 
