@@ -9,7 +9,7 @@ import (
 )
 
 var PKG_NAME = "Config PKG"
-var PKG_VERSION = "1.0.0"
+var PKG_VERSION = "2.0.0"
 
 var config *Config
 
