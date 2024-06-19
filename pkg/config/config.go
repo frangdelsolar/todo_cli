@@ -9,7 +9,7 @@ import (
 )
 
 var PKG_NAME = "Config PKG"
-var PKG_VERSION = "1.0.1"
+var PKG_VERSION = "1.0.2"
 
 var config *Config
 
@@ -17,6 +17,7 @@ var config *Config
 type Config struct {
 	AppEnv   string
 	LogLevel string
+	DBPath   string
 }
 
 // Load reads configuration from environment variables based on the APP_ENV
@@ -53,6 +54,7 @@ func Load() (*Config, error) {
 	// Set configuration values from environment variables
 	config.AppEnv = env
 	config.LogLevel = os.Getenv("LOG_LEVEL")
+	config.DBPath = os.Getenv("DB_PATH")
 
 	return config, nil
 }
