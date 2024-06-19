@@ -1,9 +1,8 @@
 package data
 
 import (
-	"os"
-
 	auth "github.com/frangdelsolar/todo_cli/pkg/auth/models"
+	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/sqlite"
@@ -11,7 +10,7 @@ import (
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.1.2"
+const PKG_VERSION = "1.1.3"
 
 var DB *Database
 
@@ -37,7 +36,9 @@ func LoadDB() (*Database, error) {
 
 	log := logger.NewLogger(PKG_NAME, PKG_VERSION)
 
-	filepath := os.Getenv("DB_PATH")
+	cfg := config.GetConfig()
+
+	filepath := cfg.DBPath
 
 	log.Info().Msgf("Connecting to database: %s", filepath)
 
