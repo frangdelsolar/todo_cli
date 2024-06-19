@@ -1,4 +1,6 @@
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
+github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4 h1:SgittD6ApM6+XjtG+eKJ1i5euyz0Bl2pGxe48BpFgMw=
+github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4/go.mod h1:7N5elTN9zmVLglNf3bOW6Az6MzVqJEvcYDxV/aL5gZg=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.1 h1:YK6jnKLE5Bn+vq8bMoqqft9KYNXx9s44ZAj7j8i1QsQ=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.1/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2 h1:gFBWAFltcoNBiq30Mhw0fCbaTKU6FG7t8h/+YKIHmEU=
