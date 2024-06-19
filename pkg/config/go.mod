@@ -1,4 +1,4 @@
-module github.com/frangdelsolar/todo_cli/config
+module github.com/frangdelsolar/todo_cli/pkg/config
 
 go 1.22.4
 
