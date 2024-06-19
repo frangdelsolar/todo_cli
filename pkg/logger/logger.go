@@ -4,15 +4,17 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/rs/zerolog"
 )
 
-const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.0.3"
+const PKG_NAME = "Logger PKG"
+const PKG_VERSION = "1.1.0"
 
-var log Logger
+var log *Logger
+var cfg *config.Config
 
-type Logger struct{
+type Logger struct {
 	*zerolog.Logger
 }
 
@@ -23,10 +25,13 @@ type Logger struct{
 //
 // Returns:
 // - A pointer to the newly created Logger instance.
-func NewLogger(logLevel string, pkgName string, pkgVersion string) *Logger{
-	logger := ConfigLogger(logLevel, pkgName, pkgVersion)
-	log = Logger{&logger}
-	return &log
+func NewLogger(pkgName string, pkgVersion string) *Logger {
+
+	cfg = config.GetConfig()
+
+	logger := ConfigLogger(cfg.LogLevel, pkgName, pkgVersion)
+	log = &Logger{&logger}
+	return log
 }
 
 func ConfigLogger(logLevel string, pkgName string, pkgVersion string) zerolog.Logger {
@@ -46,10 +51,10 @@ func ConfigLogger(logLevel string, pkgName string, pkgVersion string) zerolog.Lo
 
 	zerolog.SetGlobalLevel(zlogLevel)
 	zl := zerolog.New(zerolog.ConsoleWriter{Out: os.Stderr}).
-		    With().
-			Timestamp().
-			Str("app", fmt.Sprintf("%s v%s", pkgName, pkgVersion)).
-			Logger()
+		With().
+		Timestamp().
+		Str("app", fmt.Sprintf("%s v%s", pkgName, pkgVersion)).
+		Logger()
 
 	return zl
 }
@@ -59,5 +64,5 @@ func ConfigLogger(logLevel string, pkgName string, pkgVersion string) zerolog.Lo
 // Returns:
 // - *Logger: A pointer to the Logger instance.
 func GetLogger() *Logger {
-	return &log
+	return log
 }
