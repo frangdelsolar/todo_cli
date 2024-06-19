@@ -1,39 +1,21 @@
 package main
 
 import (
-	"github.com/frangdelsolar/todo_cli/cli"
-	auth "github.com/frangdelsolar/todo_cli/pkg/auth"
-	cr "github.com/frangdelsolar/todo_cli/pkg/currency"
-	"github.com/frangdelsolar/todo_cli/pkg/data"
-	"github.com/frangdelsolar/todo_cli/pkg/logger"
-	t "github.com/frangdelsolar/todo_cli/pkg/todo"
+	"fmt"
+
+	"github.com/frangdelsolar/todo_cli/pkg/config"
 )
 
-var APP_NAME= "TODO APP"
-var APP_VERSION = "1.0.4"
-
-var log *logger.Logger
-var logLevel = "debug"
+var APP_NAME = "TODO APP"
+var APP_VERSION = "1.5.0"
 
 func main() {
 
-	log = logger.NewLogger(logLevel, APP_NAME, APP_VERSION)
-	log.Info().Msg("Running TODO APP v" + APP_VERSION)
-	
-	db, err := data.InitDB("data.db")
+	cfg, err := config.Load()
 	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to connect to database")
+		panic(err)
 	}
 
-	log.Info().Interface("db", db).Msg("Database connected")
-	
-	auth.InitAuth()
-	t.InitTodo()
-	cr.InitCurrency()
-
-	command := cli.NewCLI(APP_VERSION)
-	command.Execute()
-	
-	log.Debug().Interface("cli", command).Msg("CLI initialized")
+	fmt.Println(cfg.DBPath)
 
 }
