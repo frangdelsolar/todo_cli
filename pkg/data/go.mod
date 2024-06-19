@@ -3,6 +3,7 @@ module github.com/frangdelsolar/todo_cli/pkg/data
 go 1.22.4
 
 require (
+	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.3
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.0.3
 	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.10

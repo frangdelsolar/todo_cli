@@ -1,13 +1,16 @@
 package data
 
 import (
+	"time"
+
+	auth "github.com/frangdelsolar/todo_cli/pkg/auth/models"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 const PKG_NAME = "Data PKG"
-const PKG_VERSION = "1.0.2"
+const PKG_VERSION = "1.1.0"
 
 var log *logger.Logger
 var logLevel = "debug"
@@ -16,6 +19,14 @@ var DB Database
 
 type Database struct {
 	*gorm.DB
+}
+
+type Model struct {
+	ID        uint `json:"id" gorm:"primaryKey"`
+	CreatedAt time.Time
+	CreatedBy auth.User
+	UpdatedAt time.Time
+	UpdatedBy auth.User
 }
 
 // InitDB initializes a new SQLite database connection and returns a pointer to the Database struct and an error.
@@ -34,17 +45,16 @@ func InitDB(filepath string) (*Database, error) {
 	}
 
 	log.Info().Msgf("Connecting to SQLite DB: %s", filepath)
-	
+
 	db, err := gorm.Open(sqlite.Open(filepath), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to database")
 	}
 
 	DB = Database{db}
-	
+
 	return &DB, err
 }
-
 
 // GetDB returns the database connection for the current application.
 //
