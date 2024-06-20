@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	d "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
@@ -27,12 +28,14 @@ func (a *Account) String() string {
 //
 // Returns:
 // - error: an error if there was a problem updating the account name.
-func (a *Account) UpdateName(name string) error {
+func (a *Account) UpdateName(name string, requestedBy *auth.User) error {
 	if err := AccountNameValidator(name); err != nil {
 		log.Err(err).Msg("Error validating account name")
 		return err
 	}
 	a.Name = name
+	a.SystemData.UpdatedBy = requestedBy
+	a.SystemData.UpdatedAt = time.Now()
 	return nil
 }
 
@@ -48,7 +51,7 @@ func (a *Account) UpdateName(name string) error {
 // Returns:
 // - *Transaction: the registered transaction.
 // - error: an error if there was a problem registering the transaction.
-func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency, date time.Time, concept string, strTType string) (*Transaction, error) {
+func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency, date time.Time, concept string, strTType string, requestedBy *auth.User) (*Transaction, error) {
 	updatedBalance := &Currency{}
 	var err error
 
@@ -77,7 +80,7 @@ func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency
 
 	a.Total = updatedBalance
 
-	transaction, err := NewTransaction(strTType, a, amount, date, concept)
+	transaction, err := NewTransaction(strTType, a, amount, date, concept, requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error creating transaction")
 		return nil, err
@@ -96,7 +99,7 @@ func (a *Account) RegisterTransaction(currentBalance *Currency, amount *Currency
 // Returns:
 // - *Account: the newly created Account.
 // - error: an error if there was a problem during creation.
-func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, error) {
+func NewAccount (name string, total *Currency, defaultAccount bool, requestedBy *auth.User) (*Account, error) {
 
 	if err := AccountNameValidator(name); err != nil {
 		log.Err(err).Msg("Error validating account name")
@@ -108,6 +111,10 @@ func NewAccount (name string, total *Currency, defaultAccount bool) (*Account, e
 		Currency: total.CurrencyCode,
 		Total: total,
 		DefaultAccount: defaultAccount,
+		SystemData: d.SystemData{
+			CreatedBy: requestedBy,
+			UpdatedBy: requestedBy,
+		},
 	}, nil
 }
 
@@ -137,14 +144,21 @@ func AccountNameValidator(name string) error {
 // - concept: the concept of the transaction.
 // - tType: the type of transaction (credit or debit).
 // Returns a pointer to the updated transaction and an error if any.
-func UpdateAccountBalance(accountId, currencyCode string, amount string, date string, concept string, tType string) (*Transaction, error) {
-	acc, err := GetAccountById(accountId)
+func UpdateAccountBalance(accountId, currencyCode string, amount string, date string, concept string, tType string, requestedBy string) (*Transaction, error) {
+	user, err := auth.GetUserById(requestedBy)
+	if err != nil {
+		log.Err(err).Msg("Error getting user")
+		return nil, err
+	}
+	
+	
+	acc, err := GetAccountById(accountId, requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error getting account")
 		return nil, err
 	}
 
-	c, err := NewCurrency(currencyCode, amount, date)
+	c, err := NewCurrency(currencyCode, amount, date, user)
 	if err != nil {
 		log.Err(err).Msg("Error creating currency")
 		return nil, err
@@ -156,13 +170,13 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 		return nil, err
 	}
 
-	balance, err := GetCurrencyById(fmt.Sprint(acc.TotalID))
+	balance, err := GetCurrencyById(fmt.Sprint(acc.TotalID), requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error getting account balance")
 		return nil, err
 	}
 
-	transaction, err := acc.RegisterTransaction(&balance, c, exDate, concept, tType)
+	transaction, err := acc.RegisterTransaction(&balance, c, exDate, concept, tType, user)
 	if err != nil {
 		log.Err(err).Msg("Error creating transaction")
 		return nil, err
@@ -183,9 +197,9 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 // Returns:
 // - *Account: a pointer to the retrieved account, or nil if not found.
 // - error: an error if there was a problem retrieving the account.
-func GetAccountById(id string) (*Account, error) {
+func GetAccountById(id string, requestedBy string) (*Account, error) {
 	var acc Account
-	db.First(&acc, "id = ?", id)
+	db.First(&acc, "id = ?", id).Where("created_by = ?", requestedBy)
 	if acc == (Account{}) {
 		return nil, fmt.Errorf("account with ID %s not found", fmt.Sprint(id))
 	}
@@ -199,10 +213,10 @@ func GetAccountById(id string) (*Account, error) {
 //
 // Returns:
 // - []Account: a slice of Account containing all the accounts retrieved from the database.
-func GetAllAccounts() []Account {
+func GetAllAccounts(requestedBy string) []Account {
 	var accs []Account
 	
-	db.Find(&accs)
+	db.Find(&accs).Where("created_by = ?", requestedBy)
 
 	if len(accs) == 0 {
 		log.Warn().Msg("No accounts found")
@@ -222,14 +236,19 @@ func GetAllAccounts() []Account {
 // Returns:
 // - *Account: a pointer to the newly created account, or nil if there was an error.
 // - error: an error if there was a problem creating the account.
-func CreateAccount(accountName string, amount string, currencyCode string, defaultAccount bool) (*Account, error) {
+func CreateAccount(accountName string, amount string, currencyCode string, defaultAccount bool, requestedBy string) (*Account, error) {
 
-	c, err := CreateCurrency(currencyCode, amount, time.Now().Format(time.DateOnly))
+	u, err := auth.GetUserById(requestedBy)
 	if err != nil {
 		return nil, err
 	}
 
-	acc, err := NewAccount(accountName, c, defaultAccount)
+	c, err := CreateCurrency(currencyCode, amount, time.Now().Format(time.DateOnly), requestedBy)
+	if err != nil {
+		return nil, err
+	}
+
+	acc, err := NewAccount(accountName, c, defaultAccount, u)
 	if err != nil {
 		return nil, err
 	}
@@ -248,14 +267,19 @@ func CreateAccount(accountName string, amount string, currencyCode string, defau
 // Returns:
 // - *Account: a pointer to the updated account, or nil if there was an error.
 // - error: an error if there was a problem updating the account.
-func UpdateAccountName(id string, accountName string) (*Account, error) {
+func UpdateAccountName(id string, accountName string, requestedBy string) (*Account, error) {
 
-	acc, err := GetAccountById(id)
+	acc, err := GetAccountById(id, requestedBy)
 	if err != nil {
 		return nil, err
 	}
 
-	err = acc.UpdateName(accountName)
+	user, err := auth.GetUserById(requestedBy)
+	if err != nil {
+		return nil, err
+	}
+
+	err = acc.UpdateName(accountName, user)
 	if err != nil {
 		return nil, err
 	}
@@ -271,8 +295,9 @@ func UpdateAccountName(id string, accountName string) (*Account, error) {
 // - id: the ID of the account to be deleted.
 // Return type:
 // - error: an error if there was a problem deleting the account.
-func DeleteAccount(id string) error {
-	acc, err := GetAccountById(id)
+func DeleteAccount(id string, requestedBy string) error {
+
+	acc, err := GetAccountById(id, requestedBy)
 	if err != nil {
 		return err
 	}

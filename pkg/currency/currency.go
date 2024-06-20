@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	d "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
@@ -64,7 +65,7 @@ func AddCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 		}
 	}
 
-	output, err = NewCurrency(cCode, amount, eDate)
+	output, err = NewCurrency(cCode, amount, eDate, a.SystemData.CreatedBy)
 	if err != nil {
 		return output, err
 	}
@@ -106,7 +107,7 @@ func SubCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 		}
 	}
 
-	output, err = NewCurrency(cCode, amount, eDate)
+	output, err = NewCurrency(cCode, amount, eDate, a.SystemData.CreatedBy)
 	if err != nil {
 		return output, err
 	}
@@ -125,7 +126,7 @@ func SubCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 // Returns:
 // - *Currency: a pointer to the newly created Currency object.
 // - error: an error if any validation fails or if there is an error getting the exchange rate.
-func NewCurrency(currencyCode string, amount string, exchangeDate string) (*Currency, error) {
+func NewCurrency(currencyCode string, amount string, exchangeDate string, user *auth.User) (*Currency, error) {
 
 	// Run Validations
 	if err := CurrencyCodeValidator(currencyCode); err != nil {
@@ -170,6 +171,10 @@ func NewCurrency(currencyCode string, amount string, exchangeDate string) (*Curr
 		ExchangeDate: eDate,
 		ExchangeRate: er,
 		Conversion:   conversion,
+		SystemData: d.SystemData{
+			CreatedBy: user,
+			UpdatedBy: user,
+		},
 	}, nil
 }
 
@@ -237,10 +242,15 @@ func DateValidator(date string) error {
 // Returns:
 // - *Currency: the created Currency object.
 // - error: an error if the creation failed.
-func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*Currency, error) {
+func CreateCurrency(currencyCode string, amount string, exchangeDate string, requestedBy string) (*Currency, error) {
 	var c *Currency
 
-	c, err := NewCurrency(currencyCode, amount, exchangeDate)
+	user, err := auth.GetUserById(requestedBy)
+	if err != nil {
+		return c, err
+	} 
+
+	c, err = NewCurrency(currencyCode, amount, exchangeDate, user)
 	if err != nil {
 		return c, err
 	}
@@ -258,10 +268,10 @@ func CreateCurrency(currencyCode string, amount string, exchangeDate string) (*C
 // Returns:
 // - Currency: the retrieved Currency object, or an empty Currency object if not found.
 // - error: an error if the Currency retrieval fails.
-func GetCurrencyById(id string) (Currency, error) {
+func GetCurrencyById(id string, requestedBy string) (Currency, error) {
 	var c Currency
 
-	db.First(&c, "id = ?", id)
+	db.First(&c, "id = ?", id).Where("created_by = ?", requestedBy)
 	if c == (Currency{}) {
 		return c, fmt.Errorf("currency with ID %s not found", fmt.Sprint(id))
 	}
@@ -272,10 +282,10 @@ func GetCurrencyById(id string) (Currency, error) {
 //
 // Returns:
 // - []Currency: a slice of Currency objects representing all the currencies.
-func GetAllCurrencies() []Currency {
+func GetAllCurrencies(requestedBy string) []Currency {
 	var cs []Currency
 
-	db.Find(&cs)
+	db.Find(&cs).Where("created_by = ?", requestedBy)
 
 	if len(cs) == 0 {
 		log.Warn().Msg("No currencies found")
@@ -292,8 +302,8 @@ func GetAllCurrencies() []Currency {
 //
 // Returns:
 // - error: an error if the currency retrieval or deletion fails.
-func DeleteCurrency(id string) error {
-	c, err := GetCurrencyById(id)
+func DeleteCurrency(id string, requestedBy string) error {
+	c, err := GetCurrencyById(id, requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error getting currency")
 		return err

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	d "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
@@ -16,7 +17,6 @@ const (
 
 type Transaction struct {
 	d.SystemData
-	ID          uint      `json:"id" gorm:"primaryKey"`
 	DateOfTransaction time.Time `json:"dateOfTransaction"`
 	TypeOfTrasaction TransactionType    `json:"typeOfTrasaction"`
 	Account      *Account  `json:"account" gorm:"foreignKey:AccountID"`
@@ -24,8 +24,6 @@ type Transaction struct {
 	Amount       *Currency `json:"amount"`
 	AmountID      uint `json:"amountId"`
 	Details     string    `json:"details"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 // String returns a string representation of the Transaction.
@@ -52,7 +50,7 @@ func (t *Transaction) String() string {
 // Returns:
 // - *Transaction: the newly created transaction.
 // - error: an error if there was a validation issue.
-func NewTransaction(tType string, account *Account, amount *Currency, date time.Time, details string) (*Transaction, error) {
+func NewTransaction(tType string, account *Account, amount *Currency, date time.Time, details string, requestedBy *auth.User) (*Transaction, error) {
 	if err := TransactionTypeValidator(tType); err != nil {
 		log.Err(err).Msg("Error validating transaction type")
 		return nil, err
@@ -73,6 +71,10 @@ func NewTransaction(tType string, account *Account, amount *Currency, date time.
 		Details:           details,
 		AccountID:         account.ID,
 		DateOfTransaction: date,
+		SystemData:        d.SystemData{
+			CreatedBy: requestedBy, 
+			UpdatedBy: requestedBy, 
+		},
 	}
 	return transaction, nil
 }
