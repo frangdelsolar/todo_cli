@@ -1,15 +1,16 @@
-package auth_test
+package contractor_test
 
 import (
 	"os"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
+	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-var PKG_NAME = "Auth Test PKG"
+var PKG_NAME = "Contractor Test PKG"
 var PKG_VERSION = "1.0.0"
 
 var cfg *config.Config
@@ -25,10 +26,10 @@ func init(){
     if err != nil {
         panic(err)
     }
-    
+
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-    log.Info().Interface("Config", cfg).Msg("Loaded Config")
+    log.Trace().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
 	if err != nil {
@@ -36,12 +37,15 @@ func init(){
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
-    
+
     auth.InitAuth()
+    c.InitContractor()
+
 }
 
-func RunAuthTests(){
-    log.Info().Msg("Running Auth Tests")
+func RunContractorTests(){
+    log.Info().Msg("Running Contractor Tests")
 
-    TestCreateUser()
+    TestCreateContractor()
+    TestUpdateContractorName()
 }
