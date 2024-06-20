@@ -10,15 +10,15 @@ import (
 
 type Account struct {
 	d.SystemData
-	Name        string    `json:"name"`
-	TotalID    uint      `json:"totalId"`
+	Name        string    `json:"name" gorm:"not null"`
+	TotalID    uint      `json:"totalId" gorm:"not null"`
 	Total   *Currency    `json:"total" gorm:"foreignKey:TotalID"`
 	DefaultAccount bool `json:"defaultAccount"`
-	Currency CurrencyUnit `json:"currency"` 
+	CurrencyCode CurrencyUnit `json:"currencyCode" gorm:"not null"` 
 }
 
 func (a *Account) String() string {
-	return fmt.Sprintf("%s (%s)", a.Name, a.Currency)
+	return fmt.Sprintf("%s (%s)", a.Name, a.CurrencyCode)
 }
 
 // UpdateName updates the name of the account.
@@ -108,7 +108,7 @@ func NewAccount (name string, total *Currency, defaultAccount bool, requestedBy 
 
 	return &Account{
 		Name: name,
-		Currency: total.CurrencyCode,
+		CurrencyCode: total.CurrencyCode,
 		Total: total,
 		DefaultAccount: defaultAccount,
 		SystemData: d.SystemData{

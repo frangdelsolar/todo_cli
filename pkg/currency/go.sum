@@ -3,8 +3,6 @@ github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4 h1:SgittD6ApM6+XjtG+eKJ1i5euyz
 github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4/go.mod h1:7N5elTN9zmVLglNf3bOW6Az6MzVqJEvcYDxV/aL5gZg=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2 h1:gFBWAFltcoNBiq30Mhw0fCbaTKU6FG7t8h/+YKIHmEU=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
-github.com/frangdelsolar/todo_cli/pkg/data v1.1.5 h1:FNeGD5bzJ+mFzRlW3murootVZPjUAia9ynsUX0Vx0eg=
-github.com/frangdelsolar/todo_cli/pkg/data v1.1.5/go.mod h1:t3u5rCX48V7ybXcoqlFv382Jt8IgMZItpWLx+TfaK08=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0 h1:5QundD+CvZHubxtd+12VaYgZojFp3edVxJ0Fn1K8CRg=
 github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0/go.mod h1:aTKq0391/gaWu79e5rXjUQn53ENGZgslo9fRPM5VQ6U=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
