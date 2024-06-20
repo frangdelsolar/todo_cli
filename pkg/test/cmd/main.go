@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
-	tc "github.com/frangdelsolar/todo_cli/pkg/test/currency"
+	at "github.com/frangdelsolar/todo_cli/pkg/test/auth_test"
 )
 
 var PKG_NAME = "Test PKG"
@@ -16,5 +16,5 @@ func main(){
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
-    tc.RunCurrencyTests()
+    at.RunAuthTests()
 }

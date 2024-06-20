@@ -1,25 +1,10 @@
-package test
+package auth_test
 
 import (
 	"fmt"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 )
-
-
-func RunAuthTests(){
-    log.Info().Msg("Running Auth Tests")
-
-    TestInitAuth()
-    TestCreateUser()
-}
-
-func TestInitAuth(){
-    log.Info().Msg("Testing InitAuth()")
-    auth.InitAuth()
-    log.Debug().Msg("Applied Auth migrations to database")
-}
-
 
 func TestCreateUser(){
     log.Info().Msg("Testing CreateUser()")
@@ -48,5 +33,4 @@ func TestCreateUser(){
 
     log.Debug().Interface("User", u).Msg("Created User")
     log.Info().Msg("Created User Successfully")
-
 }
