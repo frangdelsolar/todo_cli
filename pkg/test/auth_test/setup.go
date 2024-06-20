@@ -1,7 +1,6 @@
 package auth_test
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
@@ -26,8 +25,6 @@ func init(){
     if err != nil {
         panic(err)
     }
-
-    fmt.Printf("Config: %v\n", cfg)
     
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
@@ -40,8 +37,6 @@ func init(){
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
-
-    RunAuthTests()
 }
 
 func RunAuthTests(){

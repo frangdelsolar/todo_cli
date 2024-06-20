@@ -1,9 +1,9 @@
-package currency
+package currency_test
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	c "github.com/frangdelsolar/todo_cli/pkg/currency"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
@@ -19,9 +19,7 @@ var db *data.Database
 
 
 func init(){
-    fmt.Println("Initializing test environment...")
-
-    // Set Env
+    // Test Bed
     os.Setenv("APP_ENV", "test")
 
     cfg, err := config.Load()
@@ -29,8 +27,6 @@ func init(){
         panic(err)
     }
 
-    fmt.Printf("Config: %v\n", cfg)
-    
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
@@ -43,7 +39,7 @@ func init(){
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
 
-    RunCurrencyTests()
+    auth.InitAuth()
 }
 
 func RunCurrencyTests(){

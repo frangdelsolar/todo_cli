@@ -1,4 +1,4 @@
-package currency
+package currency_test
 
 import (
 	"fmt"
@@ -82,7 +82,7 @@ func TestAddCurrencySameCode(){
 }
 
 func TestAddCurrencyDifferentCode(){
-    log.Info().Msg("Testing AddCurrencySameCode()")
+    log.Info().Msg("Testing AddCurrencyDifferentCode()")
 
     // data prep
     owner, _ := auth.CreateUser("owenr", "owenr@admin.com")
@@ -115,14 +115,14 @@ func TestAddCurrencyDifferentCode(){
 
     if b.ExchangeRate != bExpectedRate {
         err = fmt.Errorf("expected rate %f, got %f", bExpectedRate, b.ExchangeRate)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected rate %f, got %f", bExpectedRate, b.ExchangeRate)
     }
 
     if b.Conversion != bExpectedConversion {
         err = fmt.Errorf("expected conversion %f, got %f", bExpectedConversion, b.Conversion)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected conversion %f, got %f", bExpectedConversion, b.Conversion)
     }
@@ -146,28 +146,28 @@ func TestAddCurrencyDifferentCode(){
 
     if ccy.Amount != expectedAmount {
         err = fmt.Errorf("expected amount %f, got %f", expectedAmount, ccy.Amount)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected amount %f, got %f", expectedAmount, ccy.Amount)
     }
 
     if ccy.CurrencyCode != expectedCode {
         err = fmt.Errorf("expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected code %s, got %s", expectedCode, ccy.CurrencyCode)
     }
 
     if ccy.Conversion != expectedConversion {
         err = fmt.Errorf("expected conversion %f, got %f", expectedConversion, ccy.Conversion)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected conversion %f, got %f", expectedConversion, ccy.Conversion)
     }
 
     if ccy.ExchangeRate != expectedRate {
         err = fmt.Errorf("expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
+        log.Err(err).Msg("AddCurrencyDifferentCode()")
     } else {
         log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
     }
