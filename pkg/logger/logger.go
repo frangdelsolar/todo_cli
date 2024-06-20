@@ -37,6 +37,8 @@ func NewLogger(pkgName string, pkgVersion string) *Logger {
 func ConfigLogger(logLevel string, pkgName string, pkgVersion string) zerolog.Logger {
 	var zlogLevel zerolog.Level
 	switch logLevel {
+    case "trace":
+        zlogLevel = zerolog.TraceLevel
 	case "debug":
 		zlogLevel = zerolog.DebugLevel
 	case "info":
