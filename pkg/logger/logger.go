@@ -9,7 +9,7 @@ import (
 )
 
 const PKG_NAME = "Logger PKG"
-const PKG_VERSION = "1.1.0"
+const PKG_VERSION = "1.1.1"
 
 var log *Logger
 var cfg *config.Config
