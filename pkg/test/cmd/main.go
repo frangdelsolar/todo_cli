@@ -7,7 +7,7 @@ import (
 )
 
 var PKG_NAME = "Test PKG"
-var PKG_VERSION = "1.0.0"
+var PKG_VERSION = "1.0.1"
 
 var log *logger.Logger
 

@@ -42,6 +42,6 @@ func TestCreateUser(){
         log.Debug().Msgf("Expected email %s, got %s", email, u.Email)
     }
 
-    log.Debug().Interface("User", u).Msg("Created User")
+    log.Trace().Interface("User", u).Msg("Created User")
     log.Info().Msg("Created User Successfully")
 }

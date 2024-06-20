@@ -34,7 +34,7 @@ func TestAddCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", a).Msg("Created A Currency")
+    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
 
     bAmount := "200.00"
@@ -45,7 +45,7 @@ func TestAddCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", b).Msg("Created B Currency")
+    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -54,7 +54,7 @@ func TestAddCurrencySameCode(){
         log.Err(err).Msg("Failed to add currency")
     }
 
-    log.Debug().Interface("Currency", ccy).Msg("Added Currency")
+    log.Trace().Interface("Currency", ccy).Msg("Added Currency")
     log.Info().Msg("Added Currency Successfully")
 
     // assertions
@@ -116,7 +116,7 @@ func TestAddCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", a).Msg("Created A Currency")
+    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
 
     bAmount := "8.00"
@@ -127,7 +127,7 @@ func TestAddCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", b).Msg("Created B Currency")
+    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Test Rates
     bExpectedRate := 4.00
@@ -155,7 +155,7 @@ func TestAddCurrencyDifferentCode(){
         log.Err(err).Msg("Failed to add currency")
     }
 
-    log.Debug().Interface("Currency", ccy).Msg("Added Currency")
+    log.Trace().Interface("Currency", ccy).Msg("Added Currency")
     log.Info().Msg("Added Currency Successfully")
 
     // assertions
@@ -221,7 +221,7 @@ func TestSubCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", a).Msg("Created A Currency")
+    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
     bAmount := "25.00"
     bCode := "ARS"
@@ -231,7 +231,7 @@ func TestSubCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", b).Msg("Created B Currency")
+    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -240,7 +240,7 @@ func TestSubCurrencySameCode(){
         log.Err(err).Msg("Failed to sub currency")
     }
 
-    log.Debug().Interface("Currency", ccy).Msg("Substracted Currency")
+    log.Trace().Interface("Currency", ccy).Msg("Substracted Currency")
     log.Info().Msg("Substracted Currency Successfully")
 
     // assertions
@@ -308,7 +308,7 @@ func TestSubCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", a).Msg("Created A Currency")
+    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
     // Test A Rates
     aExpectedRate := 1000.00
@@ -338,7 +338,7 @@ func TestSubCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Debug().Interface("Currency", b).Msg("Created B Currency")
+    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -347,7 +347,7 @@ func TestSubCurrencyDifferentCode(){
         log.Err(err).Msg("Failed to sub currency")
     }
 
-    log.Debug().Interface("Currency", ccy).Msg("Substracted Currency")
+    log.Trace().Interface("Currency", ccy).Msg("Substracted Currency")
     log.Info().Msg("Substracted Currency Successfully")
 
     // assertions

@@ -7,8 +7,8 @@ github.com/frangdelsolar/todo_cli/pkg/currency v1.0.3 h1:7wCuU+GeajcFnRjLmJQUZ8O
 github.com/frangdelsolar/todo_cli/pkg/currency v1.0.3/go.mod h1:zZs6jmOtkHLubZIlfHN5kZfKYgaj1fhbENr+RMGDn8w=
 github.com/frangdelsolar/todo_cli/pkg/data v1.1.5 h1:FNeGD5bzJ+mFzRlW3murootVZPjUAia9ynsUX0Vx0eg=
 github.com/frangdelsolar/todo_cli/pkg/data v1.1.5/go.mod h1:t3u5rCX48V7ybXcoqlFv382Jt8IgMZItpWLx+TfaK08=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0 h1:5QundD+CvZHubxtd+12VaYgZojFp3edVxJ0Fn1K8CRg=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0/go.mod h1:aTKq0391/gaWu79e5rXjUQn53ENGZgslo9fRPM5VQ6U=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.1.1 h1:rSI6NRaTJm0pjDF8vhcQLO2SEIXDwAy/L4LlbYyW3N8=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.1.1/go.mod h1:zxDNtSQerWFlpv1cDbb2Tx1KwYc+pQKJ/Kil7Ppuhp4=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=

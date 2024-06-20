@@ -36,7 +36,7 @@ func TestCreateAccount(){
         log.Err(err).Msg("Failed to create account")
     }
     
-    log.Debug().Interface("Account", account).Msg("Created Account")
+    log.Trace().Interface("Account", account).Msg("Created Account")
     log.Info().Msg("Created Account Successfully")
 
     // assertions
@@ -102,7 +102,7 @@ func TestUpdateAccountCredit(){
     if err != nil {
         log.Err(err).Msg("Failed to create account")
     }
-    log.Debug().Interface("Account", account).Msg("Created Account")
+    log.Trace().Interface("Account", account).Msg("Created Account")
     
     accountId := fmt.Sprint(account.ID)
     creditAmount := "1000.00"
@@ -117,7 +117,7 @@ func TestUpdateAccountCredit(){
         log.Err(err).Msg("Failed to update account balance")
     }
 
-    log.Debug().Interface("Transaction", transaction).Msg("Created Transaction")
+    log.Trace().Interface("Transaction", transaction).Msg("Created Transaction")
     log.Info().Msg("Created Transaction Successfully")
 
     // Assertions
@@ -162,14 +162,14 @@ func TestUpdateAccountCredit(){
     if err != nil {
         log.Err(err).Msg("Failed to get account")
     }
-    log.Debug().Interface("Account", account).Msg("Updated Account")
+    log.Trace().Interface("Account", account).Msg("Updated Account")
 
 
     newTotal, err := c.GetCurrencyById(fmt.Sprint(account.TotalID), userId)
     if err != nil {
         log.Err(err).Msg("Failed to get currency")
     }
-    log.Debug().Interface("Balance", newTotal).Msg("New Account Balance")
+    log.Trace().Interface("Balance", newTotal).Msg("New Account Balance")
 
 
     // assertions on balance

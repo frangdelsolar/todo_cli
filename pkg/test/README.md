@@ -1,4 +1,4 @@
-# Test PKG v1.0.0
+# Test PKG v1.0.1
 
 This test suite verifies the core operations of the TODO app. So far supports testing for:
 
@@ -14,6 +14,10 @@ This test suite verifies the core operations of the TODO app. So far supports te
 -   Currency
     -   Operations with currencies
     -   Account creation and balance update
+
+## Verbosity
+
+Supported values for log level: trace, debug, info
 
 ## Installation
 
