@@ -189,13 +189,9 @@ func NewCurrency(currencyCode string, amount string, exchangeDate string, user *
 // Returns:
 // - error: an error if the amount is invalid, otherwise nil.
 func CurrencyAmountValidator(amount string) error {
-	a, err := strconv.ParseFloat(amount, 64)
+	_, err := strconv.ParseFloat(amount, 64)
 	if err != nil {
 		return err
-	}
-
-	if a < 0 {
-		return fmt.Errorf("amount must be greater than 0")
 	}
 
 	return nil

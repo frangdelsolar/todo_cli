@@ -86,14 +86,20 @@ func RegisterTransaction(
 	}
 	tType := TransactionType(strTType)
 
+    currentBalance, err := GetCurrencyById(fmt.Sprint(account.TotalID), fmt.Sprint(requestedBy.ID))
+    if err != nil {
+        log.Err(err).Msg("Error getting current balance")
+        return nil, err
+    }
+
 	if tType == Credit {
-		updatedBalance, err = AddCurrency(amount, account.Total, date)
+		updatedBalance, err = AddCurrency(amount, &currentBalance, date)
 		if err != nil {
 			log.Err(err).Msg("Error crediting account")
 			return nil, err
 		}
 	} else if tType == Debit {
-		updatedBalance, err = SubCurrency(amount, account.Total, date)
+		updatedBalance, err = SubCurrency(amount, &currentBalance, date)
 		if err != nil {
 			log.Err(err).Msg("Error debiting account")
 			return nil, err

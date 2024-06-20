@@ -24,7 +24,6 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 		return nil, err
 	}
 	
-	
 	acc, err := GetAccountById(accountId, requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error getting account")
