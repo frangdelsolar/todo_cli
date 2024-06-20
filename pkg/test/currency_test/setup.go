@@ -29,7 +29,6 @@ func init(){
 
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-
     log.Info().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
@@ -40,22 +39,18 @@ func init(){
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
 
     auth.InitAuth()
+    c.InitCurrency()
+
 }
 
 func RunCurrencyTests(){
     log.Info().Msg("Running Currency Tests")
 
-    TestInitCurrency()
     TestAddCurrencySameCode()
     TestAddCurrencyDifferentCode()
     TestSubCurrencySameCode()
     TestSubCurrencyDifferentCode()
     TestCreateAccount()
-    // TestCreateTransaction()
+    TestUpdateAccountCredit()
 }
 
-func TestInitCurrency(){
-    log.Info().Msg("Testing InitCurrency()")
-    c.InitCurrency()
-    log.Debug().Msg("Applied Currency pkg migrations to database")
-}

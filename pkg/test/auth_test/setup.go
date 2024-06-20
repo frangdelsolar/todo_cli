@@ -18,7 +18,7 @@ var db *data.Database
 
 
 func init(){
-    // Set Env
+    // Test Bed
     os.Setenv("APP_ENV", "test")
 
     cfg, err := config.Load()
@@ -28,7 +28,6 @@ func init(){
     
     log = logger.NewLogger(PKG_NAME, PKG_VERSION)
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-
     log.Info().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
@@ -37,18 +36,12 @@ func init(){
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
+    
+    auth.InitAuth()
 }
 
 func RunAuthTests(){
     log.Info().Msg("Running Auth Tests")
 
-    TestInitAuth()
     TestCreateUser()
-}
-
-
-func TestInitAuth(){
-    log.Info().Msg("Testing InitAuth()")
-    auth.InitAuth()
-    log.Debug().Msg("Applied Auth migrations to database")
 }

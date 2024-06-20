@@ -8,6 +8,17 @@ import (
 	c "github.com/frangdelsolar/todo_cli/pkg/currency"
 )
 
+// TestAddCurrencySameCode tests the AddCurrency function when both currencies have the same code.
+//
+// This function performs the following steps:
+// 1. Logs a message indicating that the AddCurrencySameCode test is being run.
+// 2. Prepares the necessary data for the test by creating two currencies with the same code and date.
+// 3. Performs the test by calling the AddCurrency function with the two currencies and a specific date.
+// 4. Logs the added currency and a success message.
+// 5. Asserts that the added currency has the expected amount, code, conversion, and exchange rate.
+// 6. If any assertion fails, logs an error message with the expected and actual values.
+//
+// This function does not return any value.
 func TestAddCurrencySameCode(){
     log.Info().Msg("Testing AddCurrencySameCode()")
 
@@ -81,6 +92,15 @@ func TestAddCurrencySameCode(){
     }
 }
 
+// TestAddCurrencyDifferentCode is a test function that tests the AddCurrency function when the currencies have different codes.
+//
+// It performs the following steps:
+// - Creates two currencies with different codes and amounts.
+// - Tests the exchange rates of the created currencies.
+// - Adds the currencies together using the AddCurrency function.
+// - Performs assertions on the resulting currency's amount, code, conversion, and exchange rate.
+//
+// The function does not take any parameters and does not return any values.
 func TestAddCurrencyDifferentCode(){
     log.Info().Msg("Testing AddCurrencyDifferentCode()")
 
@@ -173,6 +193,19 @@ func TestAddCurrencyDifferentCode(){
     }
 }
 
+// TestSubCurrencySameCode is a test function that checks the subtraction of two currencies with the same code.
+//
+// It prepares the test data by creating two currencies with the same code and different amounts.
+// It then performs the subtraction of the two currencies and checks the expected values.
+// The expected values are the subtraction of the amounts, the same code, the conversion rate, and the exchange rate.
+//
+// It uses the auth.CreateUser function to create a user.
+// It uses the c.CreateCurrency function to create the currencies.
+// It uses the c.SubCurrency function to subtract the currencies.
+//
+// It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
+//
+// It returns nothing.
 func TestSubCurrencySameCode(){
     log.Info().Msg("Testing SubCurrencySameCode()")
 
@@ -245,6 +278,21 @@ func TestSubCurrencySameCode(){
     }
 }
 
+// TestSubCurrencyDifferentCode is a test function that tests the SubCurrency function when the currencies have different codes.
+//
+// It performs the following steps:
+// - Creates two currencies with different codes and amounts.
+// - Tests the exchange rates of the created currencies.
+// - Adds the currencies together using the SubCurrency function.
+// - Performs assertions on the resulting currency's amount, code, conversion, and exchange rate.
+//
+// It uses the auth.CreateUser function to create a user.
+// It uses the c.CreateCurrency function to create the currencies.
+// It uses the c.SubCurrency function to subtract the currencies.
+//
+// It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
+//
+// It returns nothing.
 func TestSubCurrencyDifferentCode(){
     log.Info().Msg("Testing SubCurrencyDifferentCode()")
 
@@ -335,6 +383,5 @@ func TestSubCurrencyDifferentCode(){
     } else {
         log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
     }
-
 }
 
