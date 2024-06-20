@@ -34,6 +34,8 @@ func Load() (*Config, error) {
 		envFile = ".env.dev"
 	} else if env == "prod" {
 		envFile = ".env.prod"
+	} else if env == "test" {
+		envFile = ".env.test"
 	}
 
 	// Get the current working directory

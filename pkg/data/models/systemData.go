@@ -7,8 +7,8 @@ import (
 
 type SystemData struct {
 	gorm.Model
-	CreatedByID uint
-	CreatedBy *auth.User
-	UpdatedByID uint
-	UpdatedBy *auth.User
+	CreatedByID uint `gorm:"not null" json:"createdById"`
+	CreatedBy *auth.User `gorm:"foreignKey:CreatedByID" json:"createdBy"`
+	UpdatedByID uint  `gorm:"not null" json:"updatedById"`
+	UpdatedBy *auth.User `gorm:"foreignKey:UpdatedByID" json:"updatedBy"`
 }

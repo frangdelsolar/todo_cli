@@ -1,11 +1,15 @@
-module github.com/frangdelsolar/todo_cli/pkg/currency
+module github.com/frangdelsolar/todo_cli/pkg/test
 
 go 1.22.4
 
+replace github.com/frangdelsolar/todo_cli/pkg/config => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/config
+
+replace github.com/frangdelsolar/todo_cli/pkg/currency => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/currency
 
 require (
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4
 	github.com/frangdelsolar/todo_cli/pkg/config v1.0.2
+	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.3
 	github.com/frangdelsolar/todo_cli/pkg/data v1.1.5
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0
 )
