@@ -55,20 +55,23 @@ func CreateUser(name string, email string, password string) (*User, error) {
 		return u, err
 	}
 
+    /*
+        Still not sure if this is the right place to make firebase user
+    */
     // create firebase user
     fu, err := fa.RegisterUser(name, email, password)
     if err != nil {
-        log.Err(err).Msg("Error creating firebase user")
-        return u, err
+        log.Warn().Msg("Error creating firebase user")
+    } else {
+        u.FirebaseId = fu.UID
     }
-    u.FirebaseId = fu.UID
 
 	db.Create(&u)
 
     log.Trace().Interface("User", u).Msg("Created User")
     log.Info().Msgf("Created User with ID: %d", u.ID)
 
-	return u, nil
+	return u, err
 }
 
 // UpdateUser updates the name and email of a user with the given ID.

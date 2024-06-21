@@ -8,7 +8,7 @@ import (
 	"google.golang.org/api/option"
 )
 
-var Admin FirebaseAdmin
+var Admin *FirebaseAdmin
 var ctx = context.Background()
 
 type AuthConfig struct {
@@ -35,6 +35,8 @@ func (fa *FirebaseAdmin) RegisterUser (name string,email string, password string
 	userToCreate.DisplayName(name)
 	userToCreate.Email(email)
 	userToCreate.Password(password)
+
+    log.Trace().Interface("UserToCreate", userToCreate).Msg("UserToCreate")
 
 	return fa.CreateUser(ctx, userToCreate)
 }
@@ -82,10 +84,10 @@ func NewFirebaseAdmin(config *AuthConfig) (*FirebaseAdmin, error) {
 	output.App = app
 	output.Client = cli
 
-	Admin = output
+	Admin = &output
 
     log.Trace().Interface("Output", output).Msg("Firebase Admin")
-    log.Info().Msg("Initialized Firebase Admin")
+    log.Debug().Msg("Initialized Firebase Admin")
 
 	return &output, nil
 	
@@ -96,5 +98,5 @@ func NewFirebaseAdmin(config *AuthConfig) (*FirebaseAdmin, error) {
 // It does not take any parameters.
 // It returns a pointer to the FirebaseAdmin struct.
 func GetFirebaseAdmin() *FirebaseAdmin {
-	return &Admin
+	return Admin
 }
