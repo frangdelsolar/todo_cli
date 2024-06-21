@@ -1,4 +1,4 @@
-# Auth PKG v1.0.4
+# Auth PKG v1.0.5
 
 This package offers a set of functions for managing user authentication in your Go applications. It provides functionalities for creating, retrieving, updating, and deleting users from a database. Additionally, it includes basic user validation for name and email.
 
