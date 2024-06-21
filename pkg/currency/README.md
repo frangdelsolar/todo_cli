@@ -1,4 +1,4 @@
-# Currency PKG v1.0.3
+# Currency PKG v1.0.4
 
 This package provides functionalities for managing currencies and their exchange rates, accounts, and transactions within your Go application. It offers a set of models and methods for:
 
