@@ -7,7 +7,7 @@ import (
 
 
 var PKG_NAME = "Contractor PKG"
-var PKG_VERSION = "1.0.0"
+var PKG_VERSION = "1.0.1"
 
 var log *logger.Logger
 
@@ -25,7 +25,10 @@ var db *data.Database
 // No return values.
 func InitContractor() {
 	var err error
-	log = logger.NewLogger(PKG_NAME, PKG_VERSION)
+	log = logger.NewLogger(logger.LoggerConfig{
+        PackageName: PKG_NAME,
+        PackageVersion: PKG_VERSION,
+    })
 
 	db, err = data.GetDB()
 	if err != nil {

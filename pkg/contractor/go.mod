@@ -3,10 +3,10 @@ module github.com/frangdelsolar/todo_cli/pkg/contractor
 go 1.22.4
 
 require (
-	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4
-	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.3
-	github.com/frangdelsolar/todo_cli/pkg/data v1.1.5
-	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.1
+	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.5
+	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.4
+	github.com/frangdelsolar/todo_cli/pkg/data v1.1.6
+	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.2
 )
 
 require (
