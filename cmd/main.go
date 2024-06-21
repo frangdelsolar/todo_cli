@@ -1,29 +1,35 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
+	"github.com/frangdelsolar/todo_cli/cmd/cli"
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
-	c "github.com/frangdelsolar/todo_cli/pkg/currency"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-var APP_NAME = "TODO APP"
-var APP_VERSION = "1.5.0"
+var PKG_NAME = "TODO APP"
+var PKG_VERSION = "1.6.0"
 
-func main() {
+var cfg *config.Config
+var log *logger.Logger
+var db *data.Database
 
-	cfg, err := config.Load()
-	if err != nil {
-		panic(err)
-	}
 
-	log := logger.NewLogger(APP_NAME, APP_VERSION)
-	log.Info().Msgf("Running %s v%s", APP_NAME, APP_VERSION)
-	log.Debug().Interface("Config", cfg).Msg("Loaded Config")
+func main(){
+
+    cfg, err := config.Load()
+    if err != nil {
+        panic(err)
+    }
+    
+    log = logger.NewLogger(logger.LoggerConfig{
+        PackageName: PKG_NAME,
+        PackageVersion: PKG_VERSION,
+    })
+
+    log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
+    log.Info().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
 	if err != nil {
@@ -31,33 +37,8 @@ func main() {
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
+    
+    auth.InitAuth()
 
-	auth.InitAuth()
-
-	u, err := auth.CreateUser("pepe", "pepe@admin.com")
-	if err != nil {
-		log.Err(err).Msg("Failed to create user")
-	}
-	log.Info().Interface("User", u).Msg("Created User")
-
-	c.InitCurrency()
-
-	acc, err := c.CreateAccount("pepe", "90", "USD", true, fmt.Sprint(u.ID))
-	if err != nil {
-		log.Err(err).Msg("Failed to create account")
-	}
-	log.Info().Interface("Account", acc).Msg("Created Account")
-
-	cur, err := c.NewCurrency("USD", "100", "2022-01-01", u)
-	if err != nil {
-		log.Err(err).Msg("Failed to create currency")
-	}
-	log.Info().Interface("Currency", cur).Msg("Created Currency")
-
-	t, err := c.RegisterTransaction(acc, cur, time.Now(), "test", "credit", u)
-	if err != nil {
-		log.Err(err).Msg("Failed to create transaction")
-	}
-	log.Info().Interface("Transaction", t).Msg("Created Transaction")
-
+    cli.Execute()
 }

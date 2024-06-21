@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"fmt"
+
 	auth "github.com/frangdelsolar/todo_cli/cmd/cli/auth_cli"
 	"github.com/frangdelsolar/todo_cli/cmd/cli/utils"
 	"github.com/spf13/cobra"
@@ -21,7 +23,23 @@ With TODO, you can ditch the scattered sticky notes and cluttered reminders,
 and organize your tasks in a centralized and accessible way.
 `,
         Run: func(cmd *cobra.Command, args []string) {
-            utils.SelectPrompt("What would you like to do?", rootActions)
+            selection, err := utils.SelectPrompt("What would you like to do?", rootActions)
+            if err != nil {
+                fmt.Println("Error:", err)
+                return
+            }
+            switch selection.Key {
+            case "register":
+                auth.RegisterCmd.Run(cmd, args)
+            case "login":
+                auth.LoginCmd.Run(cmd, args)
+            case "exit":
+                return
+            }
+
+        },
+        PostRun: func(cmd *cobra.Command, args []string) {
+            fmt.Println("Bye!")
         },
 }
 

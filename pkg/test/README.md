@@ -1,4 +1,4 @@
-# Test PKG v1.0.1
+# Test PKG v1.0.2
 
 This test suite verifies the core operations of the TODO app. So far supports testing for:
 

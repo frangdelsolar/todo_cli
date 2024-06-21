@@ -27,7 +27,10 @@ func init(){
         panic(err)
     }
 
-    log = logger.NewLogger(PKG_NAME, PKG_VERSION)
+    log = logger.NewLogger(logger.LoggerConfig{
+        PackageName: PKG_NAME,
+        PackageVersion: PKG_VERSION,
+    })
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
     log.Trace().Interface("Config", cfg).Msg("Loaded Config")
 
