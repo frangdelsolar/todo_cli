@@ -52,11 +52,6 @@ func (lc LoggerConfig) GetZeroLevel() zerolog.Level {
     return level
 }
 
-type consoleFormatter struct {
-  zerolog.ConsoleWriter
-}
-
-
 // GetZeroLogger returns a zerolog.Logger instance with the specified logging level and output configuration.
 //
 // Parameters:
@@ -95,6 +90,13 @@ func (lc LoggerConfig) GetZeroLogger() zerolog.Logger {
 		Logger()
 }
 
+// NewLogger creates a new Logger instance based on the provided LoggerConfig.
+//
+// Parameters:
+// - cfg: The LoggerConfig used to configure the Logger.
+//
+// Returns:
+// - *Logger: A pointer to the newly created Logger instance.
 func NewLogger(cfg LoggerConfig) *Logger {
     // Define defaults
 
