@@ -25,7 +25,10 @@ type Database struct {
 // The function returns a pointer to the Database struct and an error.
 func LoadDB() (*Database, error) {
 
-	log := logger.NewLogger(PKG_NAME, PKG_VERSION)
+	log := logger.NewLogger(logger.LoggerConfig{
+        PackageName: PKG_NAME,
+        PackageVersion: PKG_VERSION,
+    })
 
 	cfg := config.GetConfig()
 

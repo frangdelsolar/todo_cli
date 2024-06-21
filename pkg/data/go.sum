@@ -1,14 +1,10 @@
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4 h1:SgittD6ApM6+XjtG+eKJ1i5euyz0Bl2pGxe48BpFgMw=
 github.com/frangdelsolar/todo_cli/pkg/auth v1.0.4/go.mod h1:7N5elTN9zmVLglNf3bOW6Az6MzVqJEvcYDxV/aL5gZg=
-github.com/frangdelsolar/todo_cli/pkg/config v1.0.1 h1:YK6jnKLE5Bn+vq8bMoqqft9KYNXx9s44ZAj7j8i1QsQ=
-github.com/frangdelsolar/todo_cli/pkg/config v1.0.1/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2 h1:gFBWAFltcoNBiq30Mhw0fCbaTKU6FG7t8h/+YKIHmEU=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.2/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.0.0 h1:xQHUPcD88Kyn6YzO9fk5A2F6t8zRxjVHAl5nEgcY7z0=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.0.0/go.mod h1:3PKqNuwiR2H7X9t/+fnGwUzmsg03CKYNeuXl+xz0sbM=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0 h1:5QundD+CvZHubxtd+12VaYgZojFp3edVxJ0Fn1K8CRg=
-github.com/frangdelsolar/todo_cli/pkg/logger v1.1.0/go.mod h1:aTKq0391/gaWu79e5rXjUQn53ENGZgslo9fRPM5VQ6U=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.1.2 h1:bAwE64APJJ7cd66AuyZpce+mUHwl/miVGhgTLXTW8kk=
+github.com/frangdelsolar/todo_cli/pkg/logger v1.1.2/go.mod h1:zxDNtSQerWFlpv1cDbb2Tx1KwYc+pQKJ/Kil7Ppuhp4=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
