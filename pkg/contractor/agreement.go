@@ -13,7 +13,6 @@ const (
     AgreementTypeOneOff AgreementType = "one-off"
     AgreementTypeRecurring AgreementType = "recurring"
     AgreementTypeFixedAmount AgreementType = "fixed-amount"
-    AgreementTypeInstallment AgreementType = "installment" 
 )
 
 type FrequencyType string
@@ -48,7 +47,7 @@ type Agreement struct {
     FrequencyId string `gorm:"not null"` 
     EffectivePeriod *EffectivePeriod
     EffectivePeriodId string `gorm:"not null"`
-    Repetitions int // only if type is installement
+    Installments int // only if type is fixed-amount
     FixedAmount *c.Currency // only if type is fixed-amount
     CurrencyCode  *c.CurrencyUnit `gorm:"not null"`
 }
