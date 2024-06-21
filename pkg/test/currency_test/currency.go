@@ -23,7 +23,7 @@ func TestAddCurrencySameCode(){
     log.Info().Msg("Testing AddCurrencySameCode()")
 
     // data prep
-    owner, _ := auth.CreateUser("owenr", "owenr@admin.com")
+    owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
     ownerId := fmt.Sprint(owner.ID)
     
     aAmount := "100.00"
@@ -105,7 +105,7 @@ func TestAddCurrencyDifferentCode(){
     log.Info().Msg("Testing AddCurrencyDifferentCode()")
 
     // data prep
-    owner, _ := auth.CreateUser("owenr", "owenr@admin.com")
+    owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
     ownerId := fmt.Sprint(owner.ID)
     
     aAmount := "100.00"
@@ -210,7 +210,7 @@ func TestSubCurrencySameCode(){
     log.Info().Msg("Testing SubCurrencySameCode()")
 
     // data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     ownerId := fmt.Sprint(owner.ID)
     
     aAmount := "100.00"
@@ -297,7 +297,7 @@ func TestSubCurrencyDifferentCode(){
     log.Info().Msg("Testing SubCurrencyDifferentCode()")
 
     // data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     ownerId := fmt.Sprint(owner.ID)
     
     aAmount := "20000.00"

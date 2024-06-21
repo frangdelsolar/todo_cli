@@ -22,8 +22,9 @@ func TestCreateUser(){
 
     name := "pepe"
     email := "pepe@admin.com"
+    password := "test123"
 
-    u, err := auth.CreateUser(name, email)
+    u, err := auth.CreateUser(name, email, password)
     if err != nil {
         log.Err(err).Msg("Failed to create user")
     }
@@ -40,6 +41,11 @@ func TestCreateUser(){
         log.Err(err).Msg("TestCreateUser()")
     } else {
         log.Debug().Msgf("Expected email %s, got %s", email, u.Email)
+    }
+
+    if u.FirebaseId != "" {
+        err = fmt.Errorf("expected FirebaseId not to be empty")
+        log.Err(err).Msg("TestCreateUser()")
     }
 
     log.Trace().Interface("User", u).Msg("Created User")

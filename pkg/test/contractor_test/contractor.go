@@ -12,7 +12,7 @@ func TestCreateContractor() {
     log.Info().Msg("Testing CreateContractor()")
 
     // Data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     userId := fmt.Sprint(owner.ID)
 
     name := "Contractor 1"
@@ -38,7 +38,7 @@ func TestUpdateContractorName() {
     log.Info().Msg("Testing UpdateContractorName()")
 
     // Data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     userId := fmt.Sprint(owner.ID)
 
     name := "Contractor 1"  

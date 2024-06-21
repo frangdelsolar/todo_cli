@@ -20,7 +20,7 @@ func TestCreateAccount(){
     log.Info().Msg("Testing CreateAccount()")
     
     // Data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     userId := fmt.Sprint(owner.ID)
 
     accountName:= "Savings"
@@ -90,7 +90,7 @@ func TestUpdateAccountCredit(){
     log.Info().Msg("Testing UpdateAccountCredit()")
 
     // Data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com")
+    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     userId := fmt.Sprint(owner.ID)
 
     accountName:= "Savings"

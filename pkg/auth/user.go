@@ -9,10 +9,10 @@ import (
 
 
 type User struct {
-	gorm.Model
-	ID uint `json:"id" gorm:"primaryKey"`
+	gorm.Model // doesn't reference data.SystemDetails to avoid circular dependency
 	Name string `json:"name"`
 	Email string `json:"email"`
+    FirebaseId string `json:"firebase_id"`
 }
 
 // NewUser creates a new user with the given name and email.

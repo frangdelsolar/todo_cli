@@ -47,7 +47,7 @@ func GetAllUsers() []User {
 // Returns:
 // - *User: the newly created user.
 // - error: an error if the user creation fails.
-func CreateUser(name string, email string) (*User, error) {
+func CreateUser(name string, email string, password string) (*User, error) {
 
 	u, err := NewUser(name, email)
 	if err != nil {
@@ -55,7 +55,18 @@ func CreateUser(name string, email string) (*User, error) {
 		return u, err
 	}
 
+    // create firebase user
+    fu, err := fa.RegisterUser(name, email, password)
+    if err != nil {
+        log.Err(err).Msg("Error creating firebase user")
+        return u, err
+    }
+    u.FirebaseId = fu.UID
+
 	db.Create(&u)
+
+    log.Trace().Interface("User", u).Msg("Created User")
+    log.Info().Msgf("Created User with ID: %d", u.ID)
 
 	return u, nil
 }
@@ -114,7 +125,6 @@ func DeleteUser(id string, requestedBy string) error {
 	} else if err != nil {
 		return err
 	}
-
 
 	db.Delete(&u)
 	
