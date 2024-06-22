@@ -20,14 +20,9 @@ jobs:
       - name: Create directory for decoded secret (optional)
         run: mkdir secrets
 
-      - name: Decode Env**
-        run: |
-            echo "${{ secrets.DOTENVDOTTEST }}" | base64 --decode > pkg/test/cmd/.env.test
-        if: always()  
-      
       - name: Decode Firebase secret (optional)**
         run: |
-            echo "${{ secrets.FIREBASE_ADMIN_SDK }}" | base64 --decode > secrets/todoapp-firebase-admin-sdk.json
+            echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > todoapp-firebase-admin-sdk.json
         if: always()  
 
       - name: Change directory and run tests
