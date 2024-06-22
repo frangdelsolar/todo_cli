@@ -8,7 +8,7 @@ import (
 
 
 var PKG_NAME = "Auth PKG"
-var PKG_VERSION = "1.0.6"
+var PKG_VERSION = "1.0.7"
 
 var log *logger.Logger
 var db *data.Database 

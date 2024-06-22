@@ -2,6 +2,8 @@ module github.com/frangdelsolar/todo_cli/pkg/test
 
 go 1.22.4
 
+replace github.com/frangdelsolar/todo_cli/pkg/auth => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/auth
+
 require (
 	github.com/frangdelsolar/todo_cli v1.0.6
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6

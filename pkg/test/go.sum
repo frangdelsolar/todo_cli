@@ -40,8 +40,6 @@ github.com/felixge/httpsnoop v1.0.4 h1:NFTV2Zj1bL4mc9sqWACXbQFVBBg2W3GPvqp8/ESS2
 github.com/felixge/httpsnoop v1.0.4/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/frangdelsolar/todo_cli v1.0.6 h1:ym3GpoN4jH7fEBHNPYVX7IiQPm215Ua+irJyzVemkb8=
 github.com/frangdelsolar/todo_cli v1.0.6/go.mod h1:aXl+ZkEpTq6xmvG1DEa8Ruhwbb71/FfAHXtoZ2AoKjE=
-github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6 h1:IN6ghZIghVgRda7VLegLz2W+koh/4XVg62paW2Nws9w=
-github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6/go.mod h1:RNbAri8bP4xpWp9nvuOSvaFfq/BWvYvTdP7wQpojnrk=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.5 h1:gOH/LDKyEBtfiCtQCQ9XWOWx3wE3D2eaDTrA0XtV1Hk=
 github.com/frangdelsolar/todo_cli/pkg/config v1.0.5/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
 github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.3 h1:yibzTM4RuOKmwNmqwVpQNLqNsL21xcYfzN8hp4eaCmM=
