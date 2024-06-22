@@ -61,10 +61,17 @@ func (c *Config) SetSession(key string, value string) error {
 
     // Dump config and session to .env file
     storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
-    err := godotenv.Write(map[string]string{
+
+    encodedFBSecretBytes, err := base64.StdEncoding.DecodeString(c.FirebaseSecret)
+    if err != nil {
+        return err
+    }
+    encodedFBSecret := strings.TrimSuffix(string(encodedFBSecretBytes), "\n")
+
+    err = godotenv.Write(map[string]string{
         "LOG_LEVEL": c.LogLevel,
         "DB_PATH": c.DBPath,
-        "FIREBASE_SECRET": c.FirebaseSecret,
+        "FIREBASE_SECRET": encodedFBSecret,
         storedKey: value,
     }, c.envFile)
     
@@ -137,10 +144,11 @@ func Load() (*Config, error) {
     fbSecret := os.Getenv("FIREBASE_SECRET")
     decoded, err := base64.StdEncoding.DecodeString(fbSecret)
     if err != nil {
+        fmt.Errorf("error decoding firebase secret")
         return nil, err
     }
     config.FirebaseSecret = string(decoded)
-
+    
     // Set session variables
     config.Session = make(map[string]string)
     for _, value := range os.Environ() {

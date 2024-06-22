@@ -1,8 +1,6 @@
 package contractor_test
 
 import (
-	"os"
-
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
@@ -19,8 +17,6 @@ var db *data.Database
 
 
 func init(){
-    // Test Bed
-    os.Setenv("APP_ENV", "test")
 
     cfg, err := config.Load()
     if err != nil {

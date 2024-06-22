@@ -1,8 +1,6 @@
 package cli_test
 
 import (
-	"os"
-
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
@@ -18,8 +16,6 @@ var db *data.Database
 
 
 func init(){
-    // Test Bed
-    os.Setenv("APP_ENV", "test")
 
     cfg, err := config.Load()
     if err != nil {

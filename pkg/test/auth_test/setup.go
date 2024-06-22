@@ -1,7 +1,7 @@
 package auth_test
 
 import (
-	"os"
+	"fmt"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
@@ -18,12 +18,9 @@ var db *data.Database
 
 
 func init(){
-    // Test Bed
-    os.Setenv("APP_ENV", "test")
-
     cfg, err := config.Load()
     if err != nil {
-        panic(err)
+        fmt.Errorf("Failed to load config: %v", err)
     }
     
     log = logger.NewLogger(logger.LoggerConfig{
@@ -36,7 +33,6 @@ func init(){
 	db, err := data.LoadDB()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to database")
-		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
     
