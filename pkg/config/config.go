@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -23,7 +24,7 @@ type Config struct {
 	AppEnv   string `env:"APP_ENV" default:"dev"`
 	LogLevel string `env:"LOG_LEVEL" default:"debug"`
 	DBPath   string `env:"DB_PATH" default:"./data.db"`
-    FirebaseAdminSdk string `env:"FIREBASE_ADMIN_SDK" default:""`
+    FirebaseSecret string `env:"FIREBASE_SECRET" default:""`
     Session map[string]string
     envFile string
 }
@@ -62,7 +63,7 @@ func (c *Config) SetSession(key string, value string) error {
     err := godotenv.Write(map[string]string{
         "LOG_LEVEL": c.LogLevel,
         "DB_PATH": c.DBPath,
-        "FIREBASE_ADMIN_SDK": c.FirebaseAdminSdk,
+        "FIREBASE_SECRET": c.FirebaseSecret,
         storedKey: value,
     }, c.envFile)
     
@@ -127,7 +128,14 @@ func Load() (*Config, error) {
 
     config.LogLevel = os.Getenv("LOG_LEVEL")
 	config.DBPath = os.Getenv("DB_PATH")
-    config.FirebaseAdminSdk = os.Getenv("FIREBASE_ADMIN_SDK")
+
+    // decode firebase secret
+    fbSecret := os.Getenv("FIREBASE_SECRET")
+    decoded, err := base64.StdEncoding.DecodeString(fbSecret)
+    if err != nil {
+        return nil, err
+    }
+    config.FirebaseSecret = string(decoded)
 
     // Set session variables
     config.Session = make(map[string]string)
