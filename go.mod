@@ -2,10 +2,6 @@ module github.com/frangdelsolar/todo_cli
 
 go 1.22.4
 
-replace github.com/frangdelsolar/todo_cli/pkg/config => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/config
-
-replace github.com/frangdelsolar/todo_cli/pkg/contractor => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/contractor
-
 require (
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6
 	github.com/frangdelsolar/todo_cli/pkg/config v1.0.5

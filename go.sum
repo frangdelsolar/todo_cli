@@ -40,6 +40,10 @@ github.com/felixge/httpsnoop v1.0.4 h1:NFTV2Zj1bL4mc9sqWACXbQFVBBg2W3GPvqp8/ESS2
 github.com/felixge/httpsnoop v1.0.4/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6 h1:IN6ghZIghVgRda7VLegLz2W+koh/4XVg62paW2Nws9w=
 github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6/go.mod h1:RNbAri8bP4xpWp9nvuOSvaFfq/BWvYvTdP7wQpojnrk=
+github.com/frangdelsolar/todo_cli/pkg/config v1.0.5 h1:gOH/LDKyEBtfiCtQCQ9XWOWx3wE3D2eaDTrA0XtV1Hk=
+github.com/frangdelsolar/todo_cli/pkg/config v1.0.5/go.mod h1:s8Plk2KG/CZigTiproEPeG1VCECTKTYT9OEo6tYppZs=
+github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.1 h1:PM8sgknpMJB1sKAuzBuRKsgxFL9yNVmgNjmZ7CRsUy8=
+github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.1/go.mod h1:mwy2CF5p3FdYOikh9SOI70M6beNWhKRyQmL8oBw5Glk=
 github.com/frangdelsolar/todo_cli/pkg/currency v1.0.4 h1:PaFAXD9oQwjmEHklwq9WNbF0CbvA9h12nAWkjROHB2Q=
 github.com/frangdelsolar/todo_cli/pkg/currency v1.0.4/go.mod h1:X5TsBHqTEKU9+32pW7wL76U81IkXb0jPhF2RBAAV7U4=
 github.com/frangdelsolar/todo_cli/pkg/data v1.1.6 h1:5vLJUquJXKloy2jn7/RqAU//HfaNMPFErYKkl8+IvRM=
