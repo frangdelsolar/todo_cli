@@ -18,8 +18,19 @@ jobs:
         run: go mod download
 
       - name: Run tests
-        run: go run gh_test/main.go
-        # run: APP_ENV=test go run pkg/test/cmd/main.go
+        run: go run gh_test/main.go  # Replace with your test script path
+
+      - name: Check for test errors (optional - alternative)
+        uses: actions/github-script@v6
+        if: always()  # Run even if previous step succeeds
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            # Check for error messages in logs (adjust based on your logger)
+            if grep -q "Test Error" ${{ github.workspace }}/**/*.log; then
+              echo "Tests failed. Fix the errors before merging."
+              exit 1
+            fi
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
