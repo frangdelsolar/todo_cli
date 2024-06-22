@@ -12,7 +12,7 @@ import (
 
 const (
     PKG_NAME      = "Logger PKG"
-    PKG_VERSION   = "1.1.2"
+    PKG_VERSION   = "1.1.3"
     defaultLogFile = "default.log"
     logsDir        = "logs"
     defaultLogLevel = zerolog.DebugLevel
