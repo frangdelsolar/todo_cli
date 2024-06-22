@@ -17,9 +17,12 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
+      - name: Create directory for decoded secret (optional)
+        run: mkdir secrets
+      
       - name: Decode Firebase secret (optional)**
         run: |
-            echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > secretd/todoapp-firebase-admin-sdk.json
+            echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > secrets/todoapp-firebase-admin-sdk.json
         if: always()  
 
       - name: Run tests
