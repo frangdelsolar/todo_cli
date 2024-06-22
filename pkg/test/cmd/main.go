@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	at "github.com/frangdelsolar/todo_cli/pkg/test/auth_test"
 	cli "github.com/frangdelsolar/todo_cli/pkg/test/cli_test"
@@ -17,9 +18,15 @@ var PKG_NAME = "Test PKG"
 var PKG_VERSION = "1.0.2"
 
 var log *logger.Logger
+var cfg *config.Config
 
 
 func main(){
+    var err error
+    cfg, err = config.Load()
+    if err != nil {
+        fmt.Errorf("Failed to load config: %v", err)
+    }
     
     log = logger.NewLogger(logger.LoggerConfig{
         PackageName: PKG_NAME,
@@ -27,6 +34,7 @@ func main(){
     })
 
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
+    log.Debug().Interface("Config", cfg).Msg("Loaded Config")
 
     at.RunAuthTests()
     ct.RunCurrencyTests()
