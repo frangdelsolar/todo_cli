@@ -22,6 +22,11 @@ jobs:
 
       - name: Decode Firebase secret (optional)**
         run: |
+            echo "${{ secrets.ENV_TEST }}" | base64 --decode > pkg/test/cmd/.env.test
+        if: always()  
+
+      - name: Decode Firebase secret (optional)**
+        run: |
             echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > todoapp-firebase-admin-sdk.json
         if: always()  
 
