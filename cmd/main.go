@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-
 	"github.com/frangdelsolar/todo_cli/cmd/cli"
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
@@ -40,9 +38,6 @@ func main(){
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
-    
-    err = errors.New("test error")
-    log.Err(err).Msg("this should make merge fail")
 
     auth.InitAuth()
     c.InitContractor()
