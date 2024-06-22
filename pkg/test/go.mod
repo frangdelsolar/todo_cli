@@ -3,13 +3,13 @@ module github.com/frangdelsolar/todo_cli/pkg/test
 go 1.22.4
 
 require (
-	github.com/frangdelsolar/todo_cli v1.0.5
+	github.com/frangdelsolar/todo_cli v1.0.6
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6
 	github.com/frangdelsolar/todo_cli/pkg/config v1.0.5
-	github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.1
+	github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.3
 	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.4
 	github.com/frangdelsolar/todo_cli/pkg/data v1.1.6
-	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.2
+	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.3
 )
 
 require (

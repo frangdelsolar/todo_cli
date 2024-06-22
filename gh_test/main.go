@@ -1,8 +1,6 @@
 package main
 
 import (
-	"errors"
-
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
@@ -21,11 +19,11 @@ func main(){
 
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
-    err := errors.New("Some random shit")
-    log.Err(err).Msg("More shit here")
+    // err := errors.New("Some random shit")
+    // log.Err(err).Msg("More shit here")
 
-    if err != nil {
-        log.Fatal().Msg("Exiting with error")
+    // if err != nil {
+        // log.Fatal().Msg("Exiting with error")
         // os.Exit(1) // Exit with non-zero code
-    }
+    // }
 }
