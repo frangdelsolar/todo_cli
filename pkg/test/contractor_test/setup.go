@@ -49,4 +49,6 @@ func RunContractorTests(){
 
     TestCreateContractor()
     TestUpdateContractorName()
+    TestCreateFrequency()
+    TestFrequencyValidator()
 }
