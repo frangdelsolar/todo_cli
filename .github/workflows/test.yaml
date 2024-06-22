@@ -13,9 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3 
 
-      - name: Print secrets
-        run: echo ${{ secrets.GITHUB_TOKEN }} && echo ${{ secrets.FIREBASE_SECRET }}
-
       - name: Tidy
         run: go mod tidy
 
@@ -25,7 +22,7 @@ jobs:
       - name: Change directory and run tests
         env:
           APP_ENV: cicd
-          FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
+          FIREBASE_SECRET: ${{ env.FIREBASE_SECRET }}
           DB_PATH: ${{ github.workspace }}/cicd.db
           LOG_LEVEL: debug
         run: cd pkg/test/cmd && go run .
