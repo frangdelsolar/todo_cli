@@ -9,8 +9,8 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-var PKG_NAME = "TODO APP"
-var PKG_VERSION = "1.6.0"
+var PKG_NAME = "TODO CLI APP"
+var PKG_VERSION = "1.0.6"
 
 var cfg *config.Config
 var log *logger.Logger
