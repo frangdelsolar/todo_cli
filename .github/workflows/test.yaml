@@ -19,34 +19,6 @@ jobs:
 
       - name: Run tests
         run: go run gh_test/main.go  # Replace with your test script path
-    
-      - name: Grant read permissions
-        run: chmod +r ${{ github.workspace }}
-
-      - name: Check for test errors (optional - alternative)
-        uses: actions/github-script@v6
-        if: always()  # Run even if previous step succeeds
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const fs = require('fs');
-            const pattern = "error";
-
-            function hasErrorInLogs(pattern) {
-              const files = fs.readdirSync('**/*.log', { recursive: true });
-              for (const file of files) {
-                const content = fs.readFileSync(file, 'utf8');
-                if (content.includes(pattern)) {
-                  return true;
-                }
-              }
-              return false;
-            }
-
-            if (hasErrorInLogs('Test Error')) {
-              console.log('Tests failed. Fix the errors before merging.');
-              process.exit(1);
-            }
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
