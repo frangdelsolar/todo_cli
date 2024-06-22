@@ -40,7 +40,7 @@ func init(){
     auth.InitAuth()
 }
 
-func RunAuthTests(t *test.Test){
+func RunAuthTests(t *test.TestRunner){
     log.Info().Msg("Running Auth Tests")
 
     TestCreateUser(t)

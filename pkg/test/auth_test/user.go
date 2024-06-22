@@ -16,7 +16,7 @@ import (
 // It then checks if the user's email is not equal to the expected email and logs an error message indicating that the expected email was not received.
 // If the user's email is equal to the expected email, it logs a debug message indicating that the expected email was received.
 // Finally, it logs a debug message indicating that a user was created and an informational message indicating that the user was created successfully.
-func TestCreateUser(t *test.Test){
+func TestCreateUser(t *test.TestRunner){
     t.Run("TestCreateUser()")
 
     name := "pepe"

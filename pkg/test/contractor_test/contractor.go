@@ -9,7 +9,7 @@ import (
 )
 
 
-func TestCreateContractor(t *test.Test) {
+func TestCreateContractor(t *test.TestRunner) {
     t.Run("TestCreateContractor()")
 
     // Data prep
@@ -31,7 +31,7 @@ func TestCreateContractor(t *test.Test) {
     t.Stop()
 }
 
-func TestUpdateContractorName(t *test.Test) {
+func TestUpdateContractorName(t *test.TestRunner) {
     t.Run("TestUpdateContractorName()")
 
     // Data prep

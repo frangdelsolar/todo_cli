@@ -8,7 +8,7 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
-func TestCreateFrequency(t *test.Test) {
+func TestCreateFrequency(t *test.TestRunner) {
     t.Run("TestCreateFrequency()")
 
     // Data prep
@@ -37,7 +37,7 @@ func TestCreateFrequency(t *test.Test) {
     t.Stop()
 }
 
-func TestFrequencyValidator(t *test.Test) {
+func TestFrequencyValidator(t *test.TestRunner) {
     t.Run("TestFrequencyValidator()")
 
     // User validation

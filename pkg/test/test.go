@@ -7,7 +7,7 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-var t *Test
+var t *TestRunner
 
 var log *logger.Logger
 
@@ -20,7 +20,7 @@ type Running struct {
     Count int
 }
 
-type Test struct {
+type TestRunner struct {
     Errors []error
     Current *Running
 }
@@ -33,8 +33,8 @@ type Test struct {
 //
 // Returns:
 // - *Test: A pointer to the newly created Test instance.
-func NewTest() *Test {
-    t = &Test{
+func NewTestRunner() *TestRunner {
+    t = &TestRunner{
         Errors: make([]error, 0),
         Current: &Running{},
     }
@@ -48,7 +48,7 @@ func NewTest() *Test {
 // This function is a getter method that returns the instance of the Test struct.
 // It does not take any parameters.
 // It returns a pointer to the Test struct.
-func GetTest() *Test {
+func GetTest() *TestRunner {
     return t
 }
 
@@ -59,7 +59,7 @@ func GetTest() *Test {
 // - b: The second value to compare.
 //
 // Returns: None.
-func (t *Test) AssertEqual (a interface{}, b interface{}) {
+func (t *TestRunner) AssertEqual (a interface{}, b interface{}) {
     if a != b {
         err := fmt.Errorf("expected %v, got %v", a, b)
         t.Errors = append(t.Errors, fmt.Errorf("expected %v, got %v", a, b))
@@ -90,7 +90,7 @@ func (t *Test) AssertEqual (a interface{}, b interface{}) {
 // it logs a debug message indicating that the assertion passed.
 //
 // Returns: None.
-func (t *Test) AssertErrorContains (err error, expected string) {
+func (t *TestRunner) AssertErrorContains (err error, expected string) {
     if err == nil {
         err = fmt.Errorf("expected error, got nil")
         t.Errors = append(t.Errors, err)
@@ -118,7 +118,7 @@ func (t *Test) AssertErrorContains (err error, expected string) {
 // - err: The error to be checked.
 //
 // Returns: None.
-func (t *Test) AssertErrorNil (err error) {
+func (t *TestRunner) AssertErrorNil (err error) {
     if err != nil {
         t.Errors = append(t.Errors, err)
         log.Err(err).Msgf("Assertion failed")
@@ -133,7 +133,7 @@ func (t *Test) AssertErrorNil (err error) {
 // It takes a parameter `a` of type `interface{}` which represents the value to be checked.
 // If the value is `nil`, it appends an error to the `Errors` slice of the `Test` struct and logs a failure message.
 // Otherwise, it logs a debug message indicating that the assertion passed.
-func (t *Test) AssertNotEmpty (a interface{}) {
+func (t *TestRunner) AssertNotEmpty (a interface{}) {
     if a == nil {
         err := fmt.Errorf("expected not empty, got empty")
         t.Errors = append(t.Errors, err)
@@ -153,7 +153,7 @@ func (t *Test) AssertNotEmpty (a interface{}) {
 // - testName: The name of the test to be executed.
 //
 // Returns: None.
-func (t *Test) Run(testName string) {
+func (t *TestRunner) Run(testName string) {
 
     if t.Current.Name == "" {
 
@@ -175,7 +175,7 @@ func (t *Test) Run(testName string) {
 //
 // No parameters.
 // No return values.
-func (t *Test) Stop() {
+func (t *TestRunner) Stop() {
     if len(t.Errors) > t.Current.Count {
         log.Error().Msgf("Failed %s", t.Current.Name)
     } else {

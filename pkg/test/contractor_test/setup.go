@@ -45,7 +45,7 @@ func init(){
 
 }
 
-func RunContractorTests(t *test.Test) {
+func RunContractorTests(t *test.TestRunner) {
     log.Info().Msg("Running Contractor Tests")
 
     TestCreateContractor(t)

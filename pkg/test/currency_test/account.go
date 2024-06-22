@@ -17,7 +17,7 @@ import (
 // 3. Asserts that the created account has the expected properties, such as name, currency code, total amount, default account status, and created by user.
 //
 // The function does not take any parameters and does not return any values.
-func TestCreateAccount(t *test.Test){
+func TestCreateAccount(t *test.TestRunner){
     t.Run("TestCreateAccount()")
     
     // Data prep
@@ -55,7 +55,7 @@ func TestCreateAccount(t *test.Test){
 // 4. Retrieves the updated account balance and asserts that it matches the expected values.
 //
 // The function takes no parameters and does not return any values.
-func TestUpdateAccountCredit(t *test.Test){
+func TestUpdateAccountCredit(t *test.TestRunner){
     t.Run("TestUpdateAccountCredit()")
 
     // Data prep

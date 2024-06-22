@@ -20,7 +20,7 @@ import (
 // 6. If any assertion fails, logs an error message with the expected and actual values.
 //
 // This function does not return any value.
-func TestAddCurrencySameCode(t *test.Test){
+func TestAddCurrencySameCode(t *test.TestRunner){
     t.Run("TestAddCurrencySameCode()")
 
     // data prep
@@ -75,7 +75,7 @@ func TestAddCurrencySameCode(t *test.Test){
 // - Performs assertions on the resulting currency's amount, code, conversion, and exchange rate.
 //
 // The function does not take any parameters and does not return any values.
-func TestAddCurrencyDifferentCode(t *test.Test){
+func TestAddCurrencyDifferentCode(t *test.TestRunner){
     t.Run("TestAddCurrencyDifferentCode()")
 
     // data prep
@@ -142,7 +142,7 @@ func TestAddCurrencyDifferentCode(t *test.Test){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencySameCode(t *test.Test){
+func TestSubCurrencySameCode(t *test.TestRunner){
     t.Run("TestSubCurrencySameCode()")
 
     // data prep
@@ -203,7 +203,7 @@ func TestSubCurrencySameCode(t *test.Test){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencyDifferentCode(t *test.Test){
+func TestSubCurrencyDifferentCode(t *test.TestRunner){
     t.Run("TestSubCurrencyDifferentCode()")
 
     // data prep

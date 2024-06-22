@@ -5,7 +5,7 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
-func TestValidateEffectivePeriod(t *test.Test) {
+func TestValidateEffectivePeriod(t *test.TestRunner) {
     t.Run("TestValidateEffectivePeriod()")
 
     epInput := &c.NewEffectivePeriodInput{

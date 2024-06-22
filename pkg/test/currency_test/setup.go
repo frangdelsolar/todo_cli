@@ -45,7 +45,7 @@ func init(){
 
 }
 
-func RunCurrencyTests(t *test.Test){
+func RunCurrencyTests(t *test.TestRunner){
     log.Info().Msg("Running Currency Tests")
 
     TestAddCurrencySameCode(t)
