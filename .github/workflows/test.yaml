@@ -22,11 +22,16 @@ jobs:
 
       - name: Decode Firebase secret (optional)**
         run: |
-            echo "${{ secrets.ENV_TEST }}" | base64 --decode > pkg/test/cmd/.env.test |
-            echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > todoapp-firebase-admin-sdk.json |
-            cd pkg/test/cmd && APP_ENV=test DB_PATH=test.db LOG_LEVEL=debug FIREBASE_ADMIN_SDK=todoapp-firebase-admin-sdk.json go run .
+            echo "${{ secrets.ENV_TEST }}" | base64 --decode > pkg/test/cmd/.env.test
         if: always()  
 
+      - name: Decode Firebase secret (optional)**
+        run: |
+            echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > todoapp-firebase-admin-sdk.json
+        if: always()  
+
+      - name: Change directory and run tests
+        run: cd pkg/test/cmd && APP_ENV=test DB_PATH=test.db LOG_LEVEL=debug FIREBASE_ADMIN_SDK=todoapp-firebase-admin-sdk.json go run .
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3

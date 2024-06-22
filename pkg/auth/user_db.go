@@ -76,12 +76,12 @@ func CreateUser(name string, email string, password string) (*User, error) {
     /*
        Create Firebase User
     */
-    fu, err := fa.RegisterUser(name, email, password)
-    if err != nil {
-        log.Warn().Msg("Error creating firebase user")
-    } else {
-        u.FirebaseId = fu.UID
-    }
+    // fu, err := fa.RegisterUser(name, email, password)
+    // if err != nil {
+    //     log.Warn().Msg("Error creating firebase user")
+    // } else {
+    //     u.FirebaseId = fu.UID
+    // }
 
 	db.Create(&u)
 
