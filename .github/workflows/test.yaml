@@ -25,9 +25,11 @@ jobs:
             echo "${{ secrets.FIREBASE_SECRET }}" | base64 --decode > secrets/todoapp-firebase-admin-sdk.json
         if: always()  
 
+      - name: Change directory
+        run: cd pkg/test/cmd
+
       - name: Run tests
-        # run: go run gh_test/main.go  # Replace with your test script path
-        run: go run pkg/test/cmd/main.go
+        run: APP_ENV=test go run .
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
