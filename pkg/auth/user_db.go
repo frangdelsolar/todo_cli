@@ -22,6 +22,24 @@ func GetUserById(id string) (*User, error) {
 	return &u, nil
 }
 
+// GetUserByEmail retrieves a user from the database by their ID.
+//
+// Parameters:
+// - email: the email of the user to retrieve.
+//
+// Returns:
+// - *User
+func GetUserByEmail(email string) (*User, error) {
+	var u User
+	
+	db.First(&u, "email = ?", email)
+	if u == (User{}) {
+		return nil, fmt.Errorf("user with email %s not found", fmt.Sprint(email))
+	}
+	
+	return &u, nil
+}
+
 
 // GetAllUsers retrieves all users from the database.
 //
@@ -56,9 +74,8 @@ func CreateUser(name string, email string, password string) (*User, error) {
 	}
 
     /*
-        Still not sure if this is the right place to make firebase user
+       Create Firebase User
     */
-    // create firebase user
     fu, err := fa.RegisterUser(name, email, password)
     if err != nil {
         log.Warn().Msg("Error creating firebase user")
