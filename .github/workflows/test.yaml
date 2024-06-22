@@ -26,7 +26,8 @@ jobs:
         if: always()  
 
       - name: Run tests
-        run: go run gh_test/main.go  # Replace with your test script path
+        # run: go run gh_test/main.go  # Replace with your test script path
+        run: go run pkg/test/cmd/main.go
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
