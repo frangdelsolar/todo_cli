@@ -7,6 +7,7 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 var PKG_NAME = "Auth Test PKG"
@@ -39,8 +40,8 @@ func init(){
     auth.InitAuth()
 }
 
-func RunAuthTests(){
+func RunAuthTests(t *test.Test){
     log.Info().Msg("Running Auth Tests")
 
-    TestCreateUser()
+    TestCreateUser(t)
 }

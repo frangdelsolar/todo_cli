@@ -8,6 +8,7 @@ import (
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 var PKG_NAME = "Contractor Test PKG"
@@ -44,11 +45,13 @@ func init(){
 
 }
 
-func RunContractorTests(){
+func RunContractorTests(t *test.Test) {
     log.Info().Msg("Running Contractor Tests")
 
-    TestCreateContractor()
-    TestUpdateContractorName()
-    TestCreateFrequency()
-    TestFrequencyValidator()
+    TestCreateContractor(t)
+    TestUpdateContractorName(t)
+    TestCreateFrequency(t)
+    TestFrequencyValidator(t)
+    TestValidateEffectivePeriod(t)
+
 }

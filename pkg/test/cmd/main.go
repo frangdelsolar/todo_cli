@@ -8,6 +8,8 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
+
 	at "github.com/frangdelsolar/todo_cli/pkg/test/auth_test"
 	cli "github.com/frangdelsolar/todo_cli/pkg/test/cli_test"
 	co "github.com/frangdelsolar/todo_cli/pkg/test/contractor_test"
@@ -20,6 +22,7 @@ var PKG_VERSION = "1.0.2"
 var log *logger.Logger
 var cfg *config.Config
 
+var t *test.Test
 
 func main(){
     var err error
@@ -36,9 +39,11 @@ func main(){
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
     log.Debug().Interface("Config", cfg).Msg("Loaded Config")
 
-    at.RunAuthTests()
-    ct.RunCurrencyTests()
-    co.RunContractorTests()
+    t = test.NewTest()
+
+    at.RunAuthTests(t)
+    ct.RunCurrencyTests(t)
+    co.RunContractorTests(t)
     cli.RunCliTests()
 
     // Find errors in log files

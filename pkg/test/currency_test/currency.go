@@ -6,6 +6,7 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	c "github.com/frangdelsolar/todo_cli/pkg/currency"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 // TestAddCurrencySameCode tests the AddCurrency function when both currencies have the same code.
@@ -19,8 +20,8 @@ import (
 // 6. If any assertion fails, logs an error message with the expected and actual values.
 //
 // This function does not return any value.
-func TestAddCurrencySameCode(){
-    log.Info().Msg("Testing AddCurrencySameCode()")
+func TestAddCurrencySameCode(t *test.Test){
+    t.Run("TestAddCurrencySameCode()")
 
     // data prep
     owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
@@ -34,8 +35,6 @@ func TestAddCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", a).Msg("Created A Currency")
-
 
     bAmount := "200.00"
     bCode := "USD"
@@ -45,7 +44,6 @@ func TestAddCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -54,42 +52,18 @@ func TestAddCurrencySameCode(){
         log.Err(err).Msg("Failed to add currency")
     }
 
-    log.Trace().Interface("Currency", ccy).Msg("Added Currency")
-    log.Info().Msg("Added Currency Successfully")
-
     // assertions
     expectedAmount := 300.00
     expectedCode := c.CurrencyUnit("USD")
     expectedConversion := 300.00
     expectedRate := 1.00
 
-    if ccy.Amount != expectedAmount {
-        err = fmt.Errorf("expected amount %f, got %f", expectedAmount, ccy.Amount)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected amount %f, got %f", expectedAmount, ccy.Amount)
-    }
+    t.AssertEqual(ccy.Amount, expectedAmount)
+    t.AssertEqual(ccy.CurrencyCode, expectedCode)
+    t.AssertEqual(ccy.Conversion, expectedConversion)
+    t.AssertEqual(ccy.ExchangeRate, expectedRate)
 
-    if ccy.CurrencyCode != expectedCode {
-        err = fmt.Errorf("expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-    }
-
-    if ccy.Conversion != expectedConversion {
-        err = fmt.Errorf("expected conversion %f, got %f", expectedConversion, ccy.Conversion)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f, got %f", expectedConversion, ccy.Conversion)
-    }
-
-    if ccy.ExchangeRate != expectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-        log.Err(err).Msg("TestAddCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-    }
+    t.Stop()
 }
 
 // TestAddCurrencyDifferentCode is a test function that tests the AddCurrency function when the currencies have different codes.
@@ -101,8 +75,8 @@ func TestAddCurrencySameCode(){
 // - Performs assertions on the resulting currency's amount, code, conversion, and exchange rate.
 //
 // The function does not take any parameters and does not return any values.
-func TestAddCurrencyDifferentCode(){
-    log.Info().Msg("Testing AddCurrencyDifferentCode()")
+func TestAddCurrencyDifferentCode(t *test.Test){
+    t.Run("TestAddCurrencyDifferentCode()")
 
     // data prep
     owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
@@ -116,8 +90,6 @@ func TestAddCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", a).Msg("Created A Currency")
-
 
     bAmount := "8.00"
     bCode := "ARS"
@@ -127,25 +99,13 @@ func TestAddCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Test Rates
     bExpectedRate := 4.00
     bExpectedConversion := 2.00
 
-    if b.ExchangeRate != bExpectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", bExpectedRate, b.ExchangeRate)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", bExpectedRate, b.ExchangeRate)
-    }
-
-    if b.Conversion != bExpectedConversion {
-        err = fmt.Errorf("expected conversion %f, got %f", bExpectedConversion, b.Conversion)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f, got %f", bExpectedConversion, b.Conversion)
-    }
+    t.AssertEqual(b.ExchangeRate, bExpectedRate)
+    t.AssertEqual(b.Conversion, bExpectedConversion)
     // End test rates
 
     // Perform test
@@ -155,42 +115,18 @@ func TestAddCurrencyDifferentCode(){
         log.Err(err).Msg("Failed to add currency")
     }
 
-    log.Trace().Interface("Currency", ccy).Msg("Added Currency")
-    log.Info().Msg("Added Currency Successfully")
-
     // assertions
     expectedAmount := 102.00
     expectedCode := c.CurrencyUnit("USD")
     expectedConversion := 102.00
     expectedRate := 1.00
 
-    if ccy.Amount != expectedAmount {
-        err = fmt.Errorf("expected amount %f, got %f", expectedAmount, ccy.Amount)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected amount %f, got %f", expectedAmount, ccy.Amount)
-    }
+    t.AssertEqual(ccy.Amount, expectedAmount)
+    t.AssertEqual(ccy.CurrencyCode, expectedCode)
+    t.AssertEqual(ccy.Conversion, expectedConversion)
+    t.AssertEqual(ccy.ExchangeRate, expectedRate)
 
-    if ccy.CurrencyCode != expectedCode {
-        err = fmt.Errorf("expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-    }
-
-    if ccy.Conversion != expectedConversion {
-        err = fmt.Errorf("expected conversion %f, got %f", expectedConversion, ccy.Conversion)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f, got %f", expectedConversion, ccy.Conversion)
-    }
-
-    if ccy.ExchangeRate != expectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-        log.Err(err).Msg("AddCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-    }
+    t.Stop()
 }
 
 // TestSubCurrencySameCode is a test function that checks the subtraction of two currencies with the same code.
@@ -206,8 +142,8 @@ func TestAddCurrencyDifferentCode(){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencySameCode(){
-    log.Info().Msg("Testing SubCurrencySameCode()")
+func TestSubCurrencySameCode(t *test.Test){
+    t.Run("TestSubCurrencySameCode()")
 
     // data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -221,7 +157,6 @@ func TestSubCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
     bAmount := "25.00"
     bCode := "ARS"
@@ -231,7 +166,6 @@ func TestSubCurrencySameCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -240,42 +174,18 @@ func TestSubCurrencySameCode(){
         log.Err(err).Msg("Failed to sub currency")
     }
 
-    log.Trace().Interface("Currency", ccy).Msg("Substracted Currency")
-    log.Info().Msg("Substracted Currency Successfully")
-
     // assertions
     expectedAmount := 75.00
     expectedCode := c.CurrencyUnit("ARS")
     expectedRate := 1040.00
     expectedConversion := fmt.Sprintf("%.2f", expectedAmount / expectedRate) 
 
-    if ccy.Amount != expectedAmount {
-        err = fmt.Errorf("expected amount %f, got %f", expectedAmount, ccy.Amount)
-        log.Err(err).Msg("TestSubCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected amount %f, got %f", expectedAmount, ccy.Amount)
-    }
+    t.AssertEqual(ccy.Amount, expectedAmount)
+    t.AssertEqual(ccy.CurrencyCode, expectedCode)
+    t.AssertEqual(fmt.Sprintf("%.2f", ccy.Conversion), expectedConversion)
+    t.AssertEqual(ccy.ExchangeRate, expectedRate)
 
-    if ccy.CurrencyCode != expectedCode {
-        err = fmt.Errorf("expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-        log.Err(err).Msg("TestSubCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-    }
-    
-    if fmt.Sprintf("%.2f", ccy.Conversion) != expectedConversion {
-        err = fmt.Errorf("expected conversion %f to be equal to %f", ccy.Conversion, expectedAmount / expectedRate)
-        log.Err(err).Msg("TestSubCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f to be equal to %f", ccy.Conversion, expectedAmount / expectedRate)
-    }
-
-    if ccy.ExchangeRate != expectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-        log.Err(err).Msg("TestSubCurrencySameCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-    }
+    t.Stop()
 }
 
 // TestSubCurrencyDifferentCode is a test function that tests the SubCurrency function when the currencies have different codes.
@@ -293,8 +203,8 @@ func TestSubCurrencySameCode(){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencyDifferentCode(){
-    log.Info().Msg("Testing SubCurrencyDifferentCode()")
+func TestSubCurrencyDifferentCode(t *test.Test){
+    t.Run("TestSubCurrencyDifferentCode()")
 
     // data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -308,26 +218,14 @@ func TestSubCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", a).Msg("Created A Currency")
 
     // Test A Rates
     aExpectedRate := 1000.00
     aExpectedConversion := 20.00
     aExpectedConversionStr := fmt.Sprintf("%.2f", aExpectedConversion)
 
-    if a.ExchangeRate != aExpectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", aExpectedRate, a.ExchangeRate)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", aExpectedRate, a.ExchangeRate)
-    }
-
-    if fmt.Sprintf("%.2f", a.Conversion) != aExpectedConversionStr {
-        err = fmt.Errorf("expected conversion %f to be equal to %f", aExpectedConversion, a.Conversion)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f to be equal to %f", aExpectedConversion, a.Conversion)
-    }
+    t.AssertEqual(a.ExchangeRate, aExpectedRate)
+    t.AssertEqual(fmt.Sprintf("%.2f", a.Conversion), aExpectedConversionStr)
     // End test rates
 
     bAmount := "4.00"
@@ -338,7 +236,6 @@ func TestSubCurrencyDifferentCode(){
     if err != nil {
         log.Err(err).Msg("Failed to create currency")
     }
-    log.Trace().Interface("Currency", b).Msg("Created B Currency")
 
     // Perform test
     cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
@@ -347,41 +244,17 @@ func TestSubCurrencyDifferentCode(){
         log.Err(err).Msg("Failed to sub currency")
     }
 
-    log.Trace().Interface("Currency", ccy).Msg("Substracted Currency")
-    log.Info().Msg("Substracted Currency Successfully")
-
     // assertions
     expectedAmount := 16640.00
     expectedCode := c.CurrencyUnit("ARS")
     expectedRate := 1040.00
     expectedConversion := fmt.Sprintf("%.2f", expectedAmount / expectedRate)
 
-    if ccy.Amount != expectedAmount {
-        err = fmt.Errorf("expected amount %f, got %f", expectedAmount, ccy.Amount)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected amount %f, got %f", expectedAmount, ccy.Amount)
-    }
+    t.AssertEqual(ccy.Amount, expectedAmount)
+    t.AssertEqual(ccy.CurrencyCode, expectedCode)
+    t.AssertEqual(fmt.Sprintf("%.2f", ccy.Conversion), expectedConversion)
+    t.AssertEqual(ccy.ExchangeRate, expectedRate)
 
-    if ccy.CurrencyCode != expectedCode {
-        err = fmt.Errorf("expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected code %s, got %s", expectedCode, ccy.CurrencyCode)
-    }
-    
-    if fmt.Sprintf("%.2f", ccy.Conversion) != expectedConversion {
-        err = fmt.Errorf("expected conversion %f to be equal to %f", ccy.Conversion, expectedAmount / expectedRate)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected conversion %f to be equal to %f", ccy.Conversion, expectedAmount / expectedRate)
-    }
-
-    if ccy.ExchangeRate != expectedRate {
-        err = fmt.Errorf("expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-        log.Err(err).Msg("TestSubCurrencyDifferentCode()")
-    } else {
-        log.Debug().Msgf("Expected rate %f, got %f", expectedRate, ccy.ExchangeRate)
-    }
+    t.Stop()
 }
 

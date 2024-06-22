@@ -1,9 +1,8 @@
 package auth_test
 
 import (
-	"fmt"
-
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 // TestCreateUser is a test function that tests the CreateUser function from the auth package.
@@ -17,8 +16,8 @@ import (
 // It then checks if the user's email is not equal to the expected email and logs an error message indicating that the expected email was not received.
 // If the user's email is equal to the expected email, it logs a debug message indicating that the expected email was received.
 // Finally, it logs a debug message indicating that a user was created and an informational message indicating that the user was created successfully.
-func TestCreateUser(){
-    log.Info().Msg("Testing CreateUser()")
+func TestCreateUser(t *test.Test){
+    t.Run("TestCreateUser()")
 
     name := "pepe"
     email := "pepe@admin.com"
@@ -29,24 +28,8 @@ func TestCreateUser(){
         log.Warn().Msg("Failed to create user")
     }
 
-    if u.Name != name {
-        err = fmt.Errorf("expected name %s, got %s", name, u.Name)
-        log.Err(err).Msg("TestCreateUser()")
-    } else {
-        log.Debug().Msgf("Expected name %s, got %s", name, u.Name)
-    }
+    t.AssertEqual(u.Name, name)
+    t.AssertEqual(u.Email, email)
 
-    if u.Email != email {
-        err = fmt.Errorf("expected email %s, got %s", email, u.Email)
-        log.Err(err).Msg("TestCreateUser()")
-    } else {
-        log.Debug().Msgf("Expected email %s, got %s", email, u.Email)
-    }
-
-    if u.FirebaseId != "" {
-        log.Warn().Msg("expected FirebaseId not to be empty") // It may fail as the user may already exist
-    }
-
-    log.Trace().Interface("User", u).Msg("Created User")
-    log.Info().Msg("Created User Successfully")
+    t.Stop()
 }

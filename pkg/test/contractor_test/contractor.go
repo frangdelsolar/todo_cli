@@ -5,11 +5,12 @@ import (
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 
-func TestCreateContractor() {
-    log.Info().Msg("Testing CreateContractor()")
+func TestCreateContractor(t *test.Test) {
+    t.Run("TestCreateContractor()")
 
     // Data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -25,17 +26,13 @@ func TestCreateContractor() {
     log.Info().Msg("Created Contractor Successfully")
 
     // assertions
+    t.AssertEqual(contractor.Name, name)
 
-    if contractor.Name != name {
-        err = fmt.Errorf("expected name %s, got %s", name, contractor.Name)
-        log.Err(err).Msg("TestCreateContractor()")
-    } else {
-        log.Debug().Msgf("Expected name %s, got %s", name, contractor.Name)
-    }
+    t.Stop()
 }
 
-func TestUpdateContractorName() {
-    log.Info().Msg("Testing UpdateContractorName()")
+func TestUpdateContractorName(t *test.Test) {
+    t.Run("TestUpdateContractorName()")
 
     // Data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -48,22 +45,16 @@ func TestUpdateContractorName() {
         log.Err(err).Msg("Failed to create contractor")
     }
 
-    log.Trace().Interface("Contractor", contractor).Msg("Created Contractor Successfully")   
-
     newName := "Contractor 2"
     err = c.UpdateContractorName(fmt.Sprint(contractor.ID), newName, userId)
     if err != nil {
         log.Err(err).Msg("Failed to update contractor name")
     }
 
-    log.Info().Msg("Updated Contractor Name Successfully")
-
-    // assertions
     updated, _ := c.GetContractorById(fmt.Sprint(contractor.ID), userId)
-    if updated.Name != newName {
-        err = fmt.Errorf("expected name %s, got %s", newName, updated.Name)
-        log.Err(err).Msg("TestUpdateContractorName()")
-    } else {
-        log.Debug().Msgf("Expected name %s, got %s", newName, updated.Name)
-    }
+    
+    // assertions
+    t.AssertEqual(updated.Name, newName)
+
+    t.Stop()
 }

@@ -8,8 +8,6 @@ import (
 	data "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
-
-
 type FrequencyType string
 
 const (
@@ -204,6 +202,7 @@ func NewFrequency(freqInput *NewFrequencyInput)(*Frequency, error) {
 
     err := freqInput.Validate()
     if err != nil {
+        log.Err(err).Msg("Error validating new frequency")
         return nil, err
     }
 

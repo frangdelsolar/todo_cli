@@ -8,6 +8,7 @@ import (
 	c "github.com/frangdelsolar/todo_cli/pkg/currency"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
+	"github.com/frangdelsolar/todo_cli/pkg/test"
 )
 
 var PKG_NAME = "Currency Test PKG"
@@ -44,14 +45,14 @@ func init(){
 
 }
 
-func RunCurrencyTests(){
+func RunCurrencyTests(t *test.Test){
     log.Info().Msg("Running Currency Tests")
 
-    TestAddCurrencySameCode()
-    TestAddCurrencyDifferentCode()
-    TestSubCurrencySameCode()
-    TestSubCurrencyDifferentCode()
-    TestCreateAccount()
-    TestUpdateAccountCredit()
+    TestAddCurrencySameCode(t)
+    TestAddCurrencyDifferentCode(t)
+    TestSubCurrencySameCode(t)
+    TestSubCurrencyDifferentCode(t)
+    TestCreateAccount(t)
+    TestUpdateAccountCredit(t)
 }
 
