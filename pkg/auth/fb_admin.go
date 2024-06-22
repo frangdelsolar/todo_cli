@@ -5,15 +5,12 @@ import (
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/api/option"
 )
 
 var Admin *FirebaseAdmin
 var ctx = context.Background()
-
-type AuthConfig struct {
-	CredentialsFilePath string
-}
 
 type FirebaseAdmin struct {
 	*firebase.App
@@ -63,12 +60,18 @@ func (fa *FirebaseAdmin) VerifyIDToken(ctx context.Context, idToken string) (*au
 // Returns:
 // - *FirebaseAdmin: A pointer to the newly created FirebaseAdmin instance.
 // - error: An error if there was a problem initializing the Firebase app or the authentication client.
-func NewFirebaseAdmin(config *AuthConfig) (*FirebaseAdmin, error) {
+func NewFirebaseAdmin() (*FirebaseAdmin, error) {
 
 	var err error
 	output := FirebaseAdmin{}
 
-	opt := option.WithCredentialsFile(config.CredentialsFilePath)
+    creds, err := google.CredentialsFromJSON(context.Background(), []byte(cfg.FirebaseSecret))
+    if err != nil {
+        log.Err(err).Msg("error initializing firebase")
+        return &output, err
+    }
+
+	opt := option.WithCredentials(creds)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		log.Err(err).Msg("error initializing firebase")

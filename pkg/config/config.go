@@ -1,6 +1,7 @@
 package config
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -23,7 +24,7 @@ type Config struct {
 	AppEnv   string `env:"APP_ENV" default:"dev"`
 	LogLevel string `env:"LOG_LEVEL" default:"debug"`
 	DBPath   string `env:"DB_PATH" default:"./data.db"`
-    FirebaseAdminSdk string `env:"FIREBASE_ADMIN_SDK" default:""`
+    FirebaseSecret string `env:"FIREBASE_SECRET" default:""`
     Session map[string]string
     envFile string
 }
@@ -56,13 +57,14 @@ func (c *Config) SetEnvFile() {
 // - error: an error if there was a problem writing the updated configuration and session to the .env file.
 func (c *Config) SetSession(key string, value string) error {
     c.Session[key] = value
+    os.Setenv(key, value)
 
     // Dump config and session to .env file
     storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
     err := godotenv.Write(map[string]string{
         "LOG_LEVEL": c.LogLevel,
         "DB_PATH": c.DBPath,
-        "FIREBASE_ADMIN_SDK": c.FirebaseAdminSdk,
+        "FIREBASE_SECRET": c.FirebaseSecret,
         storedKey: value,
     }, c.envFile)
     
@@ -107,27 +109,37 @@ func Load() (*Config, error) {
 
     // Set configuration values from environment variables
 	config.AppEnv = os.Getenv("APP_ENV")
-    config.SetEnvFile()
 
-	// Get the current working directory
-	currentDir, err := os.Getwd()
-	if err != nil {
-        fmt.Errorf("error getting current directory")
-        return nil, err
-	}
+    if config.AppEnv != "cicd" {
+        config.SetEnvFile()
 
-	filePath := filepath.Join(currentDir, config.envFile)
+        // Get the current working directory
+        currentDir, err := os.Getwd()
+        if err != nil {
+            fmt.Errorf("error getting current directory")
+            return nil, err
+        }
 
-	// Load environment variables from the file
-	err = godotenv.Load(filePath)
-	if err != nil {
-		fmt.Errorf("error loading %s file", filePath)
-		return nil, err
-	}
+        filePath := filepath.Join(currentDir, config.envFile)
+
+        // Load environment variables from the file
+        err = godotenv.Load(filePath)
+        if err != nil {
+            fmt.Errorf("error loading %s file", filePath)
+            return nil, err
+        }
+    }
 
     config.LogLevel = os.Getenv("LOG_LEVEL")
 	config.DBPath = os.Getenv("DB_PATH")
-    config.FirebaseAdminSdk = os.Getenv("FIREBASE_ADMIN_SDK")
+
+    // decode firebase secret
+    fbSecret := os.Getenv("FIREBASE_SECRET")
+    decoded, err := base64.StdEncoding.DecodeString(fbSecret)
+    if err != nil {
+        return nil, err
+    }
+    config.FirebaseSecret = string(decoded)
 
     // Set session variables
     config.Session = make(map[string]string)
