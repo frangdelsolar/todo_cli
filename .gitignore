@@ -4,3 +4,4 @@
 rates.json
 *secrets*
 *.log
+*.session
