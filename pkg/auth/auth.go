@@ -48,9 +48,9 @@ func InitAuth() {
 
     fa, err = NewFirebaseAdmin(&AuthConfig{CredentialsFilePath: cfg.FirebaseAdminSdk})
     if err != nil {
-        log.Fatal().Err(err).Msg("Failed to initialize Firebase Admin")
-        return
+        log.Err(err).Msg("Failed to initialize Firebase Admin")
     }
+    
     log.Debug().Interface("Admin", fa.App).Msg("Initialized Firebase Admin")
     log.Info(). Msg("Initialized Auth")
 	
