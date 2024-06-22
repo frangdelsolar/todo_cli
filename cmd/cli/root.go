@@ -11,7 +11,6 @@ import (
 var anonymousActions = []utils.SelectableItem{
 	{Key: "register", Label: "Register"},
 	{Key: "login", Label: "Login"},
-    {Key: "todo", Label: "Todo"},
 	{Key: "exit", Label: "Exit"},
 }
 
@@ -46,15 +45,16 @@ and organize your tasks in a centralized and accessible way.
                 auth.RegisterCmd.Run(cmd, args)
             case "login":
                 auth.LoginCmd.Run(cmd, args)
-            case "todo":
-                fmt.Print("todo")
             case "exit":
                 return
             }
 
         },
         PostRun: func(cmd *cobra.Command, args []string) {
-            fmt.Println("Bye!")
+            // wait for user to press any key and then execute again
+            fmt.Print("\nPress any key to continue...")
+            fmt.Scanln()
+            cmd.Execute()
         },
 }
 

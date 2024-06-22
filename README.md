@@ -37,7 +37,7 @@ Todo APP is a command-line tool that empowers you to efficiently manage your tas
     # In your shell configuration file
     todo() {
         cd <path/to/todo_app>  # Replace with the actual path to your Todo APP directory
-        go run . "$@"
+        APP_ENV=dev go run cmd/main.go "$@"
     }
 ```
 
@@ -45,28 +45,4 @@ Todo APP is a command-line tool that empowers you to efficiently manage your tas
 
 ## Usage
 
-Todo APP offers a variety of commands for task management. Run `todo --help` or `todo help` in your terminal to view a list of available commands and their usage details. Here are some common examples:
-
-### - Navigation
-
-```bash
-    todo
-```
-
-### - Create a New Task
-
-```bash
-    todo task create
-```
-
-### - List Tasks
-
-```bash
-    todo task list
-```
-
-### - Delete a Task
-
-```bash
-    todo task delete
-```
+- You can login and register as a user :D
