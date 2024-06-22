@@ -19,6 +19,9 @@ jobs:
 
       - name: Run tests
         run: go run gh_test/main.go  # Replace with your test script path
+    
+      - name: Grant read permissions
+        run: chmod +r ${{ github.workspace }}
 
       - name: Check for test errors (optional - alternative)
         uses: actions/github-script@v6
