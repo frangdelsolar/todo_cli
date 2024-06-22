@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
+      - name: Print secrets
+        run: | 
+        echo ${{ secrets.FIREBASE_SECRET }}
+        echo ${{ secrets.GITHUB_TOKEN }}
+
       - name: Change directory and run tests
         env:
           APP_ENV: cicd
