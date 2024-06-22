@@ -35,7 +35,7 @@ func main(){
     cli.RunCliTests()
 
     err := errors.New("test error")
-    log.Err(err).Msg("this should make merge fail")
+    log.Err(err).Msg("this should make merge fail.")
 
     // Find errors in log files
     logsPattern := "*.log"
