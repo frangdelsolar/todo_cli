@@ -34,4 +34,4 @@ jobs:
         uses: styfle/cancel-workflow-action@0.8.0 
         if: failure()  
         with:
-          message: 'Tests failed. Fix the errors before merging.'
+          message: 'Tests failed. Fix the errors before merging...'
