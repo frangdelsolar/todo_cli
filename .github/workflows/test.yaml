@@ -19,6 +19,11 @@ jobs:
 
       - name: Create directory for decoded secret (optional)
         run: mkdir secrets
+
+      - name: Decode Env**
+        run: |
+            echo "${{ secrets.DOTENVDOTTEST }}" | base64 --decode > pkg/test/cmd/.env.test
+        if: always()  
       
       - name: Decode Firebase secret (optional)**
         run: |
