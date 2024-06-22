@@ -14,7 +14,6 @@ var RegisterCmd = &cobra.Command{
 		Short: "Register a new account",
         Long: `Register a new account. If you already have an account, you can login with the "login" command.`,
         Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("Register")
 
             email, _ := utils.Prompt(utils.PromptConfig{
                 Label: "Email",
@@ -26,12 +25,20 @@ var RegisterCmd = &cobra.Command{
                 Validate: auth.NameValidator,
             })
 
-            user, err := auth.CreateUser(name, email)
+            password, _ := utils.Prompt(utils.PromptConfig{
+                Label: "Password",
+                Validate: auth.NameValidator,
+                Password: true,
+            })
+
+            user, err := auth.CreateUser(name, email, password)
             if err != nil {
                 fmt.Println("Error creating user:", err)
             } else {
                 fmt.Println("User created:", user.ID)
             }
+
+            cfg.SetSession(userKey, fmt.Sprint(user.ID))
         },
 }
 

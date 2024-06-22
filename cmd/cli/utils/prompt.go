@@ -7,6 +7,7 @@ import (
 type PromptConfig struct {
     Label    string
     Validate func(input string) error
+    Password bool 
 }
 
 // Prompt displays a prompt to the user with the provided configuration.
@@ -19,6 +20,10 @@ func Prompt(config PromptConfig) (string, error) {
 		Label:    config.Label,
 		Validate: config.Validate,
 	}
+
+    if config.Password {
+        prompt.Mask = '*'
+    }
 
 	return prompt.Run()
 }

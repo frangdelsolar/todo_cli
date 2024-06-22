@@ -8,10 +8,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootActions = []utils.SelectableItem{
+var anonymousActions = []utils.SelectableItem{
 	{Key: "register", Label: "Register"},
 	{Key: "login", Label: "Login"},
+    {Key: "todo", Label: "Todo"},
 	{Key: "exit", Label: "Exit"},
+}
+
+var rootActions = []utils.SelectableItem{
+    {Key: "exit", Label: "Exit"},
 }
 
 var rootCmd = &cobra.Command{
@@ -23,7 +28,15 @@ With TODO, you can ditch the scattered sticky notes and cluttered reminders,
 and organize your tasks in a centralized and accessible way.
 `,
         Run: func(cmd *cobra.Command, args []string) {
-            selection, err := utils.SelectPrompt("What would you like to do?", rootActions)
+            var actions utils.SelectableList
+            userIsLoggedIn := auth.IsLoggedIn()
+            if !userIsLoggedIn {
+                actions = anonymousActions
+            } else {
+                actions = rootActions
+            }
+
+            selection, err := utils.SelectPrompt("What would you like to do?", actions)
             if err != nil {
                 fmt.Println("Error:", err)
                 return
@@ -33,6 +46,8 @@ and organize your tasks in a centralized and accessible way.
                 auth.RegisterCmd.Run(cmd, args)
             case "login":
                 auth.LoginCmd.Run(cmd, args)
+            case "todo":
+                fmt.Print("todo")
             case "exit":
                 return
             }
