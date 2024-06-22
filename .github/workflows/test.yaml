@@ -48,7 +48,7 @@ jobs:
         run: pwd
 
       - name: Change directory and run tests
-        run: cd pkg/test/cmd && APP_ENV=test DB_PATH=test.db LOG_LEVEL=debug FIREBASE_ADMIN_SDK=todoapp-firebase-admin-sdk.json go run .
+        run: cd pkg/test/cmd && APP_ENV=test DB_PATH=test.db LOG_LEVEL=debug FIREBASE_ADMIN_SDK=/home/runner/work/todo_cli/todo_cli/todoapp-firebase-admin-sdk.json go run .
         if: always()
 
 
