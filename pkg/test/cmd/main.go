@@ -1,6 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	at "github.com/frangdelsolar/todo_cli/pkg/test/auth_test"
 	cli "github.com/frangdelsolar/todo_cli/pkg/test/cli_test"
@@ -27,4 +32,28 @@ func main(){
     ct.RunCurrencyTests()
     co.RunContractorTests()
     cli.RunCliTests()
+
+    // Find errors in log files
+    logsPattern := "*.log"
+    logFiles, err := filepath.Glob(logsPattern)
+    if err != nil {
+        log.Error().Err(err).Msgf("Error finding log files: %v", err)
+        return
+    }
+    errorPattern := "\"level\":\"error\""
+    for _, fileName := range logFiles {
+        // Use grep command to search for "error"
+        cmd := exec.Command("grep", "-i", errorPattern, fileName)
+        output, err := cmd.CombinedOutput()
+        if err != nil {
+            fmt.Errorf("Error running grep command: %v", err)
+            continue
+        }
+
+        if len(output) > 0 {
+            log.Warn().Msgf("Found errors in %s:\n%s", fileName, string(output))
+            os.Exit(1)
+        }
+    }
+
 }
