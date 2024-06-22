@@ -1,11 +1,12 @@
 name: Test Suite
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+    workflow_dispatch: {}
+    
 jobs:
   test:
     runs-on: ubuntu-latest 
