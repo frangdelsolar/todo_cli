@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"os"
 
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
@@ -27,6 +26,6 @@ func main(){
 
     if err != nil {
         log.Fatal().Msg("Exiting with error")
-        os.Exit(1) // Exit with non-zero code
+        // os.Exit(1) // Exit with non-zero code
     }
 }
