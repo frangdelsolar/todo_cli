@@ -45,6 +45,9 @@ type LoggerConfig struct {
 //
 // It takes no parameters and returns a zerolog.Level.
 func (lc LoggerConfig) GetZeroLevel() zerolog.Level {
+    if lc.LogLevel == "" {
+        return defaultLogLevel
+    }
     level, err := zerolog.ParseLevel(lc.LogLevel)
     if err != nil {
         level = defaultLogLevel
