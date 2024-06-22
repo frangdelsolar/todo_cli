@@ -21,7 +21,7 @@ func main(){
 
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
 
-    err := errors.New("test error")
-    log.Err(err).Msg("Test Error")
+    err := errors.New("Some random shit")
+    log.Err(err).Msg("More shit here")
 
 }

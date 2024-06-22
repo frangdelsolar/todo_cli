@@ -26,8 +26,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            # Check for error messages in logs (adjust based on your logger)
-            if grep -q "Test Error" ${{ github.workspace }}/**/*.log; then
+            if grep -q "error" ${{ github.workspace }}/**/*.log; then
               echo "Tests failed. Fix the errors before merging."
               exit 1
             fi
