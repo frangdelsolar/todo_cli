@@ -13,6 +13,10 @@ type Contractor struct{
     Name string
 }
 
+func (c *Contractor) String() string {
+    return fmt.Sprintf("(%d) %s", c.ID, c.Name)
+}
+
 // UpdateName updates the name of the Contractor and sets the updatedBy field to the provided auth.User.
 //
 // Parameters:

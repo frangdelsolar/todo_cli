@@ -15,8 +15,16 @@ var LoginCmd = &cobra.Command{
 		Long: `Login to your account. If you don't have an account, you can register one with the "register" command.`,
         Run: func(cmd *cobra.Command, args []string) {
 
-            email := cmd.Flag("email").Value.String()
-            password := cmd.Flag("password").Value.String()
+            var email string
+            var password string
+
+            if cmd.Flags().Lookup("email") != nil {
+                email = cmd.Flag("email").Value.String()
+            }
+
+            if cmd.Flags().Lookup("password") != nil {
+                password = cmd.Flag("password").Value.String()
+            }
 
             if email == ""{
                 email, _ = utils.Prompt(utils.PromptConfig{
@@ -36,18 +44,14 @@ var LoginCmd = &cobra.Command{
             user, err := auth.GetUserByEmail(email)
             if err != nil {
                 fmt.Println("Error logging in:", err)
+                return
             } 
-            
-            fmt.Println("User logged in:", user.ID)
-
             cfg.SetSession(userKey, fmt.Sprint(user.ID))
         },
 
 }
 
 func init() {
-    // add a flag for email
-    // add a flag for password
     LoginCmd.Flags().StringP("email", "e", "", "Email address")
     LoginCmd.Flags().StringP("password", "p", "", "Password")
 }

@@ -26,5 +26,9 @@ func IsLoggedIn() bool {
     }
 
     return user.ID > 0
+}
 
+func GetUserId() string {
+    userId, _ := cfg.GetSession(userKey)
+    return userId
 }

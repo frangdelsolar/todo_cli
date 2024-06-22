@@ -4,9 +4,12 @@ go 1.22.4
 
 replace github.com/frangdelsolar/todo_cli/pkg/config => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/config
 
+replace github.com/frangdelsolar/todo_cli/pkg/contractor => /Users/frangdelsolar/Desktop/code/todoProject/todo_cli/pkg/contractor
+
 require (
 	github.com/frangdelsolar/todo_cli/pkg/auth v1.0.6
 	github.com/frangdelsolar/todo_cli/pkg/config v1.0.5
+	github.com/frangdelsolar/todo_cli/pkg/contractor v1.0.1
 	github.com/frangdelsolar/todo_cli/pkg/data v1.1.6
 	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.2
 	github.com/manifoldco/promptui v0.9.0
@@ -25,6 +28,7 @@ require (
 	firebase.google.com/go v3.13.0+incompatible // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
+	github.com/frangdelsolar/todo_cli/pkg/currency v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect

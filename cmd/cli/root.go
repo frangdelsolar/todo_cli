@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	auth "github.com/frangdelsolar/todo_cli/cmd/cli/auth_cli"
+	contractor "github.com/frangdelsolar/todo_cli/cmd/cli/contractor_cli"
 	"github.com/frangdelsolar/todo_cli/cmd/cli/utils"
 	"github.com/spf13/cobra"
 )
@@ -15,10 +16,11 @@ var anonymousActions = []utils.SelectableItem{
 }
 
 var rootActions = []utils.SelectableItem{
+    {Key: "contractor", Label: "Contractor"},
     {Key: "exit", Label: "Exit"},
 }
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 		Use:   "todo",
 		Short: "TODO: A Powerful Command-Line Task Management Tool",
 		Long: `Take control of your to-do list with TODO, 
@@ -45,6 +47,8 @@ and organize your tasks in a centralized and accessible way.
                 auth.RegisterCmd.Run(cmd, args)
             case "login":
                 auth.LoginCmd.Run(cmd, args)
+            case "contractor":
+                contractor.ContractorCmd.Run(cmd, args)
             case "exit":
                 return
             }
@@ -60,10 +64,11 @@ and organize your tasks in a centralized and accessible way.
 
 // Execute executes the root command.
 func Execute() error {
-	return rootCmd.Execute()
+	return RootCmd.Execute()
 }
 
 func init() {
-	rootCmd.AddCommand(auth.LoginCmd)
-	rootCmd.AddCommand(auth.RegisterCmd)
+	RootCmd.AddCommand(auth.LoginCmd)
+	RootCmd.AddCommand(auth.RegisterCmd)
+	RootCmd.AddCommand(contractor.ContractorCmd)
 }

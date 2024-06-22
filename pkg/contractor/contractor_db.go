@@ -95,7 +95,7 @@ func GetContractorById(id string, requestedBy string) (Contractor, error) {
 // - []Contractor: a slice of all the retrieved Contractors.
 func GetAllContractors(requestedBy string) []Contractor {
     var cs []Contractor
-    
+
     db.Find(&cs).Where("created_by = ?", requestedBy)
 
     if len(cs) == 0 {
