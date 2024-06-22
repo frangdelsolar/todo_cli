@@ -18,7 +18,8 @@ jobs:
         run: go mod download
 
       - name: Run tests
-        run: APP_ENV=test go run pkg/test/cmd/main.go
+        run: go run gh_test/main.go
+        # run: APP_ENV=test go run pkg/test/cmd/main.go
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
