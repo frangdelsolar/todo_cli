@@ -26,10 +26,24 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            if grep -q "happy" ${{ github.workspace }}/**/*.log; then
-              echo "Tests failed. Fix the errors before merging."
-              exit 1
-            fi
+            const fs = require('fs');
+            const pattern = "error";
+
+            function hasErrorInLogs(pattern) {
+              const files = fs.readdirSync('**/*.log', { recursive: true });
+              for (const file of files) {
+                const content = fs.readFileSync(file, 'utf8');
+                if (content.includes(pattern)) {
+                  return true;
+                }
+              }
+              return false;
+            }
+
+            if (hasErrorInLogs('Test Error')) {
+              console.log('Tests failed. Fix the errors before merging.');
+              process.exit(1);
+            }
 
       - name: Upload test artifacts (optional)
         uses: actions/upload-artifact@v3
