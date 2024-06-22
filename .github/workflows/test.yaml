@@ -19,24 +19,6 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
-      - name: Create directory for decoded secret (optional)
-        run: mkdir secrets
-
-      - name: Verify decoded Firebase secret file
-        run: |
-          if [ -f "todoapp-firebase-admin-sdk.json" ]; then
-            echo "Firebase secret file decoded successfully!"
-          else
-            echo "Error: Firebase secret file not found!"
-            exit 1  # Fail the workflow if the file is missing
-          fi
-
-      - name: Set permissions for Firebase secret file
-        run: chmod 600 todoapp-firebase-admin-sdk.json
-
-      - name: Print Working Directory
-        run: pwd
-
       - name: Change directory and run tests
         run: cd pkg/test/cmd && APP_ENV=cicd go run .
         if: always()
