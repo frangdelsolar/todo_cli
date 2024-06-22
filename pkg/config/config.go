@@ -57,6 +57,7 @@ func (c *Config) SetEnvFile() {
 // - error: an error if there was a problem writing the updated configuration and session to the .env file.
 func (c *Config) SetSession(key string, value string) error {
     c.Session[key] = value
+    os.Setenv(key, value)
 
     // Dump config and session to .env file
     storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
@@ -108,23 +109,26 @@ func Load() (*Config, error) {
 
     // Set configuration values from environment variables
 	config.AppEnv = os.Getenv("APP_ENV")
-    config.SetEnvFile()
 
-	// Get the current working directory
-	currentDir, err := os.Getwd()
-	if err != nil {
-        fmt.Errorf("error getting current directory")
-        return nil, err
-	}
+    if config.AppEnv != "cicd" {
+        config.SetEnvFile()
 
-	filePath := filepath.Join(currentDir, config.envFile)
+        // Get the current working directory
+        currentDir, err := os.Getwd()
+        if err != nil {
+            fmt.Errorf("error getting current directory")
+            return nil, err
+        }
 
-	// Load environment variables from the file
-	err = godotenv.Load(filePath)
-	if err != nil {
-		fmt.Errorf("error loading %s file", filePath)
-		return nil, err
-	}
+        filePath := filepath.Join(currentDir, config.envFile)
+
+        // Load environment variables from the file
+        err = godotenv.Load(filePath)
+        if err != nil {
+            fmt.Errorf("error loading %s file", filePath)
+            return nil, err
+        }
+    }
 
     config.LogLevel = os.Getenv("LOG_LEVEL")
 	config.DBPath = os.Getenv("DB_PATH")
