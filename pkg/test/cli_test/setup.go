@@ -1,6 +1,8 @@
 package cli_test
 
 import (
+	"fmt"
+
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
@@ -19,7 +21,7 @@ func init(){
 
     cfg, err := config.Load()
     if err != nil {
-        panic(err)
+        fmt.Errorf("Failed to load config: %v", err)
     }
     
     log = logger.NewLogger(logger.LoggerConfig{
@@ -27,7 +29,7 @@ func init(){
         PackageVersion: PKG_VERSION,
     })
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-    log.Info().Interface("Config", cfg).Msg("Loaded Config")
+    log.Trace().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
 	if err != nil {

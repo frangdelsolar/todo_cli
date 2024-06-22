@@ -34,7 +34,7 @@ func main(){
     })
 
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-    log.Info().Interface("Config", cfg).Msg("Loaded Config")
+    log.Debug().Interface("Config", cfg).Msg("Loaded Config")
 
     at.RunAuthTests()
     ct.RunCurrencyTests()

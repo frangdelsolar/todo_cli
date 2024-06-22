@@ -28,7 +28,7 @@ func init(){
         PackageVersion: PKG_VERSION,
     })
     log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-    log.Info().Interface("Config", cfg).Msg("Loaded Config")
+    log.Trace().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
 	if err != nil {
