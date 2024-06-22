@@ -38,7 +38,7 @@ func main(){
 		panic(err)
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
-    
+
     auth.InitAuth()
     c.InitContractor()
 

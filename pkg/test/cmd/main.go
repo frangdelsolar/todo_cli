@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -33,6 +34,9 @@ func main(){
     co.RunContractorTests()
     cli.RunCliTests()
 
+    err := errors.New("test error")
+    log.Err(err).Msg("this should make merge fail")
+
     // Find errors in log files
     logsPattern := "*.log"
     logFiles, err := filepath.Glob(logsPattern)
@@ -46,7 +50,7 @@ func main(){
         cmd := exec.Command("grep", "-i", errorPattern, fileName)
         output, err := cmd.CombinedOutput()
         if err != nil {
-            fmt.Errorf("Error running grep command: %v", err)
+            fmt.Errorf("error running grep command: %v", err)
             continue
         }
 
