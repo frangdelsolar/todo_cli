@@ -18,14 +18,15 @@ jobs:
 
       - name: Install dependencies
         run: go mod download
-
+    
       - name: Change directory and run tests
         env:
           APP_ENV: cicd
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
           DB_PATH: ${{ github.workspace }}/cicd.db
           LOG_LEVEL: debug
-        run: cd pkg/test/cmd && go run .
+        # run: cd pkg/test/cmd && go run .
+        run: go test ./...
         if: always()
 
       - name: Upload test artifacts (optional)
