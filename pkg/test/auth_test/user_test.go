@@ -14,7 +14,7 @@ func TestCreateUser(t *testing.T){
 
     u, err := auth.CreateUser(name, email, password)
     if err != nil {
-        log.Warn().Msg("Failed to create user")
+        t.Errorf("Error creating user: %v", err)
     }
 
     assert.Equal(t, u.Name, name, "Expected name to be %s, but got %s", name, u.Name)

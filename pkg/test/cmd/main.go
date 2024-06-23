@@ -8,7 +8,6 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 	"github.com/frangdelsolar/todo_cli/pkg/test"
 
-	at "github.com/frangdelsolar/todo_cli/pkg/test/auth_test"
 	cli "github.com/frangdelsolar/todo_cli/pkg/test/cli_test"
 	co "github.com/frangdelsolar/todo_cli/pkg/test/contractor_test"
 	ct "github.com/frangdelsolar/todo_cli/pkg/test/currency_test"
@@ -39,7 +38,6 @@ func main(){
 
     t = test.NewTestRunner()
 
-    at.RunAuthTests(t)
     ct.RunCurrencyTests(t)
     co.RunContractorTests(t)
     cli.RunCliTests()
