@@ -22,7 +22,7 @@ var cfg *config.Config
 //
 // No parameters.
 // No return values.
-func InitAuth() {
+func init() {
 	var err error
 
     cfg, err = config.Load()
