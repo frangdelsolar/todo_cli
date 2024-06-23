@@ -2,17 +2,16 @@ package contractor_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
-	"github.com/frangdelsolar/todo_cli/pkg/test"
+	"github.com/stretchr/testify/assert"
 )
 
 
-func TestCreateContractor(t *test.TestRunner) {
-    t.Run("TestCreateContractor()")
+func TestCreateContractor(t *testing.T) {
 
-    // Data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
     userId := fmt.Sprint(owner.ID)
 
@@ -20,19 +19,13 @@ func TestCreateContractor(t *test.TestRunner) {
 
     contractor, err := c.CreateContractor(name, userId)
     if err != nil {
-        log.Err(err).Msg("Failed to create contractor")
+        t.Errorf("Failed to create contractor: %v", err)
     }
 
-    log.Info().Msg("Created Contractor Successfully")
-
-    // assertions
-    t.AssertEqual(contractor.Name, name)
-
-    t.Stop()
+    assert.Equal(t, contractor.Name, name, "Expected name to be %s, but got %s", name, contractor.Name)
 }
 
-func TestUpdateContractorName(t *test.TestRunner) {
-    t.Run("TestUpdateContractorName()")
+func TestUpdateContractorName(t *testing.T) {
 
     // Data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -42,19 +35,20 @@ func TestUpdateContractorName(t *test.TestRunner) {
 
     contractor, err := c.CreateContractor(name, userId)
     if err != nil {
-        log.Err(err).Msg("Failed to create contractor")
+        t.Errorf("Failed to create contractor: %v", err)
     }
 
     newName := "Contractor 2"
     err = c.UpdateContractorName(fmt.Sprint(contractor.ID), newName, userId)
     if err != nil {
-        log.Err(err).Msg("Failed to update contractor name")
+        t.Errorf("Failed to update name: %v", err)
     }
 
-    updated, _ := c.GetContractorById(fmt.Sprint(contractor.ID), userId)
+    updated, err := c.GetContractorById(fmt.Sprint(contractor.ID), userId)
+    if err != nil {
+        t.Errorf("Failed to get updated contractor: %v", err)
+    }
     
     // assertions
-    t.AssertEqual(updated.Name, newName)
-
-    t.Stop()
+    assert.Equal(t, updated.Name, newName, "Expected name to be %s, but got %s", newName, updated.Name)
 }

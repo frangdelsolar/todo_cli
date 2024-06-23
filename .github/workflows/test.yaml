@@ -25,7 +25,6 @@ jobs:
           FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
           DB_PATH: ${{ github.workspace }}/cicd.db
           LOG_LEVEL: debug
-        # run: cd pkg/test/cmd && go run .
         run: go test ./...
         if: always()
 

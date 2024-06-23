@@ -2,14 +2,14 @@ package contractor_test
 
 import (
 	"fmt"
+	"testing"
 
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
-	"github.com/frangdelsolar/todo_cli/pkg/test"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateFrequency(t *test.TestRunner) {
-    t.Run("TestCreateFrequency()")
+func TestCreateFrequency(t *testing.T) {
 
     // Data prep
     owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
@@ -25,21 +25,17 @@ func TestCreateFrequency(t *test.TestRunner) {
 
     frq, err := c.CreateFrequency(frqInput)
     if err != nil {
-        log.Err(err).Msg("Failed to create contractor")
+        t.Errorf("Failed to create frequency: %v", err)
     }
-
-    t.AssertEqual(frq.Type, c.FrequencyTypeYearly)
-    t.AssertEqual(frq.Day, 12)
-    t.AssertEqual(frq.Month, 10)
-    t.AssertEqual(frq.DayOfWeek, 6)
-    t.AssertEqual(frq.SystemData.CreatedByID, owner.ID)
-
-    t.Stop()
+    assert.Equal(t, frq.Type, frqInput.FreqType, "Expected type to be %s, but got %s", frqInput.FreqType, frq.Type)
+    assert.Equal(t, frq.Day, frqInput.Day, "Expected day to be %s, but got %s", frqInput.Day, frq.Day)
+    assert.Equal(t, frq.Month, frqInput.Month, "Expected month to be %s, but got %s", frqInput.Month, frq.Month)
+    assert.Equal(t, frq.DayOfWeek, frqInput.DayOfWeek, "Expected day of week to be %s, but got %s", frqInput.DayOfWeek, frq.DayOfWeek)
+    assert.Equal(t, frq.SystemData.CreatedByID, frqInput.RequestedBy, "Expected created by id to be %s, but got %s", frqInput.RequestedBy, frq.SystemData.CreatedByID)
+    
 }
 
-func TestFrequencyValidator(t *test.TestRunner) {
-    t.Run("TestFrequencyValidator()")
-
+func TestFrequencyValidator(t *testing.T) {
     // User validation
     frqInput := &c.NewFrequencyInput{
         FreqType: "",
@@ -49,10 +45,10 @@ func TestFrequencyValidator(t *test.TestRunner) {
         RequestedBy: "0",
     }
 
-    err := frqInput.Validate()
+    validationErrMsg := frqInput.Validate()
     expected := "invalid user id"
 
-    t.AssertErrorContains(err, expected)
+    assert.ErrorContains(t, validationErrMsg, expected)
 
     // Daily validation
     frqInput = &c.NewFrequencyInput{
@@ -63,9 +59,9 @@ func TestFrequencyValidator(t *test.TestRunner) {
         RequestedBy: "1",
     }
 
-    err = frqInput.Validate()
-    
-    t.AssertErrorNil(err)
+    validationErrMsg = frqInput.Validate()
+
+    assert.Nil(t, validationErrMsg, "Expected validation error to be nil")
 
     // Weekly validation
     frqInput = &c.NewFrequencyInput{
@@ -76,10 +72,10 @@ func TestFrequencyValidator(t *test.TestRunner) {
         RequestedBy: "1",
     }
 
-    err = frqInput.Validate()
+    validationErrMsg = frqInput.Validate()
     expected = "you must specify a day of the week"
 
-    t.AssertErrorContains(err, expected)
+    assert.ErrorContains(t, validationErrMsg, expected, "Expected validation error to be %s, but got %s", expected, validationErrMsg)
 
     // Monthly validation
     frqInput = &c.NewFrequencyInput{
@@ -90,10 +86,10 @@ func TestFrequencyValidator(t *test.TestRunner) {
         RequestedBy: "1",
     }
 
-    err = frqInput.Validate()
+    validationErrMsg = frqInput.Validate()
     expected = "you must specify a day of the month"
 
-    t.AssertErrorContains(err, expected)
+    assert.ErrorContains(t, validationErrMsg, expected, "Expected validation error to be %s, but got %s", expected, validationErrMsg)
 
     // Yearly validation
     frqInput = &c.NewFrequencyInput{
@@ -104,10 +100,9 @@ func TestFrequencyValidator(t *test.TestRunner) {
         RequestedBy: "1",
     }
 
-    err = frqInput.Validate()
+    validationErrMsg = frqInput.Validate()
     expected = "you must specify a month"
 
-    t.AssertErrorContains(err, expected)
+    assert.ErrorContains(t, validationErrMsg, expected, "Expected validation error to be %s, but got %s", expected, validationErrMsg)
 
-    t.Stop()
 }

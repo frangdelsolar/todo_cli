@@ -1,13 +1,13 @@
 package contractor_test
 
 import (
+	"testing"
+
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
-	"github.com/frangdelsolar/todo_cli/pkg/test"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestValidateEffectivePeriod(t *test.TestRunner) {
-    t.Run("TestValidateEffectivePeriod()")
-
+func TestValidateEffectivePeriod(t *testing.T) {
     epInput := &c.NewEffectivePeriodInput{
         StartDate: "2022-01-01",
         EndDate: "2022-01-01",
@@ -15,8 +15,11 @@ func TestValidateEffectivePeriod(t *test.TestRunner) {
     }
 
     err := epInput.Validate()
+    if err != nil {
+        t.Errorf("Unexpected error: %v", err)
+    }
+
     expected := "invalid user id"
-    
-    t.AssertErrorContains(err, expected)
-    t.Stop()
+
+    assert.ErrorContains(t, err, expected)
 }
