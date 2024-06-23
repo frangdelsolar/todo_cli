@@ -74,6 +74,7 @@ func UpdateContractorName(id string, name string, requestedBy string) error {
 // - Contractor: the retrieved Contractor.
 // - error: an error if the Contractor is not found.
 func GetContractorById(id string, requestedBy string) (Contractor, error) {
+
     var c Contractor
     
     db.First(&c, "id = ?", id).Where("created_by = ?", requestedBy)

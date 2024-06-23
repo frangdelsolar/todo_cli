@@ -52,3 +52,35 @@ func TestUpdateContractorName(t *testing.T) {
     // assertions
     assert.Equal(t, updated.Name, newName, "Expected name to be %s, but got %s", newName, updated.Name)
 }
+
+func TestListContractor(t *testing.T) {
+
+    owner1, _ := auth.CreateUser("owner1", "owner@admin.com", "test123")
+    userId1 := fmt.Sprint(owner1.ID)
+
+    name1 := "Contractor ow1"
+
+    _, err := c.CreateContractor(name1, userId1)
+    if err != nil {
+        t.Errorf("Failed to create contractor: %v", err)
+    }
+
+    owner2, _ := auth.CreateUser("owner2", "owner@admin.com", "test123")
+    userId2 := fmt.Sprint(owner2.ID)
+
+    name2 := "Contractor ow2"
+
+    _, err = c.CreateContractor(name2, userId2)
+    if err != nil {
+        t.Errorf("Failed to create contractor: %v", err)
+    }
+
+    list1:= c.GetAllContractors(userId1)
+    assert.Equal(t, len(list1), 1, "Expected 1 contractor, but got %d", len(list1))
+    assert.Equal(t, list1[0].Name, name1, "Expected name to be %s, but got %s", name1, list1[0].Name)
+
+    list2:= c.GetAllContractors(userId2)
+    assert.Equal(t, len(list2), 1, "Expected 1 contractor, but got %d", len(list2))
+    assert.Equal(t, list2[0].Name, name2, "Expected name to be %s, but got %s", name2, list2[0].Name)
+    
+}
