@@ -19,6 +19,4 @@ func TestCreateUser(t *testing.T){
 
     assert.Equal(t, u.Name, name, "Expected name to be %s, but got %s", name, u.Name)
     assert.Equal(t, u.Email, email, "Expected email to be %s, but got %s", email, u.Email)
-    assert.Equal(t, u.Email, "email", "Expected email to be %s, but got %s", email, u.Email)
-
 }
