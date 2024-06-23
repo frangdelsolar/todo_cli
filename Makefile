@@ -15,5 +15,6 @@ test:
 	cp .env.test pkg/test/cli/.env.test 
 	cp .env.test pkg/test/contractor/.env.test 
 	cp .env.test pkg/test/currency/.env.test 
+	export APP_ENV=test
 	go test -coverprofile=coverage.out -covermode=set $(go list ./...) -v ./...
 	go tool cover -html=coverage.out
