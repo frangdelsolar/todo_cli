@@ -5,3 +5,4 @@ rates.json
 *secrets*
 *.log
 *.session
+*.out
