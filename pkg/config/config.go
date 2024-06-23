@@ -59,11 +59,8 @@ func (c *Config) SetSession(key string, value string) error {
     c.Session[key] = value
     os.Setenv(key, value)
 
-    // Dump config and session to .env file
+    // Encode the Firebase secret and write it to the .env file
     storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
-
-    fmt.Printf("fb secret: %s\n", c.FirebaseSecret) // currently a string representation of a JSON
-
     encodedFBSecret := base64.StdEncoding.EncodeToString([]byte(c.FirebaseSecret))
 
     err := godotenv.Write(map[string]string{
@@ -165,5 +162,8 @@ func Load() (*Config, error) {
 
 // GetConfig returns the loaded configuration
 func GetConfig() *Config {
+    if config == nil {
+		Load()
+	}
 	return config
 }
