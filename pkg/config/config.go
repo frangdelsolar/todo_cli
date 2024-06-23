@@ -62,13 +62,11 @@ func (c *Config) SetSession(key string, value string) error {
     // Dump config and session to .env file
     storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
 
-    encodedFBSecretBytes, err := base64.StdEncoding.DecodeString(c.FirebaseSecret)
-    if err != nil {
-        return err
-    }
-    encodedFBSecret := strings.TrimSuffix(string(encodedFBSecretBytes), "\n")
+    fmt.Printf("fb secret: %s\n", c.FirebaseSecret) // currently a string representation of a JSON
 
-    err = godotenv.Write(map[string]string{
+    encodedFBSecret := base64.StdEncoding.EncodeToString([]byte(c.FirebaseSecret))
+
+    err := godotenv.Write(map[string]string{
         "LOG_LEVEL": c.LogLevel,
         "DB_PATH": c.DBPath,
         "FIREBASE_SECRET": encodedFBSecret,
