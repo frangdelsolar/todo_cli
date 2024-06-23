@@ -14,12 +14,8 @@ func TestValidateEffectivePeriod(t *testing.T) {
         RequestedBy: "",
     }
 
-    err := epInput.Validate()
-    if err != nil {
-        t.Errorf("Unexpected error: %v", err)
-    }
-
+    validationErrorMsg := epInput.Validate()
     expected := "invalid user id"
 
-    assert.ErrorContains(t, err, expected)
+    assert.ErrorContains(t, validationErrorMsg, expected)
 }
