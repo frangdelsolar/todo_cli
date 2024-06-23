@@ -38,6 +38,8 @@ func InitContractor() {
 
 	db.AutoMigrate(
         &Contractor{},
+        &Agreement{},
+        &Frequency{},
 	)
 
 	log.Debug().Msgf("Applied %s pkg migrations to database", PKG_NAME)
