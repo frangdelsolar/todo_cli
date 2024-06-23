@@ -172,7 +172,7 @@ func TestSubCurrencySameCode(t *testing.T){
     expectedAmount := 75.00
     expectedCode := c.CurrencyUnit("ARS")
     expectedRate := 1040.00
-    expectedConversion := fmt.Sprintf("%.2f", expectedAmount / expectedRate) 
+    expectedConversion := expectedAmount / expectedRate
 
     assert.Equal(t, ccy.Amount, expectedAmount)
     assert.Equal(t, ccy.CurrencyCode, expectedCode)

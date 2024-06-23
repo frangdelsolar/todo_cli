@@ -10,6 +10,10 @@ import (
 
 type FrequencyType string
 
+func (ft FrequencyType) String() string {
+    return string(ft)
+}
+
 const (
     FrequencyTypeDaily FrequencyType = "daily"
     FrequencyTypeWeekly FrequencyType = "weekly"

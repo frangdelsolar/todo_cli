@@ -27,11 +27,11 @@ func TestCreateFrequency(t *testing.T) {
     if err != nil {
         t.Errorf("Failed to create frequency: %v", err)
     }
-    assert.Equal(t, frq.Type, frqInput.FreqType, "Expected type to be %s, but got %s", frqInput.FreqType, frq.Type)
-    assert.Equal(t, frq.Day, frqInput.Day, "Expected day to be %s, but got %s", frqInput.Day, frq.Day)
-    assert.Equal(t, frq.Month, frqInput.Month, "Expected month to be %s, but got %s", frqInput.Month, frq.Month)
-    assert.Equal(t, frq.DayOfWeek, frqInput.DayOfWeek, "Expected day of week to be %s, but got %s", frqInput.DayOfWeek, frq.DayOfWeek)
-    assert.Equal(t, frq.SystemData.CreatedByID, frqInput.RequestedBy, "Expected created by id to be %s, but got %s", frqInput.RequestedBy, frq.SystemData.CreatedByID)
+    assert.Equal(t, frq.Type.String(), frqInput.FreqType, "Expected type to be %s, but got %s", frqInput.FreqType, frq.Type)
+    assert.Equal(t, fmt.Sprint(frq.Day), frqInput.Day, "Expected day to be %s, but got %s", frqInput.Day, frq.Day)
+    assert.Equal(t, fmt.Sprint(frq.Month), frqInput.Month, "Expected month to be %s, but got %s", frqInput.Month, frq.Month)
+    assert.Equal(t, fmt.Sprint(frq.DayOfWeek), frqInput.DayOfWeek, "Expected day of week to be %s, but got %s", frqInput.DayOfWeek, frq.DayOfWeek)
+    assert.Equal(t, fmt.Sprint(frq.SystemData.CreatedByID), frqInput.RequestedBy, "Expected created by id to be %s, but got %s", frqInput.RequestedBy, frq.SystemData.CreatedByID)
     
 }
 
