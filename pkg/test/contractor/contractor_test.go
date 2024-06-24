@@ -1,86 +1,88 @@
 package contractor_test
 
 import (
-	"fmt"
 	"testing"
 
-	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
+	"github.com/frangdelsolar/todo_cli/pkg/test/helpers"
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestCreateContractor(t *testing.T) {
-
-    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
-    userId := fmt.Sprint(owner.ID)
-
-    name := "Contractor 1"
-
-    contractor, err := c.CreateContractor(name, userId)
+    ow, _ := helpers.CreateRandomUser()
+    name := helpers.RandomName()
+    contractor, err := c.CreateContractor(name, ow.GetIDString())
     if err != nil {
         t.Errorf("Failed to create contractor: %v", err)
     }
-
     assert.Equal(t, contractor.Name, name, "Expected name to be %s, but got %s", name, contractor.Name)
 }
 
 func TestUpdateContractorName(t *testing.T) {
 
-    // Data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
-    userId := fmt.Sprint(owner.ID)
-
-    name := "Contractor 1"  
-
-    contractor, err := c.CreateContractor(name, userId)
+    contractor, err := helpers.CreateRandomContractor()
     if err != nil {
-        t.Errorf("Failed to create contractor: %v", err)
+        t.Errorf("Failed to create random contractor: %v", err)
     }
 
     newName := "Contractor 2"
-    err = c.UpdateContractorName(fmt.Sprint(contractor.ID), newName, userId)
+    err = c.UpdateContractorName(contractor.GetIDString(), newName, contractor.CreatedBy.GetIDString())
     if err != nil {
         t.Errorf("Failed to update name: %v", err)
     }
 
-    updated, err := c.GetContractorById(fmt.Sprint(contractor.ID), userId)
+    updated, err := c.GetContractorById(contractor.GetIDString(), contractor.CreatedBy.GetIDString())
     if err != nil {
         t.Errorf("Failed to get updated contractor: %v", err)
     }
     
-    // assertions
     assert.Equal(t, updated.Name, newName, "Expected name to be %s, but got %s", newName, updated.Name)
+
 }
 
 func TestListContractor(t *testing.T) {
 
-    owner1, _ := auth.CreateUser("owner1", "owner@admin.com", "test123")
-    userId1 := fmt.Sprint(owner1.ID)
+    c1, _ := helpers.CreateRandomContractor()
+    c2, _ := helpers.CreateRandomContractor() // this would be created by a differnt user
 
-    name1 := "Contractor ow1"
+    list1:= c.GetAllContractors(c1.CreatedBy.GetIDString())
 
-    _, err := c.CreateContractor(name1, userId1)
-    if err != nil {
-        t.Errorf("Failed to create contractor: %v", err)
+    // iterate over the list of contractors and check if c1 and c2 are in the list
+    c1Present := false
+    c2Present := false
+    for _, c := range list1 {
+        if c.GetIDString() == c1.GetIDString() {
+            c1Present = true
+        }
+        if c.GetIDString() == c2.GetIDString() {
+            c2Present = true
+        }
     }
 
-    owner2, _ := auth.CreateUser("owner2", "owner@admin.com", "test123")
-    userId2 := fmt.Sprint(owner2.ID)
-
-    name2 := "Contractor ow2"
-
-    _, err = c.CreateContractor(name2, userId2)
-    if err != nil {
-        t.Errorf("Failed to create contractor: %v", err)
+    if !c1Present {
+        t.Errorf("Contractor %s not found in list", c1.GetIDString())
     }
 
-    list1:= c.GetAllContractors(userId1)
-    assert.Equal(t, len(list1), 1, "Expected 1 contractor, but got %d", len(list1))
-    assert.Equal(t, list1[0].Name, name1, "Expected name to be %s, but got %s", name1, list1[0].Name)
+    if c2Present {
+        t.Errorf("Contractor %s found in list", c2.GetIDString())
+    }
+    
+}
 
-    list2:= c.GetAllContractors(userId2)
-    assert.Equal(t, len(list2), 1, "Expected 1 contractor, but got %d", len(list2))
-    assert.Equal(t, list2[0].Name, name2, "Expected name to be %s, but got %s", name2, list2[0].Name)
+func TestGetContractorById(t *testing.T) {
+
+    c1, _ := helpers.CreateRandomContractor()
+    ow1 := c1.CreatedBy
+    ow2, _ := helpers.CreateRandomUser()
+
+    _, err := c.GetContractorById(c1.GetIDString(), ow1.GetIDString())
+    if err != nil {
+        t.Errorf("Failed to get contractor: %v", err)
+    }
+
+    _, err = c.GetContractorById(c1.GetIDString(), ow2.GetIDString())
+    if err == nil {
+        t.Errorf("Expected error, but got none")
+    }
     
 }

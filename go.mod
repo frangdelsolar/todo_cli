@@ -4,7 +4,6 @@ go 1.22.4
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
-	github.com/frangdelsolar/todo_cli/pkg/logger v1.1.3
 	github.com/joho/godotenv v1.5.1
 	github.com/manifoldco/promptui v0.9.0
 	github.com/rs/zerolog v1.33.0

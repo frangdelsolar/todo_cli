@@ -12,6 +12,7 @@ var PKG_NAME = "Auth Test PKG"
 var PKG_VERSION = "1.0.4"
 
 func init(){
+    
     cfg, err := config.Load()
     if err != nil {
         fmt.Errorf("error loading config: %v", err)        
@@ -23,9 +24,7 @@ func init(){
         PackageVersion: PKG_VERSION,
     })
 
-
-
-    log.Info().Interface("Config", cfg).Msg("Loaded Config")
+    log.Trace().Interface("Config", cfg).Msg("Loaded Config")
 
 	data.LoadDB()
 }

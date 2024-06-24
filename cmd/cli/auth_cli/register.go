@@ -54,7 +54,7 @@ var RegisterCmd = &cobra.Command{
             if err != nil {
                 fmt.Println("Error creating user:", err)
             } else {
-                fmt.Println("User created:", user.ID)
+                fmt.Println("User created ID:", user.ID)
             }
 
             cfg.SetSession(userKey, fmt.Sprint(user.ID))

@@ -36,9 +36,7 @@ func CreateEffectivePeriod(input *NewEffectivePeriodInput) (*EffectivePeriod, er
 func GetEffectivePeriodById(id string, requestedBy string) (*EffectivePeriod, error) {
     var ep EffectivePeriod
     
-    db.
-        First(&ep, id).
-        Where("created_by = ?", requestedBy)
+    db.First(&ep, "id = ? AND created_by_id = ?", id, requestedBy)
    
     if ep == (EffectivePeriod{}) {
         return nil, fmt.Errorf("effective period with ID %s not found", id)
