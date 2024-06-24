@@ -74,9 +74,10 @@ func UpdateContractorName(id string, name string, requestedBy string) error {
 // - Contractor: the retrieved Contractor.
 // - error: an error if the Contractor is not found.
 func GetContractorById(id string, requestedBy string) (Contractor, error) {
+
     var c Contractor
     
-    db.First(&c, "id = ?", id).Where("created_by = ?", requestedBy)
+    db.First(&c, "id = ? AND created_by_id = ?", id, requestedBy)
     
     if c == (Contractor{}) {
         return c, fmt.Errorf("contractor with ID %s not found", fmt.Sprint(id))
@@ -96,7 +97,7 @@ func GetContractorById(id string, requestedBy string) (Contractor, error) {
 func GetAllContractors(requestedBy string) []Contractor {
     var cs []Contractor
 
-    db.Find(&cs).Where("created_by = ?", requestedBy)
+    db.Find(&cs, "created_by_id = ?", requestedBy)
 
     if len(cs) == 0 {
         log.Warn().Msg("No contractors found")

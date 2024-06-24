@@ -15,6 +15,14 @@ type User struct {
     FirebaseId string `json:"firebase_id"`
 }
 
+// ID returns the ID of the user as a string.
+//
+// No parameters.
+// Returns a string.
+func (user *User) GetIDString() string {
+    return fmt.Sprint(user.ID)
+}
+
 // NewUser creates a new user with the given name and email.
 //
 // Parameters:

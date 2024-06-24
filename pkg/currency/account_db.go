@@ -66,7 +66,7 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 func GetAccountById(id string, requestedBy string) (*Account, error) {
 	var acc Account
 	
-	db.First(&acc, "id = ?", id).Where("created_by = ?", requestedBy)
+	db.First(&acc, "id = ? AND created_by_id = ?", id, requestedBy)
 	
 	if acc == (Account{}) {
 		return nil, fmt.Errorf("account with ID %s not found", fmt.Sprint(id))

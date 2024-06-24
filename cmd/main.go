@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/frangdelsolar/todo_cli/cmd/cli"
-	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	c "github.com/frangdelsolar/todo_cli/pkg/contractor"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
@@ -41,7 +40,6 @@ func main(){
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
 
-    auth.InitAuth()
     c.InitContractor()
 
     cli.Execute()

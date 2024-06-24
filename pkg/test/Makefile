@@ -4,6 +4,7 @@ test:
 	cp .env.test cli/.env.test 
 	cp .env.test contractor/.env.test 
 	cp .env.test currency/.env.test 
+	export APP_ENV=test 
 	go test -coverprofile=coverage.out -covermode=set $(go list ./...) -v ./...
 	go tool cover -html=coverage.out
 

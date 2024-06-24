@@ -39,9 +39,7 @@ func CreateFrequency(input *NewFrequencyInput) (*Frequency, error) {
 func GetFrequencyById(id string, requestedBy string) (*Frequency, error) {
     var freq Frequency
 
-    db.
-        First(&freq, id).
-        Where("created_by = ?", requestedBy)
+    db.First(&freq, "id = ? AND created_by = ?", id, requestedBy)
 
     if freq == (Frequency{}) {
         return nil, fmt.Errorf("frequency with ID %s not found", id)

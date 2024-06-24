@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"fmt"
+
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
@@ -20,12 +22,12 @@ var cfg *config.Config
 //
 // No parameters.
 // No return values.
-func InitAuth() {
+func init() {
 	var err error
 
     cfg, err = config.Load()
     if err != nil {
-        log.Fatal().Err(err).Msg("Failed to load config")
+        fmt.Errorf("error loading config: %v", err)        
         return
     }
 	

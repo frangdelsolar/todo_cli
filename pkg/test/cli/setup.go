@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"github.com/frangdelsolar/todo_cli/pkg/auth"
 	"github.com/frangdelsolar/todo_cli/pkg/config"
 	"github.com/frangdelsolar/todo_cli/pkg/data"
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
@@ -19,5 +18,4 @@ func init(){
     })
 
 	data.LoadDB()
-    auth.InitAuth()
 }

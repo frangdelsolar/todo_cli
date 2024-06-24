@@ -17,7 +17,7 @@ var ContractorListCmd = &cobra.Command{
             contractors := c.GetAllContractors(a.GetUserId())
             fmt.Printf("Contractors: %d\n", len(contractors))
             for _, c := range contractors {
-                fmt.Println(c)
+                fmt.Println(c.String())
             }
         },
 }
