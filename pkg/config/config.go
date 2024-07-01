@@ -11,22 +11,23 @@ import (
 )
 
 const (
-    PKG_NAME = "Config PKG"
-    PKG_VERSION = "1.0.5"
+	PKG_NAME    = "Config PKG"
+	PKG_VERSION = "1.0.5"
 
-    sessionVariablesPrefix = "TODO_APP_SESSION_"
+	sessionVariablesPrefix = "TODO_APP_SESSION_"
 )
 
 var config *Config
 
 // Config represents the configuration loaded from environment variables
 type Config struct {
-	AppEnv   string `env:"APP_ENV" default:"dev"`
-	LogLevel string `env:"LOG_LEVEL" default:"debug"`
-	DBPath   string `env:"DB_PATH" default:"./data.db"`
-    FirebaseSecret string `env:"FIREBASE_SECRET" default:""`
-    Session map[string]string
-    envFile string
+	AppEnv         string `env:"APP_ENV" default:"dev"`
+	LogLevel       string `env:"LOG_LEVEL" default:"debug"`
+	DBPath         string `env:"DB_PATH" default:"./data.db"`
+	FirebaseSecret string `env:"FIREBASE_SECRET" default:""`
+	Session        map[string]string
+	envFile        string
+	ServerPort     string `env:"SERVER_PORT" default:"3000"`
 }
 
 // SetEnvFile sets the environment file based on the AppEnv field of the Config struct.
@@ -56,25 +57,26 @@ func (c *Config) SetEnvFile() {
 // Returns:
 // - error: an error if there was a problem writing the updated configuration and session to the .env file.
 func (c *Config) SetSession(key string, value string) error {
-    c.Session[key] = value
-    os.Setenv(key, value)
+	c.Session[key] = value
+	os.Setenv(key, value)
 
-    // Encode the Firebase secret and write it to the .env file
-    storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
-    encodedFBSecret := base64.StdEncoding.EncodeToString([]byte(c.FirebaseSecret))
+	// Encode the Firebase secret and write it to the .env file
+	storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
+	encodedFBSecret := base64.StdEncoding.EncodeToString([]byte(c.FirebaseSecret))
 
-    err := godotenv.Write(map[string]string{
-        "LOG_LEVEL": c.LogLevel,
-        "DB_PATH": c.DBPath,
-        "FIREBASE_SECRET": encodedFBSecret,
-        storedKey: value,
-    }, c.envFile)
-    
-    if err != nil {
-        return err
-    }
+	err := godotenv.Write(map[string]string{
+		"LOG_LEVEL":       c.LogLevel,
+		"DB_PATH":         c.DBPath,
+		"FIREBASE_SECRET": encodedFBSecret,
+		"SERVER_PORT":     c.ServerPort,
+		storedKey:         value,
+	}, c.envFile)
 
-    return nil
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetSession retrieves a session variable from the Config struct using the provided key.
@@ -85,12 +87,12 @@ func (c *Config) SetSession(key string, value string) error {
 // - string: the value of the session variable.
 // - error: an error if the key is not found in the session.
 func (c *Config) GetSession(key string) (string, error) {
-    // storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
-    value, ok := c.Session[key]
-    if !ok {
-        return "", fmt.Errorf("key %s not found in session", key)
-    }
-    return value, nil
+	// storedKey := fmt.Sprintf("%s%s", sessionVariablesPrefix, key)
+	value, ok := c.Session[key]
+	if !ok {
+		return "", fmt.Errorf("key %s not found in session", key)
+	}
+	return value, nil
 }
 
 // Load loads the configuration values from environment variables and returns a Config struct and an error.
@@ -99,70 +101,73 @@ func (c *Config) GetSession(key string) (string, error) {
 // It also sets session variables from environment variables that start with sessionVariablesPrefix.
 //
 // Parameters:
-//   None.
+//
+//	None.
 //
 // Return types:
-//   *Config: A pointer to the Config struct with the loaded configuration values.
-//   error: An error if there was a problem loading the configuration values.
+//
+//	*Config: A pointer to the Config struct with the loaded configuration values.
+//	error: An error if there was a problem loading the configuration values.
 func Load() (*Config, error) {
 
 	config = &Config{}
 	var err error
 
-    // Set configuration values from environment variables
+	// Set configuration values from environment variables
 	config.AppEnv = os.Getenv("APP_ENV")
 
-    if config.AppEnv != "cicd" {
-        config.SetEnvFile()
+	if config.AppEnv != "cicd" {
+		config.SetEnvFile()
 
-        // Get the current working directory
-        currentDir, err := os.Getwd()
-        if err != nil {
-            fmt.Errorf("error getting current directory")
-            return nil, err
-        }
+		// Get the current working directory
+		currentDir, err := os.Getwd()
+		if err != nil {
+			fmt.Errorf("error getting current directory")
+			return nil, err
+		}
 
-        filePath := filepath.Join(currentDir, config.envFile)
+		filePath := filepath.Join(currentDir, config.envFile)
 
-        // Load environment variables from the file
-        err = godotenv.Load(filePath)
-        if err != nil {
-            fmt.Errorf("error loading %s file", filePath)
-            return nil, err
-        }
-    }
+		// Load environment variables from the file
+		err = godotenv.Load(filePath)
+		if err != nil {
+			fmt.Errorf("error loading %s file", filePath)
+			return nil, err
+		}
+	}
 
-    config.LogLevel = os.Getenv("LOG_LEVEL")
+	config.LogLevel = os.Getenv("LOG_LEVEL")
 	config.DBPath = os.Getenv("DB_PATH")
+	config.ServerPort = os.Getenv("SERVER_PORT")
 
-    // decode firebase secret
-    fbSecret := os.Getenv("FIREBASE_SECRET")
-    decoded, err := base64.StdEncoding.DecodeString(fbSecret)
-    if err != nil {
-        fmt.Errorf("error decoding firebase secret")
-        return nil, err
-    }
-    config.FirebaseSecret = string(decoded)
-    
-    // Set session variables
-    config.Session = make(map[string]string)
-    for _, value := range os.Environ() {
-        if strings.HasPrefix(value, sessionVariablesPrefix) {
-            keyValue := strings.TrimPrefix(value, sessionVariablesPrefix)
+	// decode firebase secret
+	fbSecret := os.Getenv("FIREBASE_SECRET")
+	decoded, err := base64.StdEncoding.DecodeString(fbSecret)
+	if err != nil {
+		fmt.Errorf("error decoding firebase secret")
+		return nil, err
+	}
+	config.FirebaseSecret = string(decoded)
 
-            key := strings.Split(keyValue, "=")[0]
-            value := strings.Split(keyValue, "=")[1]
+	// Set session variables
+	config.Session = make(map[string]string)
+	for _, value := range os.Environ() {
+		if strings.HasPrefix(value, sessionVariablesPrefix) {
+			keyValue := strings.TrimPrefix(value, sessionVariablesPrefix)
 
-            config.Session[key] = value
-        }
-    }
+			key := strings.Split(keyValue, "=")[0]
+			value := strings.Split(keyValue, "=")[1]
+
+			config.Session[key] = value
+		}
+	}
 
 	return config, nil
 }
 
 // GetConfig returns the loaded configuration
 func GetConfig() *Config {
-    if config == nil {
+	if config == nil {
 		Load()
 	}
 	return config

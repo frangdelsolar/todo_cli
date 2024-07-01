@@ -2,6 +2,10 @@
 run:
 	APP_ENV=dev go run cmd/main.go 
 
+.PHONY: serve
+serve:
+	APP_ENV=dev go run server/server.go
+
 .PHONY: clean
 clean:
 	find . -name "coverage.out" -delete
