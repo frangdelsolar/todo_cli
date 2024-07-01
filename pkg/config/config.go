@@ -25,9 +25,10 @@ type Config struct {
 	LogLevel       string `env:"LOG_LEVEL" default:"debug"`
 	DBPath         string `env:"DB_PATH" default:"./data.db"`
 	FirebaseSecret string `env:"FIREBASE_SECRET" default:""`
+	ServerPort     string `env:"SERVER_PORT" default:"3000"`
+	CSRF           string `env:"CSRF_SECRET" default:""`
 	Session        map[string]string
 	envFile        string
-	ServerPort     string `env:"SERVER_PORT" default:"3000"`
 }
 
 // SetEnvFile sets the environment file based on the AppEnv field of the Config struct.
@@ -69,6 +70,7 @@ func (c *Config) SetSession(key string, value string) error {
 		"DB_PATH":         c.DBPath,
 		"FIREBASE_SECRET": encodedFBSecret,
 		"SERVER_PORT":     c.ServerPort,
+		"CSRF_SECRET":     c.CSRF,
 		storedKey:         value,
 	}, c.envFile)
 
@@ -139,6 +141,7 @@ func Load() (*Config, error) {
 	config.LogLevel = os.Getenv("LOG_LEVEL")
 	config.DBPath = os.Getenv("DB_PATH")
 	config.ServerPort = os.Getenv("SERVER_PORT")
+	config.CSRF = os.Getenv("CSRF_SECRET")
 
 	// decode firebase secret
 	fbSecret := os.Getenv("FIREBASE_SECRET")
