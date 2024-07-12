@@ -13,12 +13,12 @@ import (
 // - *User
 func GetUserById(id string) (*User, error) {
 	var u User
-	
+
 	db.First(&u, "id = ?", id)
 	if u == (User{}) {
 		return nil, fmt.Errorf("user with ID %s not found", fmt.Sprint(id))
 	}
-	
+
 	return &u, nil
 }
 
@@ -31,15 +31,14 @@ func GetUserById(id string) (*User, error) {
 // - *User
 func GetUserByEmail(email string) (*User, error) {
 	var u User
-	
+
 	db.First(&u, "email = ?", email)
 	if u == (User{}) {
 		return nil, fmt.Errorf("user with email %s not found", fmt.Sprint(email))
 	}
-	
+
 	return &u, nil
 }
-
 
 // GetAllUsers retrieves all users from the database.
 //
@@ -47,13 +46,13 @@ func GetUserByEmail(email string) (*User, error) {
 // - []User
 func GetAllUsers() []User {
 	var users []User
-	
+
 	db.Find(&users)
 
 	if len(users) == 0 {
 		log.Warn().Msg("No users found")
 	}
-	
+
 	return users
 }
 
@@ -73,20 +72,20 @@ func CreateUser(name string, email string, password string) (*User, error) {
 		return u, err
 	}
 
-    /*
-       Create Firebase User
-    */
-    // fu, err := fa.RegisterUser(name, email, password)
-    // if err != nil {
-    //     log.Warn().Msg("Error creating firebase user")
-    // } else {
-    //     u.FirebaseId = fu.UID
-    // }
+	/*
+	   Create Firebase User
+	*/
+	// fu, err := fa.RegisterUser(name, email, password)
+	// if err != nil {
+	//     log.Warn().Msg("Error creating firebase user")
+	// } else {
+	//     u.FirebaseId = fu.UID
+	// }
 
 	db.Create(&u)
 
-    log.Trace().Interface("User", u).Msg("Created User")
-    log.Info().Msgf("Created User with ID: %d", u.ID)
+	log.Trace().Interface("User", u).Msg("Created User")
+	log.Info().Msgf("Created User with ID: %d", u.ID)
 
 	return u, err
 }
@@ -121,7 +120,7 @@ func UpdateUser(id string, name string, email string, requestedBy string) (*User
 	}
 
 	db.Save(&u)
-	
+
 	return u, nil
 }
 
@@ -133,7 +132,7 @@ func UpdateUser(id string, name string, email string, requestedBy string) (*User
 //
 // Returns:
 // - error: an error if the user making the request is not authorized to delete the user or if there was an error retrieving the user.
-func DeleteUser(id string, requestedBy string) error {	
+func DeleteUser(id string, requestedBy string) error {
 	u, err := GetUserById(id)
 	if err != nil {
 		log.Err(err).Msg("Error retrieving User")
@@ -147,7 +146,7 @@ func DeleteUser(id string, requestedBy string) error {
 	}
 
 	db.Delete(&u)
-	
+
 	return nil
 }
 
@@ -176,6 +175,6 @@ func CanUpdateUser(userId string, requestedBy string) (bool, error) {
 	if rBy.ID != u.ID {
 		return false, fmt.Errorf("user %s is not authorized to delete user %s", requestedBy, userId)
 	}
-	
+
 	return true, nil
 }

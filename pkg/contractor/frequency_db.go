@@ -13,18 +13,18 @@ import (
 // - *Frequency: the newly created frequency.
 // - error: an error if the creation process encounters any issues.
 func CreateFrequency(input *NewFrequencyInput) (*Frequency, error) {
-    freq, err := NewFrequency(input)
-    if err != nil {
-        log.Err(err).Msg("Error creating frequency")
-        return nil, err
-    }
+	freq, err := NewFrequency(input)
+	if err != nil {
+		log.Err(err).Msg("Error creating frequency")
+		return nil, err
+	}
 
-    db.Create(&freq)
+	db.Create(&freq)
 
-    log.Trace().Interface("frequency", freq).Msg("Created frequency")
-    log.Info().Msg("Created frequency")
+	log.Trace().Interface("frequency", freq).Msg("Created frequency")
+	log.Info().Msg("Created frequency")
 
-    return freq, nil
+	return freq, nil
 }
 
 // GetFrequencyById retrieves a Frequency object by its ID and the ID of the user who requested it.
@@ -37,15 +37,15 @@ func CreateFrequency(input *NewFrequencyInput) (*Frequency, error) {
 // - *Frequency: A pointer to the retrieved Frequency object.
 // - error: An error if the Frequency object with the specified ID is not found.
 func GetFrequencyById(id string, requestedBy string) (*Frequency, error) {
-    var freq Frequency
+	var freq Frequency
 
-    db.First(&freq, "id = ? AND created_by = ?", id, requestedBy)
+	db.First(&freq, "id = ? AND created_by = ?", id, requestedBy)
 
-    if freq == (Frequency{}) {
-        return nil, fmt.Errorf("frequency with ID %s not found", id)
-    }
-    
-    return &freq, nil
+	if freq == (Frequency{}) {
+		return nil, fmt.Errorf("frequency with ID %s not found", id)
+	}
+
+	return &freq, nil
 }
 
 // DeleteFrequency deletes a frequency from the database by its ID.
@@ -57,15 +57,15 @@ func GetFrequencyById(id string, requestedBy string) (*Frequency, error) {
 // Returns:
 // - error: an error if the frequency retrieval or deletion fails.
 func DeleteFrequency(id string, requestedBy string) error {
-    freq, err := GetFrequencyById(id, requestedBy)
-    if err != nil {
-        log.Err(err).Msg("Error getting frequency")
-        return err
-    }
+	freq, err := GetFrequencyById(id, requestedBy)
+	if err != nil {
+		log.Err(err).Msg("Error getting frequency")
+		return err
+	}
 
-    db.Delete(&freq)
+	db.Delete(&freq)
 
-    log.Info().Msgf("Deleted frequency with ID %s", id)
+	log.Info().Msgf("Deleted frequency with ID %s", id)
 
-    return nil
+	return nil
 }

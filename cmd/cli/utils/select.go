@@ -4,10 +4,9 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-
 type SelectableItem struct {
-    Key   string
-    Label string
+	Key   string
+	Label string
 }
 
 type SelectableList []SelectableItem
@@ -17,13 +16,13 @@ type SelectableList []SelectableItem
 // No parameters.
 // Returns a slice of strings.
 func (sl SelectableList) GetLabels() []string {
-    items := make([]string, len(sl))
+	items := make([]string, len(sl))
 
-    for i, item := range sl {
-        items[i] = item.Label
-    }
+	for i, item := range sl {
+		items[i] = item.Label
+	}
 
-    return items
+	return items
 }
 
 // SelectPrompt displays a prompt to the user with a list of selectable items and
@@ -40,8 +39,8 @@ func SelectPrompt(label string, selectables SelectableList) (*SelectableItem, er
 	ix, _, err := prompt.Run()
 
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 
-    return &selectables[ix], nil
+	return &selectables[ix], nil
 }

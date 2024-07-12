@@ -84,7 +84,6 @@ func TaskTitleValidator(title string) error {
 	return nil
 }
 
-
 // TaskIDValidator validates a task ID.
 //
 // Parameters:

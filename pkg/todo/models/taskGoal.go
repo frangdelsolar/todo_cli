@@ -8,8 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
 type TaskGoalCategory string
 
 const (
@@ -26,16 +24,16 @@ const (
 // - CreatedAt: the timestamp when the TaskGoal was created.
 type TaskGoal struct {
 	gorm.Model
-	ID        uint             `json:"id" gorm:"primaryKey"`
-	TaskID    string             `json:"taskId"`
-	Task      *Task            `json:"task" gorm:"foreignKey:TaskID"`
-	StartDate time.Time        `json:"startDate"`
-	EndDate   time.Time        `json:"endDate" omitempty:"true"`
+	ID          uint             `json:"id" gorm:"primaryKey"`
+	TaskID      string           `json:"taskId"`
+	Task        *Task            `json:"task" gorm:"foreignKey:TaskID"`
+	StartDate   time.Time        `json:"startDate"`
+	EndDate     time.Time        `json:"endDate" omitempty:"true"`
 	FrequencyID string           `json:"frequencyId"`
-	Frequency TaskFrequency    `json:"frequency"`
-	Category  TaskGoalCategory `json:"category"`
-	CreatedAt time.Time        `json:"createdAt"`
-	UpdatedAt time.Time        `json:"updatedAt"`
+	Frequency   TaskFrequency    `json:"frequency"`
+	Category    TaskGoalCategory `json:"category"`
+	CreatedAt   time.Time        `json:"createdAt"`
+	UpdatedAt   time.Time        `json:"updatedAt"`
 }
 
 // String returns a string representation of the TaskGoal.
@@ -57,13 +55,13 @@ func (e *TaskGoal) String() string {
 // - *TaskGoal: the newly created TaskGoal.
 // - error: an error if there was a problem parsing the start or end date, or if the start date is after the end date.
 func NewTaskGoal(
-		in_taskId string, 
-		in_startDate string, 
-		in_endDate string, 
-		in_frequency string, 
-		in_category string,
-	) (*TaskGoal, error) {
-	
+	in_taskId string,
+	in_startDate string,
+	in_endDate string,
+	in_frequency string,
+	in_category string,
+) (*TaskGoal, error) {
+
 	var output *TaskGoal
 	var err error
 
@@ -109,10 +107,10 @@ func NewTaskGoal(
 	category := TaskGoalCategory(in_category)
 
 	output = &TaskGoal{
-		TaskID:    in_taskId,
-		StartDate: sd,
+		TaskID:      in_taskId,
+		StartDate:   sd,
 		FrequencyID: in_frequency,
-		Category:  category,
+		Category:    category,
 	}
 
 	if in_endDate != "" {

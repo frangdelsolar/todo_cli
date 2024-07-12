@@ -8,14 +8,14 @@ import (
 )
 
 func TestValidateEffectivePeriod(t *testing.T) {
-    epInput := &c.NewEffectivePeriodInput{
-        StartDate: "2022-01-01",
-        EndDate: "2022-01-01",
-        RequestedBy: "",
-    }
+	epInput := &c.NewEffectivePeriodInput{
+		StartDate:   "2022-01-01",
+		EndDate:     "2022-01-01",
+		RequestedBy: "",
+	}
 
-    validationErrorMsg := epInput.Validate()
-    expected := "invalid user id"
+	validationErrorMsg := epInput.Validate()
+	expected := "invalid user id"
 
-    assert.ErrorContains(t, validationErrorMsg, expected)
+	assert.ErrorContains(t, validationErrorMsg, expected)
 }

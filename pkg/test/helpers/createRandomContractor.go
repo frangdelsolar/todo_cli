@@ -5,7 +5,7 @@ import (
 )
 
 func CreateRandomContractor() (*c.Contractor, error) {
-    owner, _:= CreateRandomUser()
-    name := RandomName()
-    return c.CreateContractor(name, owner.GetIDString())
+	owner, _ := CreateRandomUser()
+	name := RandomName()
+	return c.CreateContractor(name, owner.GetIDString())
 }

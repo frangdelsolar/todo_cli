@@ -10,11 +10,11 @@ import (
 
 type Account struct {
 	d.SystemData
-	Name        string    `json:"name" gorm:"not null"`
-	TotalID    uint      `json:"totalId" gorm:"not null"`
-	Total   *Currency    `json:"total" gorm:"foreignKey:TotalID"`
-	DefaultAccount bool `json:"defaultAccount"`
-	CurrencyCode CurrencyUnit `json:"currencyCode" gorm:"not null"` 
+	Name           string       `json:"name" gorm:"not null"`
+	TotalID        uint         `json:"totalId" gorm:"not null"`
+	Total          *Currency    `json:"total" gorm:"foreignKey:TotalID"`
+	DefaultAccount bool         `json:"defaultAccount"`
+	CurrencyCode   CurrencyUnit `json:"currencyCode" gorm:"not null"`
 }
 
 func (a *Account) String() string {
@@ -49,7 +49,7 @@ func (a *Account) UpdateName(name string, requestedBy *auth.User) error {
 // Returns:
 // - *Account: the newly created Account.
 // - error: an error if there was a problem during creation.
-func NewAccount (name string, total *Currency, defaultAccount bool, requestedBy *auth.User) (*Account, error) {
+func NewAccount(name string, total *Currency, defaultAccount bool, requestedBy *auth.User) (*Account, error) {
 
 	if err := AccountNameValidator(name); err != nil {
 		log.Err(err).Msg("Error validating account name")
@@ -57,9 +57,9 @@ func NewAccount (name string, total *Currency, defaultAccount bool, requestedBy 
 	}
 
 	return &Account{
-		Name: name,
-		CurrencyCode: total.CurrencyCode,
-		Total: total,
+		Name:           name,
+		CurrencyCode:   total.CurrencyCode,
+		Total:          total,
 		DefaultAccount: defaultAccount,
 		SystemData: d.SystemData{
 			CreatedBy: requestedBy,

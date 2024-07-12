@@ -21,47 +21,47 @@ import (
 // 6. If any assertion fails, logs an error message with the expected and actual values.
 //
 // This function does not return any value.
-func TestAddCurrencySameCode(t *testing.T){
+func TestAddCurrencySameCode(t *testing.T) {
 
-    // data prep
-    owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
-    ownerId := fmt.Sprint(owner.ID)
-    
-    aAmount := "100.00"
-    aCode := "USD"
-    aDate := "2024-01-01"
+	// data prep
+	owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
+	ownerId := fmt.Sprint(owner.ID)
 
-    a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	aAmount := "100.00"
+	aCode := "USD"
+	aDate := "2024-01-01"
 
-    bAmount := "200.00"
-    bCode := "USD"
-    bDate := "2024-01-01"
+	a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	bAmount := "200.00"
+	bCode := "USD"
+	bDate := "2024-01-01"
 
-    // Perform test
-    cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
-    ccy, err := c.AddCurrency(a, b, cDate)
-    if err != nil {
-        t.Errorf("Failed to add currency: %v", err)
-    }
+	b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    // assertions
-    expectedAmount := 300.00
-    expectedCode := c.CurrencyUnit("USD")
-    expectedConversion := 300.00
-    expectedRate := 1.00
+	// Perform test
+	cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
+	ccy, err := c.AddCurrency(a, b, cDate)
+	if err != nil {
+		t.Errorf("Failed to add currency: %v", err)
+	}
 
-    assert.Equal(t, ccy.Amount, expectedAmount)
-    assert.Equal(t, ccy.CurrencyCode, expectedCode)
-    assert.Equal(t, ccy.Conversion, expectedConversion)
-    assert.Equal(t, ccy.ExchangeRate, expectedRate)
+	// assertions
+	expectedAmount := 300.00
+	expectedCode := c.CurrencyUnit("USD")
+	expectedConversion := 300.00
+	expectedRate := 1.00
+
+	assert.Equal(t, ccy.Amount, expectedAmount)
+	assert.Equal(t, ccy.CurrencyCode, expectedCode)
+	assert.Equal(t, ccy.Conversion, expectedConversion)
+	assert.Equal(t, ccy.ExchangeRate, expectedRate)
 }
 
 // TestAddCurrencyDifferentCode is a test function that tests the AddCurrency function when the currencies have different codes.
@@ -73,55 +73,55 @@ func TestAddCurrencySameCode(t *testing.T){
 // - Performs assertions on the resulting currency's amount, code, conversion, and exchange rate.
 //
 // The function does not take any parameters and does not return any values.
-func TestAddCurrencyDifferentCode(t *testing.T){
+func TestAddCurrencyDifferentCode(t *testing.T) {
 
-    // data prep
-    owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
-    ownerId := fmt.Sprint(owner.ID)
-    
-    aAmount := "100.00"
-    aCode := "USD"
-    aDate := "2024-01-01"
+	// data prep
+	owner, _ := auth.CreateUser("owenr", "owenr@admin.com", "test123")
+	ownerId := fmt.Sprint(owner.ID)
 
-    a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	aAmount := "100.00"
+	aCode := "USD"
+	aDate := "2024-01-01"
 
-    bAmount := "8.00"
-    bCode := "ARS"
-    bDate := "2011-01-03"
+	a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	bAmount := "8.00"
+	bCode := "ARS"
+	bDate := "2011-01-03"
 
-    // Test Rates
-    bExpectedRate := 4.00
-    bExpectedConversion := 2.00
+	b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    assert.Equal(t, b.ExchangeRate, bExpectedRate)
-    assert.Equal(t, b.Conversion, bExpectedConversion)
-    // End test rates
+	// Test Rates
+	bExpectedRate := 4.00
+	bExpectedConversion := 2.00
 
-    // Perform test
-    cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
-    ccy, err := c.AddCurrency(a, b, cDate)
-    if err != nil {
-        t.Errorf("Failed to add currency: %v", err)
-    }
+	assert.Equal(t, b.ExchangeRate, bExpectedRate)
+	assert.Equal(t, b.Conversion, bExpectedConversion)
+	// End test rates
 
-    // assertions
-    expectedAmount := 102.00
-    expectedCode := c.CurrencyUnit("USD")
-    expectedConversion := 102.00
-    expectedRate := 1.00
+	// Perform test
+	cDate := time.Date(2025, 5, 1, 0, 0, 0, 0, time.UTC)
+	ccy, err := c.AddCurrency(a, b, cDate)
+	if err != nil {
+		t.Errorf("Failed to add currency: %v", err)
+	}
 
-    assert.Equal(t, ccy.Amount, expectedAmount)
-    assert.Equal(t, ccy.CurrencyCode, expectedCode)
-    assert.Equal(t, ccy.Conversion, expectedConversion)
-    assert.Equal(t, ccy.ExchangeRate, expectedRate)
+	// assertions
+	expectedAmount := 102.00
+	expectedCode := c.CurrencyUnit("USD")
+	expectedConversion := 102.00
+	expectedRate := 1.00
+
+	assert.Equal(t, ccy.Amount, expectedAmount)
+	assert.Equal(t, ccy.CurrencyCode, expectedCode)
+	assert.Equal(t, ccy.Conversion, expectedConversion)
+	assert.Equal(t, ccy.ExchangeRate, expectedRate)
 }
 
 // TestSubCurrencySameCode is a test function that checks the subtraction of two currencies with the same code.
@@ -137,47 +137,47 @@ func TestAddCurrencyDifferentCode(t *testing.T){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencySameCode(t *testing.T){
+func TestSubCurrencySameCode(t *testing.T) {
 
-    // data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
-    ownerId := fmt.Sprint(owner.ID)
-    
-    aAmount := "100.00"
-    aCode := "ARS"
-    aDate := "2024-01-01"
+	// data prep
+	owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
+	ownerId := fmt.Sprint(owner.ID)
 
-    a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	aAmount := "100.00"
+	aCode := "ARS"
+	aDate := "2024-01-01"
 
-    bAmount := "25.00"
-    bCode := "ARS"
-    bDate := "2011-01-03"
+	a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	bAmount := "25.00"
+	bCode := "ARS"
+	bDate := "2011-01-03"
 
-    // Perform test
-    cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
-    ccy, err := c.SubCurrency(a, b, cDate)
-    if err != nil {
-        t.Errorf("Failed to sub currency: %v", err)
-    }
+	b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    // assertions
-    expectedAmount := 75.00
-    expectedCode := c.CurrencyUnit("ARS")
-    expectedRate := 1040.00
-    expectedConversion := expectedAmount / expectedRate
+	// Perform test
+	cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
+	ccy, err := c.SubCurrency(a, b, cDate)
+	if err != nil {
+		t.Errorf("Failed to sub currency: %v", err)
+	}
 
-    assert.Equal(t, ccy.Amount, expectedAmount)
-    assert.Equal(t, ccy.CurrencyCode, expectedCode)
-    assert.Equal(t, ccy.Conversion, expectedConversion)
-    assert.Equal(t, ccy.ExchangeRate, expectedRate)
+	// assertions
+	expectedAmount := 75.00
+	expectedCode := c.CurrencyUnit("ARS")
+	expectedRate := 1040.00
+	expectedConversion := expectedAmount / expectedRate
+
+	assert.Equal(t, ccy.Amount, expectedAmount)
+	assert.Equal(t, ccy.CurrencyCode, expectedCode)
+	assert.Equal(t, ccy.Conversion, expectedConversion)
+	assert.Equal(t, ccy.ExchangeRate, expectedRate)
 }
 
 // TestSubCurrencyDifferentCode is a test function that tests the SubCurrency function when the currencies have different codes.
@@ -195,54 +195,53 @@ func TestSubCurrencySameCode(t *testing.T){
 // It logs the progress of the test using the log.Info, log.Debug, and log.Err functions.
 //
 // It returns nothing.
-func TestSubCurrencyDifferentCode(t *testing.T){
-    // data prep
-    owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
-    ownerId := fmt.Sprint(owner.ID)
-    
-    aAmount := "20000.00"
-    aCode := "ARS"
-    aDate := "2024-01-01"
+func TestSubCurrencyDifferentCode(t *testing.T) {
+	// data prep
+	owner, _ := auth.CreateUser("owner", "owner@admin.com", "test123")
+	ownerId := fmt.Sprint(owner.ID)
 
-    a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	aAmount := "20000.00"
+	aCode := "ARS"
+	aDate := "2024-01-01"
 
-    // Test A Rates
-    aExpectedRate := 1000.00
-    aExpectedConversion := 20.00
-    aExpectedConversionStr := fmt.Sprintf("%.2f", aExpectedConversion)
+	a, err := c.CreateCurrency(aCode, aAmount, aDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    assert.Equal(t, a.ExchangeRate, aExpectedRate)
-    assert.Equal(t, fmt.Sprintf("%.2f", a.Conversion), aExpectedConversionStr)
-    // End test rates
+	// Test A Rates
+	aExpectedRate := 1000.00
+	aExpectedConversion := 20.00
+	aExpectedConversionStr := fmt.Sprintf("%.2f", aExpectedConversion)
 
-    bAmount := "4.00"
-    bCode := "USD"
-    bDate := "2011-01-03"
+	assert.Equal(t, a.ExchangeRate, aExpectedRate)
+	assert.Equal(t, fmt.Sprintf("%.2f", a.Conversion), aExpectedConversionStr)
+	// End test rates
 
-    b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
-    if err != nil {
-        t.Errorf("Failed to create currency: %v", err)
-    }
+	bAmount := "4.00"
+	bCode := "USD"
+	bDate := "2011-01-03"
 
-    // Perform test
-    cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
-    ccy, err := c.SubCurrency(a, b, cDate)
-    if err != nil {
-        t.Errorf("Failed to sub currency: %v", err)
-    }
+	b, err := c.CreateCurrency(bCode, bAmount, bDate, ownerId)
+	if err != nil {
+		t.Errorf("Failed to create currency: %v", err)
+	}
 
-    // assertions
-    expectedAmount := 16640.00
-    expectedCode := c.CurrencyUnit("ARS")
-    expectedRate := 1040.00
-    expectedConversion := fmt.Sprintf("%.2f", expectedAmount / expectedRate)
+	// Perform test
+	cDate := time.Date(2024, 5, 1, 0, 0, 0, 0, time.UTC)
+	ccy, err := c.SubCurrency(a, b, cDate)
+	if err != nil {
+		t.Errorf("Failed to sub currency: %v", err)
+	}
 
-    assert.Equal(t, ccy.Amount, expectedAmount)
-    assert.Equal(t, ccy.CurrencyCode, expectedCode)
-    assert.Equal(t, fmt.Sprintf("%.2f", ccy.Conversion), expectedConversion)
-    assert.Equal(t, ccy.ExchangeRate, expectedRate)
+	// assertions
+	expectedAmount := 16640.00
+	expectedCode := c.CurrencyUnit("ARS")
+	expectedRate := 1040.00
+	expectedConversion := fmt.Sprintf("%.2f", expectedAmount/expectedRate)
+
+	assert.Equal(t, ccy.Amount, expectedAmount)
+	assert.Equal(t, ccy.CurrencyCode, expectedCode)
+	assert.Equal(t, fmt.Sprintf("%.2f", ccy.Conversion), expectedConversion)
+	assert.Equal(t, ccy.ExchangeRate, expectedRate)
 }
-

@@ -15,14 +15,14 @@ import (
 // - CompletedAt: the timestamp when the task was completed.
 type TaskCompletionLog struct {
 	gorm.Model
-	ID          uint      `json:"id" gorm:"primaryKey"`
-	TaskID      string      `json:"taskId"`
-	Task        *Task     `json:"task" gorm:"foreignKey:TaskID"`
-	TaskGoalID  string      `json:"taskGoalId"`
-	TaskGoal    *TaskGoal `json:"taskGoal" gorm:"foreignKey:TaskGoalID"`
-	DueDate time.Time `json:"completedAt"` // Stores the date of the corresponding period
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
+	ID         uint      `json:"id" gorm:"primaryKey"`
+	TaskID     string    `json:"taskId"`
+	Task       *Task     `json:"task" gorm:"foreignKey:TaskID"`
+	TaskGoalID string    `json:"taskGoalId"`
+	TaskGoal   *TaskGoal `json:"taskGoal" gorm:"foreignKey:TaskGoalID"`
+	DueDate    time.Time `json:"completedAt"` // Stores the date of the corresponding period
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
 // String returns a string representation of the TaskCompletionLog.
@@ -71,7 +71,7 @@ func NewTaskCompletionLog(taskID string, completedAt string, taskGoalID string) 
 		return nil, err
 	}
 
-    err = TaskGoalIDValidator(taskGoalID)
+	err = TaskGoalIDValidator(taskGoalID)
 	if err != nil {
 		log.Err(err).Msg("Error validating Task Goal ID")
 		return nil, err
@@ -89,8 +89,8 @@ func NewTaskCompletionLog(taskID string, completedAt string, taskGoalID string) 
 	}
 
 	return &TaskCompletionLog{
-		TaskID:      taskID,
-		DueDate: cd,
+		TaskID:     taskID,
+		DueDate:    cd,
 		TaskGoalID: taskGoalID,
 	}, nil
 }

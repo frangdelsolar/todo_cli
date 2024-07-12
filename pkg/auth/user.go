@@ -7,12 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type User struct {
-	gorm.Model // doesn't reference data.SystemDetails to avoid circular dependency
-	Name string `json:"name"`
-	Email string `json:"email"`
-    FirebaseId string `json:"firebase_id"`
+	gorm.Model        // doesn't reference data.SystemDetails to avoid circular dependency
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	FirebaseId string `json:"firebase_id"`
 }
 
 // ID returns the ID of the user as a string.
@@ -20,7 +19,7 @@ type User struct {
 // No parameters.
 // Returns a string.
 func (user *User) GetIDString() string {
-    return fmt.Sprint(user.ID)
+	return fmt.Sprint(user.ID)
 }
 
 // NewUser creates a new user with the given name and email.
@@ -88,16 +87,16 @@ func EmailValidator(email string) error {
 		return fmt.Errorf("email cannot be empty")
 	}
 
-    emailRegex := `^[a-zA-Z0-9.!#$%&'*+/=?^_` + `{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$`
+	emailRegex := `^[a-zA-Z0-9.!#$%&'*+/=?^_` + `{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$`
 
-    match, err := regexp.MatchString(emailRegex, email)
-    if err != nil {
-        return fmt.Errorf("error compiling email regex: %w", err)
-    }
+	match, err := regexp.MatchString(emailRegex, email)
+	if err != nil {
+		return fmt.Errorf("error compiling email regex: %w", err)
+	}
 
-    if !match {
-        return fmt.Errorf("invalid email format")
-    }
+	if !match {
+		return fmt.Errorf("invalid email format")
+	}
 
 	return nil
 }
