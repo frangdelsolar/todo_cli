@@ -81,7 +81,7 @@ This package provides a centralized and structured approach to managing environm
     }, c.envFile)
 ```
 4. Update `Load()` method:
-```go 
+```go
 	// Load environment variables from the file
 	err = godotenv.Load(filePath)
 	if err != nil {

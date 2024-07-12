@@ -19,7 +19,7 @@ const (
 type Currency struct {
 	d.SystemData
 	ID           uint         `json:"id" gorm:"primaryKey"`
-	CurrencyCode     CurrencyUnit `json:"currencyCode"`
+	CurrencyCode CurrencyUnit `json:"currencyCode"`
 	Amount       float64      `json:"amount"`
 	ExchangeRate float64      `json:"exchangeRate"`
 	Conversion   float64      `json:"conversion"`
@@ -29,7 +29,6 @@ type Currency struct {
 func (c *Currency) String() string {
 	return fmt.Sprintf("Currency: %s, Amount: %f", c.CurrencyCode, c.Amount)
 }
-
 
 // AddCurrency adds two currencies together based on their conversion rates and
 // stores the result in the database. It takes two Currency pointers and a
@@ -82,7 +81,7 @@ func AddCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 // Returns:
 // - a pointer to a Currency object containing the result of subtracting the two currencies, and an error if there was an error during the calculation or database insertion.
 func SubCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
-	
+
 	output := &Currency{}
 	var err error
 
@@ -114,7 +113,6 @@ func SubCurrency(a *Currency, b *Currency, date time.Time) (*Currency, error) {
 
 	return output, nil
 }
-
 
 // NewCurrency creates a new Currency object with the given currency code, amount, and exchange date.
 //
@@ -166,7 +164,7 @@ func NewCurrency(currencyCode string, amount string, exchangeDate string, user *
 	}
 
 	return &Currency{
-		CurrencyCode:     cc,
+		CurrencyCode: cc,
 		Amount:       amountFloat,
 		ExchangeDate: eDate,
 		ExchangeRate: er,

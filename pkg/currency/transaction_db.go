@@ -7,54 +7,53 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/auth"
 )
 
-
 func CreateTransaction(
-    tType string, 
-    accountId string, 
-    amount string, 
-    currencyCode string, 
-    date string, 
-    concept string, 
-    requestedBy string,
+	tType string,
+	accountId string,
+	amount string,
+	currencyCode string,
+	date string,
+	concept string,
+	requestedBy string,
 ) (*Transaction, error) {
-    var err error
-    var t *Transaction
+	var err error
+	var t *Transaction
 
-    user, err := auth.GetUserById(requestedBy)
-    if err != nil {
-        log.Err(err).Msg("Error getting user")
-        return t, err
-    }
+	user, err := auth.GetUserById(requestedBy)
+	if err != nil {
+		log.Err(err).Msg("Error getting user")
+		return t, err
+	}
 
-    total, err := CreateCurrency(currencyCode, amount, date, requestedBy)
-    if err != nil {
-        log.Err(err).Msg("Error creating currency")
-        return t, err
-    }
+	total, err := CreateCurrency(currencyCode, amount, date, requestedBy)
+	if err != nil {
+		log.Err(err).Msg("Error creating currency")
+		return t, err
+	}
 
-    account, err := GetAccountById(accountId, requestedBy)
-    if err != nil {
-        log.Err(err).Msg("Error getting account")
-        return t, err
-    }
+	account, err := GetAccountById(accountId, requestedBy)
+	if err != nil {
+		log.Err(err).Msg("Error getting account")
+		return t, err
+	}
 
-    formattedDate, err := time.Parse(time.DateOnly, date)
-    if err != nil {
-        log.Err(err).Msg("Error parsing date")
-        return t, err
-    }
-    
-    transaction, err := NewTransaction(tType, account, total, formattedDate, concept, user)
-    if err != nil {
-        log.Err(err).Msg("Error creating transaction")
-        return t, err
-    }
+	formattedDate, err := time.Parse(time.DateOnly, date)
+	if err != nil {
+		log.Err(err).Msg("Error parsing date")
+		return t, err
+	}
 
-    db.Create(&transaction)
+	transaction, err := NewTransaction(tType, account, total, formattedDate, concept, user)
+	if err != nil {
+		log.Err(err).Msg("Error creating transaction")
+		return t, err
+	}
 
-    log.Info().Interface("Transaction", transaction).Msg("Transaction created successfully")
+	db.Create(&transaction)
 
-    return transaction, nil
+	log.Info().Interface("Transaction", transaction).Msg("Transaction created successfully")
+
+	return transaction, nil
 }
 
 // RegisterTransaction registers a transaction for the account.
@@ -70,12 +69,12 @@ func CreateTransaction(
 // - *Transaction: the registered transaction.
 // - error: an error if there was a problem registering the transaction.
 func RegisterTransaction(
-    account *Account, 
-    amount *Currency, 
-    date time.Time, 
-    concept string, 
-    strTType string, 
-    requestedBy *auth.User,
+	account *Account,
+	amount *Currency,
+	date time.Time,
+	concept string,
+	strTType string,
+	requestedBy *auth.User,
 ) (*Transaction, error) {
 	updatedBalance := &Currency{}
 	var err error
@@ -86,11 +85,11 @@ func RegisterTransaction(
 	}
 	tType := TransactionType(strTType)
 
-    currentBalance, err := GetCurrencyById(fmt.Sprint(account.TotalID), fmt.Sprint(requestedBy.ID))
-    if err != nil {
-        log.Err(err).Msg("Error getting current balance")
-        return nil, err
-    }
+	currentBalance, err := GetCurrencyById(fmt.Sprint(account.TotalID), fmt.Sprint(requestedBy.ID))
+	if err != nil {
+		log.Err(err).Msg("Error getting current balance")
+		return nil, err
+	}
 
 	if tType == Credit {
 		updatedBalance, err = AddCurrency(amount, &currentBalance, date)

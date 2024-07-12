@@ -8,16 +8,15 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type FrequencyTypeName string
 
 type TaskFrequency struct {
 	gorm.Model
-	ID uint `json:"id" gorm:"primaryKey"`
-	Type FrequencyTypeName `json:"type"`
-	Day int `json:"day"`
-	Month int `json:"month"`
-	DayOfWeek int `json:"dayOfWeek"`
+	ID        uint              `json:"id" gorm:"primaryKey"`
+	Type      FrequencyTypeName `json:"type"`
+	Day       int               `json:"day"`
+	Month     int               `json:"month"`
+	DayOfWeek int               `json:"dayOfWeek"`
 }
 
 const (
@@ -33,16 +32,16 @@ func (ft *TaskFrequency) String() string {
 
 func NewTaskFrequency(
 	freqType string,
-	day string, 
-	month string, 
+	day string,
+	month string,
 	dayOfWeek string,
 ) (*TaskFrequency, error) {
 
 	// var frequency TaskFrequency
 	err := FrequencyValidator(
-		freqType, 
-		day, 
-		month, 
+		freqType,
+		day,
+		month,
 		dayOfWeek,
 	)
 
@@ -55,14 +54,13 @@ func NewTaskFrequency(
 	cdayOfWeek, _ := strconv.Atoi(dayOfWeek)
 
 	return &TaskFrequency{
-		Type: FrequencyTypeName(freqType),
-		Day: cday,
-		Month: cmonth,
+		Type:      FrequencyTypeName(freqType),
+		Day:       cday,
+		Month:     cmonth,
 		DayOfWeek: cdayOfWeek,
 	}, nil
 
 }
-
 
 // FrequencyValidator validates the given frequency string.
 //
@@ -76,26 +74,26 @@ func NewTaskFrequency(
 // Returns:
 // - error: an error if the frequency is invalid, otherwise nil.
 func FrequencyValidator(
-	in_frequency_name string, 
-	in_frequency_day string, 
-	in_frequency_month string, 
+	in_frequency_name string,
+	in_frequency_day string,
+	in_frequency_month string,
 	in_frequency_day_of_week string,
 ) error {
-	switch in_frequency_name{
-		case string(Daily):
-			return nil
-		
-		case string(Weekly):
-			return DayOfWeekValidator(in_frequency_day_of_week)
-			
-		case string(Monthly):
-			return DayValidator(in_frequency_day)
+	switch in_frequency_name {
+	case string(Daily):
+		return nil
 
-		case string(Yearly):
-			return DayOfMonthValidator(in_frequency_day, in_frequency_month)
+	case string(Weekly):
+		return DayOfWeekValidator(in_frequency_day_of_week)
 
-		default:
-			return errors.New("invalid frequency")
+	case string(Monthly):
+		return DayValidator(in_frequency_day)
+
+	case string(Yearly):
+		return DayOfMonthValidator(in_frequency_day, in_frequency_month)
+
+	default:
+		return errors.New("invalid frequency")
 	}
 }
 
@@ -116,9 +114,8 @@ func CategoryValidator(category string) error {
 	return errors.New("invalid category")
 }
 
-
 func DayOfWeekValidator(day string) error {
-	if (day == "" ){
+	if day == "" {
 		return errors.New("you must specify a day of the week")
 	}
 
@@ -135,7 +132,7 @@ func DayOfWeekValidator(day string) error {
 }
 
 func DayValidator(day string) error {
-	if (day == "" ){
+	if day == "" {
 		return errors.New("you must specify a day of the month")
 	}
 
@@ -152,7 +149,7 @@ func DayValidator(day string) error {
 }
 
 func MonthValidator(month string) error {
-	if (month == "" ){
+	if month == "" {
 		return errors.New("you must specify a month")
 	}
 
@@ -169,7 +166,7 @@ func MonthValidator(month string) error {
 }
 
 func DayOfMonthValidator(day string, month string) error {
-	err:= MonthValidator(month)
+	err := MonthValidator(month)
 	if err != nil {
 		return err
 	}

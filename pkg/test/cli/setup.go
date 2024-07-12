@@ -9,13 +9,13 @@ import (
 var PKG_NAME = "CLI Test PKG"
 var PKG_VERSION = "1.0.4"
 
-func init(){
-    config.Load()
-    
-    logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+func init() {
+	config.Load()
+
+	logger.NewLogger(logger.LoggerConfig{
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
 	data.LoadDB()
 }

@@ -9,16 +9,15 @@ import (
 )
 
 var ContractorListCmd = &cobra.Command{
-		Use:   "list",
-		Short: "List of Contractors",
-		Long: `List of all Contractors.`,
-        Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("List of all Contractors")
-            contractors := c.GetAllContractors(a.GetUserId())
-            fmt.Printf("Contractors: %d\n", len(contractors))
-            for _, c := range contractors {
-                fmt.Println(c.String())
-            }
-        },
+	Use:   "list",
+	Short: "List of Contractors",
+	Long:  `List of all Contractors.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("List of all Contractors")
+		contractors := c.GetAllContractors(a.GetUserId())
+		fmt.Printf("Contractors: %d\n", len(contractors))
+		for _, c := range contractors {
+			fmt.Println(c.String())
+		}
+	},
 }
-

@@ -22,7 +22,7 @@ func CreateCurrency(currencyCode string, amount string, exchangeDate string, req
 	user, err := auth.GetUserById(requestedBy)
 	if err != nil {
 		return c, err
-	} 
+	}
 
 	c, err = NewCurrency(currencyCode, amount, exchangeDate, user)
 	if err != nil {
@@ -31,8 +31,8 @@ func CreateCurrency(currencyCode string, amount string, exchangeDate string, req
 
 	db.Create(&c)
 
-    log.Trace().Interface("currency", c).Msg("Created currency")
-    log.Info().Msg("Created currency")
+	log.Trace().Interface("currency", c).Msg("Created currency")
+	log.Info().Msg("Created currency")
 
 	return c, nil
 }
@@ -49,9 +49,9 @@ func GetCurrencyById(id string, requestedBy string) (Currency, error) {
 	var c Currency
 
 	db.
-        First(&c, "id = ?", id).
-        Where("created_by = ?", requestedBy)
-        
+		First(&c, "id = ?", id).
+		Where("created_by = ?", requestedBy)
+
 	if c == (Currency{}) {
 		return c, fmt.Errorf("currency with ID %s not found", fmt.Sprint(id))
 	}
@@ -66,8 +66,8 @@ func GetAllCurrencies(requestedBy string) []Currency {
 	var cs []Currency
 
 	db.
-        Find(&cs).
-        Where("created_by = ?", requestedBy)
+		Find(&cs).
+		Where("created_by = ?", requestedBy)
 
 	if len(cs) == 0 {
 		log.Warn().Msg("No currencies found")
@@ -93,9 +93,7 @@ func DeleteCurrency(id string, requestedBy string) error {
 
 	db.Delete(&c)
 
-    log.Info().Msgf("Deleted currency with ID %s", id)
+	log.Info().Msgf("Deleted currency with ID %s", id)
 
 	return nil
 }
-
-

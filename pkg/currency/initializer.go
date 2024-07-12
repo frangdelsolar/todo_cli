@@ -5,7 +5,6 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-
 var PKG_NAME = "Currency PKG"
 var PKG_VERSION = "1.0.4"
 
@@ -26,9 +25,9 @@ var db *data.Database
 func InitCurrency() {
 	var err error
 	log = logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
 	db, err = data.GetDB()
 	if err != nil {
@@ -37,11 +36,11 @@ func InitCurrency() {
 	}
 
 	db.AutoMigrate(
-		&Account{}, 
-		&Currency{}, 
+		&Account{},
+		&Currency{},
 		&Transaction{},
 	)
 
 	log.Debug().Msg("Applied Currency pkg migrations to database")
-	
+
 }

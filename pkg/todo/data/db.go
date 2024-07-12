@@ -8,9 +8,9 @@ import (
 var log *logger.Logger
 var db *data.Database
 
-func init(){
+func init() {
 	var err error
-	
+
 	log = logger.GetLogger()
 	db, err = data.GetDB()
 

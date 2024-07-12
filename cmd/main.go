@@ -17,21 +17,20 @@ var cfg *config.Config
 var log *logger.Logger
 var db *data.Database
 
+func main() {
 
-func main(){
+	cfg, err := config.Load()
+	if err != nil {
+		fmt.Errorf("Failed to load config: %v", err)
+	}
 
-    cfg, err := config.Load()
-    if err != nil {
-        fmt.Errorf("Failed to load config: %v", err)
-    }
-    
-    log = logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+	log = logger.NewLogger(logger.LoggerConfig{
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
-    log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
-    log.Debug().Interface("Config", cfg).Msg("Loaded Config")
+	log.Info().Msgf("Running %s v%s", PKG_NAME, PKG_VERSION)
+	log.Debug().Interface("Config", cfg).Msg("Loaded Config")
 
 	db, err := data.LoadDB()
 	if err != nil {
@@ -40,7 +39,7 @@ func main(){
 	}
 	log.Debug().Msgf("Loaded Database: %s", db.Name())
 
-    c.InitContractor()
+	c.InitContractor()
 
-    cli.Execute()
+	cli.Execute()
 }
