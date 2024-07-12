@@ -11,30 +11,30 @@ import (
 type FrequencyType string
 
 func (ft FrequencyType) String() string {
-    return string(ft)
+	return string(ft)
 }
 
 const (
-    FrequencyTypeDaily FrequencyType = "daily"
-    FrequencyTypeWeekly FrequencyType = "weekly"
-    FrequencyTypeMonthly FrequencyType = "monthly"
-    FrequencyTypeYearly FrequencyType = "yearly"
+	FrequencyTypeDaily   FrequencyType = "daily"
+	FrequencyTypeWeekly  FrequencyType = "weekly"
+	FrequencyTypeMonthly FrequencyType = "monthly"
+	FrequencyTypeYearly  FrequencyType = "yearly"
 )
 
 type Frequency struct {
-    data.SystemData
-    Type FrequencyType `gorm:"not null"`
-    Day int
-    Month int
-    DayOfWeek int
+	data.SystemData
+	Type      FrequencyType `gorm:"not null"`
+	Day       int
+	Month     int
+	DayOfWeek int
 }
 
 type NewFrequencyInput struct {
-    FreqType string
-    Day string
-    Month string
-    DayOfWeek string
-    RequestedBy string
+	FreqType    string
+	Day         string
+	Month       string
+	DayOfWeek   string
+	RequestedBy string
 }
 
 // Validate validates the frequency input.
@@ -52,22 +52,22 @@ type NewFrequencyInput struct {
 // - error: an error if the frequency type is invalid, otherwise nil.
 func (nfi *NewFrequencyInput) Validate() error {
 
-    if ValidateID(nfi.RequestedBy) != nil {
-        return errors.New("invalid user id")
-    }
+	if ValidateID(nfi.RequestedBy) != nil {
+		return errors.New("invalid user id")
+	}
 
-    switch nfi.FreqType {
-    case string(FrequencyTypeDaily):
-        return nil
-    case string(FrequencyTypeWeekly):
-        return nfi.DayOfWeekValidator()
-    case string(FrequencyTypeMonthly):
-        return nfi.DayValidator()
-    case string(FrequencyTypeYearly):
-        return nfi.DayOfMonthValidator()
-    default:
-        return errors.New("invalid frequency type")
-    }
+	switch nfi.FreqType {
+	case string(FrequencyTypeDaily):
+		return nil
+	case string(FrequencyTypeWeekly):
+		return nfi.DayOfWeekValidator()
+	case string(FrequencyTypeMonthly):
+		return nfi.DayValidator()
+	case string(FrequencyTypeYearly):
+		return nfi.DayOfMonthValidator()
+	default:
+		return errors.New("invalid frequency type")
+	}
 }
 
 // DayOfWeekValidator validates if the given day of the week is valid.
@@ -81,7 +81,7 @@ func (nfi *NewFrequencyInput) Validate() error {
 // Return type:
 // - error: an error if the day of the week is invalid, otherwise nil.
 func (nfi *NewFrequencyInput) DayOfWeekValidator() error {
-	if (nfi.DayOfWeek == "" ){
+	if nfi.DayOfWeek == "" {
 		return errors.New("you must specify a day of the week")
 	}
 
@@ -108,7 +108,7 @@ func (nfi *NewFrequencyInput) DayOfWeekValidator() error {
 // Return type:
 // - error: an error if the day of the month is invalid, otherwise nil.
 func (nfi *NewFrequencyInput) DayValidator() error {
-	if (nfi.Day == "" ){
+	if nfi.Day == "" {
 		return errors.New("you must specify a day of the month")
 	}
 
@@ -135,7 +135,7 @@ func (nfi *NewFrequencyInput) DayValidator() error {
 // Return type:
 // - error: an error if the month is invalid, otherwise nil.
 func (nfi *NewFrequencyInput) MonthValidator() error {
-	if (nfi.Month == "" ){
+	if nfi.Month == "" {
 		return errors.New("you must specify a month")
 	}
 
@@ -163,10 +163,10 @@ func (nfi *NewFrequencyInput) MonthValidator() error {
 // - month: a string representing the month to be validated.
 //
 // Return type:
-// - error: an error if the day of the month is invalid for the specified month,
-//          otherwise nil.
+//   - error: an error if the day of the month is invalid for the specified month,
+//     otherwise nil.
 func (nfi *NewFrequencyInput) DayOfMonthValidator() error {
-	err:= nfi.MonthValidator()
+	err := nfi.MonthValidator()
 	if err != nil {
 		return err
 	}
@@ -202,29 +202,29 @@ func (nfi *NewFrequencyInput) DayOfMonthValidator() error {
 // Returns:
 // - a pointer to a Frequency struct representing the new frequency.
 // - an error if the input is invalid.
-func NewFrequency(freqInput *NewFrequencyInput)(*Frequency, error) {
+func NewFrequency(freqInput *NewFrequencyInput) (*Frequency, error) {
 
-    err := freqInput.Validate()
-    if err != nil {
-        log.Err(err).Msg("Error validating new frequency")
-        return nil, err
-    }
+	err := freqInput.Validate()
+	if err != nil {
+		log.Err(err).Msg("Error validating new frequency")
+		return nil, err
+	}
 
-    freqType := FrequencyType(freqInput.FreqType)
-    day, _ := strconv.Atoi(freqInput.Day)
-    month, _ := strconv.Atoi(freqInput.Month)
-    dayOfWeek, _ := strconv.Atoi(freqInput.DayOfWeek)
-    requestedById, _ := strconv.Atoi(freqInput.RequestedBy)
+	freqType := FrequencyType(freqInput.FreqType)
+	day, _ := strconv.Atoi(freqInput.Day)
+	month, _ := strconv.Atoi(freqInput.Month)
+	dayOfWeek, _ := strconv.Atoi(freqInput.DayOfWeek)
+	requestedById, _ := strconv.Atoi(freqInput.RequestedBy)
 
-    return &Frequency{
-        Type: freqType,
-        Day: day,
-        Month: month,
-        DayOfWeek: dayOfWeek,
-        SystemData: data.SystemData{
-            CreatedByID: uint(requestedById),
-            UpdatedByID: uint(requestedById),
-        },
-    }, nil
+	return &Frequency{
+		Type:      freqType,
+		Day:       day,
+		Month:     month,
+		DayOfWeek: dayOfWeek,
+		SystemData: data.SystemData{
+			CreatedByID: uint(requestedById),
+			UpdatedByID: uint(requestedById),
+		},
+	}, nil
 
 }

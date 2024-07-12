@@ -5,7 +5,6 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-
 var PKG_NAME = "Contractor PKG"
 var PKG_VERSION = "1.0.3"
 
@@ -26,9 +25,9 @@ var db *data.Database
 func InitContractor() {
 	var err error
 	log = logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
 	db, err = data.GetDB()
 	if err != nil {
@@ -37,11 +36,11 @@ func InitContractor() {
 	}
 
 	db.AutoMigrate(
-        &Contractor{},
-        &Agreement{},
-        &Frequency{},
+		&Contractor{},
+		&Agreement{},
+		&Frequency{},
 	)
 
 	log.Debug().Msgf("Applied %s pkg migrations to database", PKG_NAME)
-	
+
 }

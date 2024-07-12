@@ -23,7 +23,7 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 		log.Err(err).Msg("Error getting user")
 		return nil, err
 	}
-	
+
 	acc, err := GetAccountById(accountId, requestedBy)
 	if err != nil {
 		log.Err(err).Msg("Error getting account")
@@ -54,7 +54,6 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 	return transaction, nil
 }
 
-
 // GetAccountById retrieves an account by its ID.
 //
 // Parameters:
@@ -65,13 +64,13 @@ func UpdateAccountBalance(accountId, currencyCode string, amount string, date st
 // - error: an error if there was a problem retrieving the account.
 func GetAccountById(id string, requestedBy string) (*Account, error) {
 	var acc Account
-	
+
 	db.First(&acc, "id = ? AND created_by_id = ?", id, requestedBy)
-	
+
 	if acc == (Account{}) {
 		return nil, fmt.Errorf("account with ID %s not found", fmt.Sprint(id))
 	}
-	
+
 	return &acc, nil
 }
 
@@ -84,7 +83,7 @@ func GetAccountById(id string, requestedBy string) (*Account, error) {
 // - []Account: a slice of Account containing all the accounts retrieved from the database.
 func GetAllAccounts(requestedBy string) []Account {
 	var accs []Account
-	
+
 	db.Find(&accs).Where("created_by = ?", requestedBy)
 
 	if len(accs) == 0 {
@@ -175,6 +174,6 @@ func DeleteAccount(id string, requestedBy string) error {
 	db.Delete(&acc.Total)
 
 	db.Delete(&acc)
-	
+
 	return nil
 }

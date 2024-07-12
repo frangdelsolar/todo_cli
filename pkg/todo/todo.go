@@ -6,7 +6,6 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/todo/models"
 )
 
-
 const PKG_NAME = "TODO PKG"
 const PKG_VERSION = "1.0.6"
 
@@ -24,11 +23,11 @@ func InitTodo() {
 	db, err := data.GetDB()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to database")
-		return 
+		return
 	}
 
 	// Migrate the schema
-    db.AutoMigrate(
+	db.AutoMigrate(
 		&models.Task{},
 		&models.TaskGoal{},
 		&models.TaskCompletionLog{},

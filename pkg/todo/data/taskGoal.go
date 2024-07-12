@@ -54,20 +54,20 @@ func GetTaskGoalsByTaskId(taskID string) []models.TaskGoal {
 // - *models.TaskGoal: the newly created TaskGoal.
 // - error: an error if the TaskGoal creation fails.
 func CreateTaskGoal(
-	taskID string, 
-	startDate string, 
-	endDate string, 
-	frequency string, 
+	taskID string,
+	startDate string,
+	endDate string,
+	frequency string,
 	category string,
 ) (*models.TaskGoal, error) {
 	ep, err := models.NewTaskGoal(
-		taskID, 
-		startDate, 
-		endDate, 
-		frequency, 
+		taskID,
+		startDate,
+		endDate,
+		frequency,
 		category,
 	)
-	
+
 	if err != nil {
 		log.Err(err).Msg("Error creating new TaskGoal")
 		return nil, err

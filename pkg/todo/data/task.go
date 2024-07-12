@@ -55,9 +55,9 @@ func GetActiveTasks(refDate time.Time) []models.Task {
 		Select("DISTINCT tasks.*").
 		Joins("join tasks on task_goals.task_id = tasks.id").
 		Where(`
-				task_goals.start_date <= ? AND 
+				task_goals.start_date <= ? AND
 					(
-						task_goals.end_date >= ? OR 
+						task_goals.end_date >= ? OR
 						task_goals.end_date == ?
 					)
 			  `, refDate, refDate, nullDate).

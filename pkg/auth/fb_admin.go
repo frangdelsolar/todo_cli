@@ -27,13 +27,13 @@ type FirebaseAdmin struct {
 // Returns:
 // - *auth.UserRecord: the user record of the newly created user.
 // - error: an error if the user creation fails.
-func (fa *FirebaseAdmin) RegisterUser (name string,email string, password string) (*auth.UserRecord, error) {
-    userToCreate:= &auth.UserToCreate{}
+func (fa *FirebaseAdmin) RegisterUser(name string, email string, password string) (*auth.UserRecord, error) {
+	userToCreate := &auth.UserToCreate{}
 	userToCreate.DisplayName(name)
 	userToCreate.Email(email)
 	userToCreate.Password(password)
 
-    log.Trace().Interface("UserToCreate", userToCreate).Msg("UserToCreate")
+	log.Trace().Interface("UserToCreate", userToCreate).Msg("UserToCreate")
 
 	return fa.CreateUser(ctx, userToCreate)
 }
@@ -48,9 +48,8 @@ func (fa *FirebaseAdmin) RegisterUser (name string,email string, password string
 // - *auth.Token: The decoded Firebase ID token object if valid.
 // - error: An error if the token verification fails.
 func (fa *FirebaseAdmin) VerifyIDToken(ctx context.Context, idToken string) (*auth.Token, error) {
-    return fa.Client.VerifyIDToken(ctx, idToken)
+	return fa.Client.VerifyIDToken(ctx, idToken)
 }
-
 
 // NewFirebaseAdmin creates a new instance of FirebaseAdmin using the provided AuthConfig.
 //
@@ -65,11 +64,11 @@ func NewFirebaseAdmin() (*FirebaseAdmin, error) {
 	var err error
 	output := FirebaseAdmin{}
 
-    creds, err := google.CredentialsFromJSON(context.Background(), []byte(cfg.FirebaseSecret))
-    if err != nil {
-        log.Err(err).Msg("error initializing firebase")
-        return &output, err
-    }
+	creds, err := google.CredentialsFromJSON(context.Background(), []byte(cfg.FirebaseSecret))
+	if err != nil {
+		log.Err(err).Msg("error initializing firebase")
+		return &output, err
+	}
 
 	opt := option.WithCredentials(creds)
 	app, err := firebase.NewApp(context.Background(), nil, opt)
@@ -89,11 +88,11 @@ func NewFirebaseAdmin() (*FirebaseAdmin, error) {
 
 	Admin = &output
 
-    log.Trace().Interface("Output", output).Msg("Firebase Admin")
-    log.Debug().Msg("Initialized Firebase Admin")
+	log.Trace().Interface("Output", output).Msg("Firebase Admin")
+	log.Debug().Msg("Initialized Firebase Admin")
 
 	return &output, nil
-	
+
 }
 
 // GetFirebaseAdmin returns a pointer to the FirebaseAdmin instance.

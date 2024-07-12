@@ -8,11 +8,10 @@ import (
 	data "github.com/frangdelsolar/todo_cli/pkg/data/models"
 )
 
-
 type NewEffectivePeriodInput struct {
-    StartDate string
-    EndDate string
-    RequestedBy string
+	StartDate   string
+	EndDate     string
+	RequestedBy string
 }
 
 // Validate validates the NewEffectivePeriodInput struct.
@@ -24,33 +23,33 @@ type NewEffectivePeriodInput struct {
 // - error: an error if any of the validations fail.
 func (nfi *NewEffectivePeriodInput) Validate() error {
 
-    if ValidateID(nfi.RequestedBy) != nil {
-        return errors.New("invalid user id")
-    }
+	if ValidateID(nfi.RequestedBy) != nil {
+		return errors.New("invalid user id")
+	}
 
-    err := DateValidator(nfi.StartDate)
-    if err != nil {
-        return errors.New("invalid start date")
-    }
+	err := DateValidator(nfi.StartDate)
+	if err != nil {
+		return errors.New("invalid start date")
+	}
 
-    // end date can be empty
-    if nfi.EndDate == "" {
-        return nil
-    }
+	// end date can be empty
+	if nfi.EndDate == "" {
+		return nil
+	}
 
-    err = DateValidator(nfi.EndDate)
-    if err != nil {
-        return errors.New("invalid end date")
-    }
+	err = DateValidator(nfi.EndDate)
+	if err != nil {
+		return errors.New("invalid end date")
+	}
 
-    st, _ := time.Parse(time.DateOnly, nfi.StartDate)
-    ed, _ := time.Parse(time.DateOnly, nfi.EndDate)
-    
-    if st.After(ed) {
-        return errors.New("start date is after end date")
-    }
-    
-    return nil
+	st, _ := time.Parse(time.DateOnly, nfi.StartDate)
+	ed, _ := time.Parse(time.DateOnly, nfi.EndDate)
+
+	if st.After(ed) {
+		return errors.New("start date is after end date")
+	}
+
+	return nil
 }
 
 // NewEffectivePeriod creates a new EffectivePeriod based on the input provided.
@@ -62,24 +61,24 @@ func (nfi *NewEffectivePeriodInput) Validate() error {
 // - error: an error if the creation process encounters any issues.
 func NewEffectivePeriod(input *NewEffectivePeriodInput) (*EffectivePeriod, error) {
 
-    err := input.Validate()
-    if err != nil {
-        log.Err(err).Msg("Error validating new effective period")
-        return nil, err
-    }
+	err := input.Validate()
+	if err != nil {
+		log.Err(err).Msg("Error validating new effective period")
+		return nil, err
+	}
 
-    st, _ := time.Parse(time.DateOnly, input.StartDate)
-    ed, _ := time.Parse(time.DateOnly, input.EndDate)
-    rb, _ := strconv.Atoi(input.RequestedBy)
-    
-    return &EffectivePeriod{
-        StartDate: st, 
-        EndDate: ed, 
-        SystemData: data.SystemData{
-            CreatedByID: uint(rb),
-            UpdatedByID: uint(rb),
-        },    
-    }, nil
+	st, _ := time.Parse(time.DateOnly, input.StartDate)
+	ed, _ := time.Parse(time.DateOnly, input.EndDate)
+	rb, _ := strconv.Atoi(input.RequestedBy)
+
+	return &EffectivePeriod{
+		StartDate: st,
+		EndDate:   ed,
+		SystemData: data.SystemData{
+			CreatedByID: uint(rb),
+			UpdatedByID: uint(rb),
+		},
+	}, nil
 
 }
 

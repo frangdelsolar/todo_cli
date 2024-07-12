@@ -26,9 +26,9 @@ type Database struct {
 func LoadDB() (*Database, error) {
 
 	log := logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
 	cfg := config.GetConfig()
 

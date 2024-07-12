@@ -7,16 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateUser(t *testing.T){
-    name := "pepe"
-    email := "pepe@admin.com"
-    password := "test123"
+func TestCreateUser(t *testing.T) {
+	name := "pepe"
+	email := "pepe@admin.com"
+	password := "test123"
 
-    u, err := auth.CreateUser(name, email, password)
-    if err != nil {
-        t.Errorf("Error creating user: %v", err)
-    }
+	u, err := auth.CreateUser(name, email, password)
+	if err != nil {
+		t.Errorf("Error creating user: %v", err)
+	}
 
-    assert.Equal(t, u.Name, name, "Expected name to be %s, but got %s", name, u.Name)
-    assert.Equal(t, u.Email, email, "Expected email to be %s, but got %s", email, u.Email)
+	assert.Equal(t, u.Name, name, "Expected name to be %s, but got %s", name, u.Name)
+	assert.Equal(t, u.Email, email, "Expected email to be %s, but got %s", email, u.Email)
 }

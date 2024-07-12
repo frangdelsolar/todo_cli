@@ -8,12 +8,11 @@ import (
 	"github.com/frangdelsolar/todo_cli/pkg/logger"
 )
 
-
 var PKG_NAME = "Auth PKG"
 var PKG_VERSION = "1.0.8"
 
 var log *logger.Logger
-var db *data.Database 
+var db *data.Database
 var fa *FirebaseAdmin
 var cfg *config.Config
 
@@ -25,35 +24,35 @@ var cfg *config.Config
 func init() {
 	var err error
 
-    cfg, err = config.Load()
-    if err != nil {
-        fmt.Errorf("error loading config: %v", err)        
-        return
-    }
-	
+	cfg, err = config.Load()
+	if err != nil {
+		fmt.Errorf("error loading config: %v", err)
+		return
+	}
+
 	log = logger.NewLogger(logger.LoggerConfig{
-        PackageName: PKG_NAME,
-        PackageVersion: PKG_VERSION,
-    })
+		PackageName:    PKG_NAME,
+		PackageVersion: PKG_VERSION,
+	})
 
 	db, err = data.GetDB()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to connect to database")
-		return 
+		return
 	}
 
 	db.AutoMigrate(
-		&User{}, 
+		&User{},
 	)
 
 	log.Debug().Msg("Applied Auth migrations to database")
 
-    fa, err = NewFirebaseAdmin()
-    if err != nil {
-        log.Err(err).Msg("Failed to initialize Firebase Admin")
-    }
+	fa, err = NewFirebaseAdmin()
+	if err != nil {
+		log.Err(err).Msg("Failed to initialize Firebase Admin")
+	}
 
-    log.Debug().Interface("Admin", fa.App).Msg("Initialized Firebase Admin")
-    log.Info(). Msg("Initialized Auth")
-	
+	log.Debug().Interface("Admin", fa.App).Msg("Initialized Firebase Admin")
+	log.Info().Msg("Initialized Auth")
+
 }

@@ -17,13 +17,13 @@ const (
 
 type Transaction struct {
 	d.SystemData
-	DateOfTransaction time.Time `json:"dateOfTransaction"`
-	TypeOfTrasaction TransactionType    `json:"typeOfTrasaction"`
-	Account      *Account  `json:"account" gorm:"foreignKey:AccountID"`
-	AccountID    uint      `json:"accountId"`
-	Amount       *Currency `json:"amount"`
-	AmountID      uint `json:"amountId"`
-	Details     string    `json:"details"`
+	DateOfTransaction time.Time       `json:"dateOfTransaction"`
+	TypeOfTrasaction  TransactionType `json:"typeOfTrasaction"`
+	Account           *Account        `json:"account" gorm:"foreignKey:AccountID"`
+	AccountID         uint            `json:"accountId"`
+	Amount            *Currency       `json:"amount"`
+	AmountID          uint            `json:"amountId"`
+	Details           string          `json:"details"`
 }
 
 // String returns a string representation of the Transaction.
@@ -65,15 +65,15 @@ func NewTransaction(tType string, account *Account, amount *Currency, date time.
 	}
 
 	transaction := &Transaction{
-		TypeOfTrasaction: TransactionType(tType),
+		TypeOfTrasaction:  TransactionType(tType),
 		Account:           account,
 		Amount:            amount,
 		Details:           details,
 		AccountID:         account.ID,
 		DateOfTransaction: date,
-		SystemData:        d.SystemData{
-			CreatedBy: requestedBy, 
-			UpdatedBy: requestedBy, 
+		SystemData: d.SystemData{
+			CreatedBy: requestedBy,
+			UpdatedBy: requestedBy,
 		},
 	}
 	return transaction, nil
@@ -118,4 +118,3 @@ func DetailsValidator(details string) error {
 	}
 	return nil
 }
-
